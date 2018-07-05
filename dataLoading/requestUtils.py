@@ -2,12 +2,12 @@ import urllib.request as request
 import ssl
 import configUtils
 import json
-import authUtils
+from dataLoading import authUtils
 import plotUtils
 
-REQUEST_URL= "https://cmsweb.cern.ch/dqm/online/jsonfairy/archive/317111/Global/Online/ALL/DT/01-Digi/Wheel-1/Sector2/Station1/OccupancyAllHits_perCh_W-1_St1_Sec2"
+DEMO_REQUEST_URL= "https://cmsweb.cern.ch/dqm/online/jsonfairy/archive/317111/Global/Online/ALL/DT/01-Digi/Wheel-1/Sector2/Station1/OccupancyAllHits_perCh_W-1_St1_Sec2"
 
-def getLabelsFromProtectedUrl(url=REQUEST_URL):
+def getLabelsFromProtectedUrl(url=DEMO_REQUEST_URL):
     print("URL:", url)
     authObj = authUtils.AuthContainer().loadData()
     dataJson = getContentFromProtectedUrl(url, authObj)
@@ -23,7 +23,6 @@ def getLabels(valueDictionary):
     if isinstance(hist, str):
         raise ValueError("cannot load data from url")
     return valueDictionary.get('hist').get('bins').get('content')      
-
 
 def parseJsonResult(jsonString):
     return json.loads(jsonString)

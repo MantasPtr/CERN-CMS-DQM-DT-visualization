@@ -1,12 +1,13 @@
 from validotors.abstractValidator import AbstractValidator
 
 class BetweenValidator(AbstractValidator):
-    def __init__(self):
-        self.min = 0
-        self.max = 100
+    minValue = 0
+    maxValue = 100
 
-    def validate(self, value: int):
-        return self.min <= value <= self.max
+    @classmethod
+    def validate(cls, value: int):
+        return cls.minValue <= int(value) <= cls.maxValue
 
-    def getErrorMessage(self):
-        return "Value must be between {0} and {1} (inclusively)".format(self.min, self.max) 
+    @classmethod
+    def getErrorMessage(cls):
+        return "Value must be between {0} and {1} (inclusively)".format(cls.minValue, cls.maxValue) 

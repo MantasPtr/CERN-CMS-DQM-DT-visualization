@@ -19,7 +19,7 @@ def __plot(matrix):
     # ax.set_xticks(np.arange(len(matrix[0]))[::2] - 0.5, minor=True)
     ax.set_yticks(np.arange(len(matrix))[::2] - 0.5, minor=True)
     im = ax.imshow(matrix)
-    cbar = ax.figure.colorbar(im,  ax=ax)
+    cbar = ax.figure.colorbar(im, ax=ax)
     cbar.ax.set_ylabel("colors", rotation=-90, va="bottom")
     
 def __getPlotBytes() ->  io.BytesIO: 
