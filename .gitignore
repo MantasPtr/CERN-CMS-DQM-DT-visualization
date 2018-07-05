@@ -1,5 +1,3 @@
-/usercert.pem
-/userkey.pem
-config.ini
+files/
 .vscode/
 __pycache__/
