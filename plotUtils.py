@@ -7,10 +7,6 @@ from matplotlib.transforms import Bbox, TransformedBbox
 from matplotlib.backends.backend_agg import FigureCanvasAgg as FigureCanvas
 from matplotlib.figure import Figure
 
-# def getImageBytes(matrix):
-#     __plot(matrix)
-#     return __getPlotBytes()
-    
 def drawPlot(matrix):
     __plot(matrix)
     __showPlot()
