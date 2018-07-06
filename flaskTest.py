@@ -1,7 +1,7 @@
 from dataLoading.requestUtils import getLabelsFromProtectedUrl
 import plotUtils
-import base64
-from flask import Flask, redirect
+from dataLoading.urlBuilder import buildUrl
+from flask import Flask, redirect, make_response
 
 app = Flask(__name__)
 
@@ -9,5 +9,17 @@ app = Flask(__name__)
 def default():
     labels = getLabelsFromProtectedUrl()
     imgBytes = plotUtils.getImageBytes(labels)
-    plot_url = base64.b64encode(imgBytes.getvalue()).decode()
-    return '<img src="data:image/png;base64,{}">'.format(plot_url)
+    # imgBytes = plotUtils.getImageBytes(labels)
+    
+    response=make_response(imgBytes.getvalue())
+    response.headers['Content-Type'] = 'image/png'
+    return response
+
+@app.route("/<int:run>/<int:wheel>/<int:sector>/<int:station>/labels.png")
+def simple(run, wheel, sector, station):
+    url = buildUrl(run, wheel, sector, station)
+    labels = getLabelsFromProtectedUrl(url)
+    imgBytes = plotUtils.getImageBytes(labels)
+    response=make_response(imgBytes.getvalue())
+    response.headers['Content-Type'] = 'image/png'
+    return response
