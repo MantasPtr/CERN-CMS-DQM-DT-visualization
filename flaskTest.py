@@ -1,4 +1,4 @@
-from requestUtils import getLabelsFromProtectedUrl
+from dataLoading.requestUtils import getLabelsFromProtectedUrl
 import plotUtils
 import base64
 from flask import Flask, redirect
