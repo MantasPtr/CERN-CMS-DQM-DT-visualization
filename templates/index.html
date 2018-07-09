@@ -1,0 +1,55 @@
+<!doctype html>
+
+<head>
+  <script src="https://d3js.org/d3.v3.min.js"></script>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u"
+    crossorigin="anonymous">
+  <link rel="stylesheet" href={{url_for('static', filename='style.css')}}/>
+</head>
+
+<body style="margin:50px">
+  <div class="row">
+    <div class="col-md-12">
+      Run number {{ run }}
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-md-12">
+      <form action="/result" class="input-group">
+        <table border="0">
+          <tr>
+            <td rowspan="14">
+              <div id="image"/>
+            </td>
+            <td height="50px"></td>
+          </tr>
+          <tr><td class="dummy"><span class="input-group-addon"><input type="checkbox" name="l12" checked> Layer 12</span></td></tr>
+          <tr><td class="dummy"><span class="input-group-addon"><input type="checkbox" name="l11" checked> Layer 11</span></td></tr>
+          <tr><td class="dummy"><span class="input-group-addon"><input type="checkbox" name="l10" checked> Layer 10</span></td></tr>
+          <tr><td class="dummy"><span class="input-group-addon"><input type="checkbox" name= "l9" checked> Layer 9 </span></td></tr>
+          <tr><td class="dummy"><span class="input-group-addon"><input type="checkbox" name= "l8" checked> Layer 8 </span></td></tr>
+          <tr><td class="dummy"><span class="input-group-addon"><input type="checkbox" name= "l7" checked> Layer 7 </span></td></tr>
+          <tr><td class="dummy"><span class="input-group-addon"><input type="checkbox" name= "l6" checked> Layer 6 </span></td></tr>
+          <tr><td class="dummy"><span class="input-group-addon"><input type="checkbox" name= "l5" checked> Layer 5 </span></td></tr>
+          <tr><td class="dummy"><span class="input-group-addon"><input type="checkbox" name= "l4" checked> Layer 4 </span></td></tr>
+          <tr><td class="dummy"><span class="input-group-addon"><input type="checkbox" name= "l3" checked> Layer 3 </span></td></tr>
+          <tr><td class="dummy"><span class="input-group-addon"><input type="checkbox" name= "l2" checked> Layer 2 </span></td></tr>
+          <tr><td class="dummy"><span class="input-group-addon"><input type="checkbox" name= "l1" checked> Layer 1 </span></td></tr>
+          <tr><td height="50px"></td></tr>    
+        </table>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-md-2">
+      <input type="hidden" value="{{ id }}" name="idplot">
+    </div>
+    <div class="col-md-3">
+      <input class="btn btn-sm btn-warning" type="submit">
+    </div>
+    <div class="col-md-3">
+      <a class="btn btn-sm btn-info" href="/label/">SKIP</a>
+    </div>
+  </div>
+  </form>
+  <script src="{{url_for('static', filename='draw.js')}}"></script>
+</body>

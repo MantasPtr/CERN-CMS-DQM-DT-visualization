@@ -1,19 +1,23 @@
 from dataLoading.requestUtils import getLabelsFromProtectedUrl
 import plotUtils
 from dataLoading.urlBuilder import validateAndBuildUrl
-from flask import Flask, redirect, make_response
+from flask import Flask, render_template,  make_response
 import plotting
+
 app = Flask(__name__)
+MAIN_PAGE='index.html'
+IMAGE_URL='/a'
 
 @app.route('/')
 def default():
-    labels = getLabelsFromProtectedUrl()
-    imgBytes = plotUtils.getImageBytes(labels)
-    response=make_response(imgBytes.getvalue())
-    response.headers['Content-Type'] = 'image/png'
-    return response
+    return render_template(MAIN_PAGE, run = 111111, imageUrl = IMAGE_URL)
+#     labels = getLabelsFromProtectedUrl()
+#     imgBytes = plotUtils.getImageBytes(labels)
+#     response=make_response(imgBytes.getvalue())
+#     response.headers['Content-Type'] = 'image/png'
+#     return response
 
-@app.route('/a')
+@app.route(IMAGE_URL)
 def a():
     labels = getLabelsFromProtectedUrl()
     imgBytes = plotting.plot_occupancy_hitmap(labels, "title", "a.u.")
