@@ -1,4 +1,4 @@
-from validotors.abstractValidator import AbstractValidator
+from validators.abstractValidator import AbstractValidator
 
 class BetweenValidator(AbstractValidator):
     minValue = 0

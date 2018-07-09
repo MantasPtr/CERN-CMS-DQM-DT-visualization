@@ -1,4 +1,4 @@
-from validotors.betweenValidator import BetweenValidator
+from validators.betweenValidator import BetweenValidator
 
 class WheelValidator(BetweenValidator):
     minValue = -2

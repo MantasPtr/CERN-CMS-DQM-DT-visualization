@@ -1,6 +1,6 @@
 from dataLoading.requestUtils import getLabelsFromProtectedUrl
 import plotUtils
-from dataLoading.urlBuilder import buildUrl
+from dataLoading.urlBuilder import validateAndBuildUrl
 from flask import Flask, redirect, make_response
 import plotting
 app = Flask(__name__)
@@ -23,7 +23,7 @@ def a():
 
 @app.route("/<int:run>/<int:wheel>/<int:sector>/<int:station>/labels.png")
 def simple(run, wheel, sector, station):
-    url = buildUrl(run, wheel, sector, station)
+    url = validateAndBuildUrl(run, wheel, sector, station)
     labels = getLabelsFromProtectedUrl(url)
     imgBytes = plotUtils.getImageBytes(labels)
     response=make_response(imgBytes.getvalue())
