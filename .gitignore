@@ -1,4 +1,4 @@
 files/
 .vscode/
 __pycache__/
-password.txt
+config/password.txt

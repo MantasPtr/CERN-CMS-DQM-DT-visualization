@@ -1,6 +1,5 @@
 import urllib.request as request
 import ssl
-import configUtils
 import json
 from dataLoading import authUtils
 import plotUtils
@@ -8,10 +7,13 @@ import plotUtils
 DEMO_REQUEST_URL= "https://cmsweb.cern.ch/dqm/online/jsonfairy/archive/317111/Global/Online/ALL/DT/01-Digi/Wheel-1/Sector2/Station1/OccupancyAllHits_perCh_W-1_St1_Sec2"
 
 def getLabelsFromProtectedUrl(url=DEMO_REQUEST_URL):
-    print("URL:", url)
-    authObj = authUtils.AuthContainer().loadData()
-    dataJson = getContentFromProtectedUrl(url, authObj)
+    dataJson = getDataJsonFromProtectedUrl(url)
     return getLabels(parseJsonResult(dataJson))
+
+def getDataJsonFromProtectedUrl(url=DEMO_REQUEST_URL):
+    authObj = authUtils.AuthContainer().loadData()
+    return getContentFromProtectedUrl(url, authObj)
+
 
 def getContentFromProtectedUrl(url, authObj: authUtils.AuthContainer): 
     context = ssl.SSLContext()

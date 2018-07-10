@@ -1,4 +1,4 @@
-import configUtils
+import config.configUtils as cfg
 from os.path import isfile
 import warnings
 
@@ -16,8 +16,8 @@ class AuthContainer():
         return f.read()
 
     def loadData(self):
-        config = configUtils.getConfig('DEFAULT')
-        homePath = configUtils.getHomePath()
+        config = cfg.getConfig('DEFAULT')
+        homePath = cfg.getHomePath()
         self.pathToCerticate= homePath + config['pathToCert']
         self.pathToCerticatePass= homePath + config['pathToCertKey']
         self.password= self.readPasswordFile(config['passwordFile'])
