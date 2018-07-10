@@ -5,7 +5,7 @@ class BetweenValidator(AbstractValidator):
     maxValue = 100
 
     @classmethod
-    def validate(cls, value: int):
+    def validValue(cls, value: int):
         return cls.minValue <= int(value) <= cls.maxValue
 
     @classmethod

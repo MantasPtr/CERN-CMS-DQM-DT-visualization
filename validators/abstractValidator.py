@@ -1,7 +1,7 @@
 class AbstractValidator():
     
     @staticmethod
-    def validate(value):
+    def validValue(value):
         pass
     
     @staticmethod
@@ -9,5 +9,5 @@ class AbstractValidator():
         pass
 
 def validateAndRaiseException(value, validator: AbstractValidator):
-    if not validator.validate(value):
-        raise ValueError(validator.getErrorMessage)
+    if not validator.validValue(value):
+        raise ValueError(validator.getErrorMessage())

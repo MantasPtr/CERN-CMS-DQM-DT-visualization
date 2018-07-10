@@ -16,6 +16,6 @@ svg.selectAll("rect")
     .attr("height", z)
     .style("fill", (d) => d3.hsl(d % x / x * 360, 1, Math.floor(d / x) / y))
 
-    function translate(d) {
-        return "translate(" + (d % x) * z + "," + Math.floor(d / x) * z + ")";
-    }
+function translate(d) {
+   return "translate(" + (d % x) * z + "," + Math.floor(d / x) * z + ")";
+}

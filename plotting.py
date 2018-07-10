@@ -52,12 +52,6 @@ def plot_occupancy_hitmap(data, title, unit):
     png_output = io.BytesIO()
     canvas.print_png(png_output)
     return png_output
-    
-    
-def get_title(title, show):
-    """Generates title for occupancy plot"""
-    return ("%sRun: %s, W: %s, St: %s, Sec: %s" % 
-            (title, int(show.run), show.wheel, show.station, show.sector))
 
 # def visualize_preprocessing(show, smoothed):
 #     """Visualizes preprocessing steps"""

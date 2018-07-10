@@ -6,7 +6,7 @@ class WheelValidator(BetweenValidator):
 
     @classmethod
     def getErrorMessage(cls):
-        return "Invalid wheel number:" + cls.getErrorMessage()
+        return "Invalid wheel number: " + BetweenValidator.getErrorMessage()
 
 class SectorValidator(BetweenValidator):
     minValue = 1
@@ -14,7 +14,7 @@ class SectorValidator(BetweenValidator):
 
     @classmethod
     def getErrorMessage(cls):
-        return "Invalid sector number:" + cls.getErrorMessage()
+        return "Invalid sector number: " + BetweenValidator.getErrorMessage()
 
 class StationValidator(BetweenValidator):
     minValue = 1
@@ -22,4 +22,4 @@ class StationValidator(BetweenValidator):
 
     @classmethod
     def getErrorMessage(cls):
-        return "Invalid station number:" + cls.getErrorMessage()
+        return "Invalid station number: " + BetweenValidator.getErrorMessage()

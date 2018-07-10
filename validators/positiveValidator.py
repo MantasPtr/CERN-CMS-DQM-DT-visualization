@@ -4,7 +4,7 @@ class PositiveValidator(AbstractValidator):
     minValue = 0
 
     @classmethod
-    def validate(cls, value: int):
+    def validValue(cls, value: int):
         return value > 0 
 
     @classmethod

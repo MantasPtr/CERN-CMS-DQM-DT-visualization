@@ -2,26 +2,34 @@
 
 <head>
   <script src="https://d3js.org/d3.v3.min.js"></script>
-  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u"
-    crossorigin="anonymous">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
   <link rel="stylesheet" href={{url_for('static', filename='style.css')}}/>
+  <script src="{{url_for('static', filename='actions.js')}}"></script>
 </head>
 
-<body style="margin:50px">
+<body>
   <div class="row">
     <div class="col-md-12">
-      Run number {{ run }}
+      {{title}}
     </div>
   </div>
+
+  <div class="form-inline">
+      <input type="text" class="form-control mb-2 mr-sm-2" id="runInput" placeholder="Run number">
+      <input type="text" class="form-control mb-2 mr-sm-2" id="wheelInput" placeholder="Wheel">
+      <input type="text" class="form-control mb-2 mr-sm-2" id="sectorInput" placeholder="Sector">
+      <input type="text" class="form-control mb-2 mr-sm-2" id="stationInput" placeholder="Station">  
+      <button class="btn btn-primary mb-2" onclick=loadData()>Load</button>
+  </div>
+
   <div class="row">
     <div class="col-md-12">
       <form action="/result" class="input-group">
-        <table border="0">
+        <table class="table table-striped">
           <tr>
             <td rowspan="14">
               <div id="image"/>
             </td>
-            <td height="50px"></td>
           </tr>
           <tr><td class="dummy"><span class="input-group-addon"><input type="checkbox" name="l12" checked> Layer 12</span></td></tr>
           <tr><td class="dummy"><span class="input-group-addon"><input type="checkbox" name="l11" checked> Layer 11</span></td></tr>
@@ -35,7 +43,6 @@
           <tr><td class="dummy"><span class="input-group-addon"><input type="checkbox" name= "l3" checked> Layer 3 </span></td></tr>
           <tr><td class="dummy"><span class="input-group-addon"><input type="checkbox" name= "l2" checked> Layer 2 </span></td></tr>
           <tr><td class="dummy"><span class="input-group-addon"><input type="checkbox" name= "l1" checked> Layer 1 </span></td></tr>
-          <tr><td height="50px"></td></tr>    
         </table>
     </div>
   </div>
