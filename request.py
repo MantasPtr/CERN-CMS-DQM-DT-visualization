@@ -1,6 +1,6 @@
 from dataLoading.requestUtils import getLabelsFromProtectedUrl
 from dataLoading.urlBuilder import validateAndBuildUrl  
-from plotUtils import drawPlot
+from plotting.plotUtils import drawPlot
 import dataLoading.urlBuilder    
 import sys
 

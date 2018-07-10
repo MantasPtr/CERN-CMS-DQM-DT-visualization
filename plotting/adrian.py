@@ -52,21 +52,3 @@ def plot_occupancy_hitmap(data, title, unit):
     png_output = io.BytesIO()
     canvas.print_png(png_output)
     return png_output
-
-# def visualize_preprocessing(show, smoothed):
-#     """Visualizes preprocessing steps"""
-#     if smoothed:
-#         plot_occupancy_hitmap(show.content_smoothed,
-#                               get_title("Smoothed Occupancy, ", show), "F", "a.u.")
-#         plot_occupancy_hitmap(show.content_smoothed_resized,
-#                               get_title("Standardized Occupancy, ", show), "G", "a.u.")
-#         plot_occupancy_hitmap(show.content_smoothed_scaled,
-#                               get_title("Scaled Occupancy, ", show), False, "a.u.") 
-
-#     else:
-#         plot_occupancy_hitmap(show.content_raw,
-#                               get_title("Raw Occupancy, ", show), "D", "counts")
-#         plot_occupancy_hitmap(show.content_resized,
-#                               get_title("Standardized Occupancy, ", show), "E", "a.u.")
-#         plot_occupancy_hitmap(show.content_scaled,
-#                               get_title("Scaled Occupancy, ", show), False, "a.u.")
