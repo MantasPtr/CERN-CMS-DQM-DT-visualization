@@ -5,15 +5,16 @@ function loadData(){
     let station = getValueFromInputField("#stationInput");
     if (!(run && wheel && sector && station)) {
         console.log("some value is empty")
-        return
+        return;
     }
     fetch("/" +run+ "/" + wheel + "/" + sector + "/" + station + "/labels.json").then(
-        (data) => console.log("OK",data)
-    ).catch(
-        (error) => console.log("ERROR:",error) 
+        (data) => data.json().then(
+            (json) => {
+                let matrix = json.hist.bins.content;
+                createTable(matrix)
+            }
+        )
     )
-
-
 }
 
 function getValueFromInputField(selector){
