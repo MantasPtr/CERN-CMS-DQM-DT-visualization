@@ -1,4 +1,3 @@
-let showText = false;
 const LAYER_SUFFIX = "Layer ";
 let maxLayers = 0;
 let maxValue = 0;
