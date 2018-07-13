@@ -1,12 +1,19 @@
 const settings = {}
 
-settings.showText = false; 
+settings.showText = null; 
 
 settings.toggleShowText = function toggleShowText(d) {
-    showText = document.querySelector("#showNumbersCheck").checked
+    settings.showText = document.querySelector("#showNumbersCheck").checked
     if (cacheData) {
         createTable(cacheData)
     }
+}
+
+settings.getShowText = () => {
+    if (settings.showText === null) {
+        settings.showText = document.getElementById("showNumbersCheck").checked
+    }
+    return settings.showText
 }
 
 

@@ -9,5 +9,7 @@ class BetweenValidator(AbstractValidator):
         return cls.minValue <= int(value) <= cls.maxValue
 
     @classmethod
-    def getErrorMessage(cls):
-        return "Value must be between {0} and {1} (inclusively)".format(cls.minValue, cls.maxValue) 
+    def getErrorMessage(cls, caller= None):
+        if caller is None:
+            caller = cls
+        return "Value must be between {0} and {1} (inclusively)".format(caller.minValue, caller.maxValue) 

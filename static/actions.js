@@ -26,7 +26,6 @@ function loadData(){
 
 function getValueFromInputField(selector){
     let element = document.getElementById(selector)
-    logs(element, element.checkValidity());
     return document.getElementById(selector).value.trim();
 }
 
@@ -35,18 +34,19 @@ function validateApiResponse(response){
         hideApiError();
         return true;
     } else {
-        response.json().then(v => showApiError(v))
+        if (response.BodyUsed) {
+            response.json().then(v => showApiError(v))
+        } else {
+            showApiError(response.status + ": " + response.statusText )
+        }
     }
 }
-
-
 
 function showApiError(message){
     logs(message);
     let errorbanner = document.getElementById(apiErrorBannerId);
     errorbanner.hidden = false;
     errorbanner.textContent = message;
-    logs(errorbanner);
 }
 
 function hideApiError(){

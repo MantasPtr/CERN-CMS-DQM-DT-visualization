@@ -17,16 +17,16 @@ function createTable(tableData) {
     container.innerHTML = "";
     container.appendChild(table);
 
-    function createRows(rowData, i) {
+    function createRows(rowData, rowIndex) {
         let row = document.createElement('tr');
         rowData.forEach(createCell);
-        let layerS = addLayerSelector(i);
+        let layerS = addLayerSelector(rowIndex);
         row.appendChild(layerS)
         tableBody.appendChild(row);
 
         function createCell(cellData) {
             let cell = document.createElement('td');
-            if (showText)
+            if (settings.getShowText())
                 cell.appendChild(document.createTextNode(cellData));
             cell.style.backgroundColor = getColor(cellData, maxValue);
             row.appendChild(cell);
@@ -59,12 +59,4 @@ function drawColorPalet() {
     ctx.fillStyle = grd;
     ctx.fillRect(0, 0,  20, 200);
     canvasDiv.appendChild(canvas)
-}
-
-
-function toggleShowText(d) {
-    showText = document.querySelector("#showNumbersCheck").checked
-    if (cacheData) {
-        createTable(cacheData)
-    }
 }
