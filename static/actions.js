@@ -72,12 +72,21 @@ function hideApiError(){
 }
 
 function save(){
-    getCheckedValues();
+    if (cacheData === null) {
+        return;
+    }
+    const saveObject = {}
+    saveObject.run = run;
+    saveObject.wheel = wheel;
+    saveObject.sector = sector;
+    saveObject.station = station;
+    saveObject.layers =  getCheckedValues();
+    logs(saveObject)
 }
 
 function getCheckedValues(){
     const checkboxes = Array.from(document.querySelectorAll('.layer-selection'));
-    return logs(checkboxes.filter(c => c.checked).map(c => c.getAttribute("index")));
+    return checkboxes.filter(c => c.checked).map(c => c.getAttribute("index"));
 }
 
 

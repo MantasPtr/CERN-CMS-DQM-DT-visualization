@@ -1,9 +1,10 @@
-const emptyColor = d3.hsl(0,0,0); 
+const emptyColor = d3.hsl(0,0,0);
 
 const getColor = (value, max) =>{
     max = max ? max : 255;
-    if (value === -1)
+    if (value === -1) {
         return emptyColor;
+    }
     return d3.hsl(100, value/max, 0.5);
 }
 
