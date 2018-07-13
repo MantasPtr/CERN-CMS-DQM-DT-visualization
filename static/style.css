@@ -11,3 +11,7 @@ body {
     border: 1px solid white;
     min-width: 20px;
 }
+
+#colorbar > canvas {
+    height: 100%;
+}

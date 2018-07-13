@@ -6,7 +6,8 @@ let maxValue = 0;
 let cacheData = null;
 
 function createTable(tableData) {
-    maxValue = getMax(tableData)
+    maxValue = getMax(tableData);
+    drawColorPalet();
     cacheData = tableData;
     maxLayers = tableData.length;
     let table = document.createElement('table');
@@ -44,6 +45,23 @@ function createTable(tableData) {
         return wrap("td", span);
     }
 };
+
+function drawColorPalet() {
+    let canvasDiv = document.querySelector("#colorbar");
+    canvasDiv.innerHTML = "";
+    let canvas = document.createElement("canvas")
+    let ctx = canvas.getContext("2d");
+
+    let grd = ctx.createLinearGradient(0, 0, 0, 100);
+    grd.addColorStop(0, getColor(0, maxValue));
+    //grd.addColorStop(0.5, "red");
+    grd.addColorStop(1, getColor(maxValue, maxValue));
+
+    ctx.fillStyle = grd;
+    ctx.fillRect(0, 0,  20, 200);
+    canvasDiv.appendChild(canvas)
+}
+
 
 function toggleShowText(d) {
     showText = document.querySelector("#showNumbersCheck").checked
