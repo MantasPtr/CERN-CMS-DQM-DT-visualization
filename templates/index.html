@@ -10,9 +10,9 @@
     crossorigin="anonymous"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49"
     crossorigin="anonymous"></script>
-  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js" integrity="sha384-smHYKdLADwkXOn1EmN1qk/HfnUcbVRZyYmZ4qpPea6sjB/pTJ0euyQp0Mk8ck+5T"
-    crossorigin="anonymous"></script>
-  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.1.0/css/all.css" integrity="sha384-lKuwvrZot6UHsBSfcMvOkWwlCMgc0TaWr+30HWe3a4ltaBwTZhyTEggF5tJv8tbt"
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js" integrity="sha384-smHYKdLADwkXOn1EmN1qk/HfnUcbVRZyYmZ4qpPea6sjB/pTJ0euyQp0Mk8ck+5T"
+      crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.1.0/css/all.css" integrity="sha384-lKuwvrZot6UHsBSfcMvOkWwlCMgc0TaWr+30HWe3a4ltaBwTZhyTEggF5tJv8tbt"
     crossorigin="anonymous">
 </head>
 
@@ -29,19 +29,19 @@
       <div class="form-row">
         <div class="form-group col-md-3">
           <label for="runInput">Run</label>
-          <input type="text" class="form-control mb-2 mr-sm-2" id="runInput" min=0 placeholder="Run number">
+          <input class="form-control mb-2 mr-sm-2" id="runInput" type="number" min="1" required placeholder="Run number">
         </div>
         <div class="form-group col-md-3">
           <label for="runInput">Wheel</label>
-          <input type="text" class="form-control mb-2 mr-sm-2" min=-2 max=2 id="wheelInput" placeholder="Wheel">
+          <input class="form-control mb-2 mr-sm-2" type="number" min=-2 max=2 id="wheelInput" required placeholder="Wheel">
         </div>
         <div class="form-group col-md-3">
           <label for="runInput">Sector</label>
-          <input type="text" class="form-control " id="sectorInput" placeholder="Sector">
+          <input class="form-control" type="number" id="sectorInput"  min=1 max=14 required placeholder="Sector">
         </div>
         <div class="form-group col-md-3">
           <label for="runInput">Station</label>
-          <input type="text" class="form-control mb-2 mr-sm-2" id="stationInput" placeholder="Station">
+          <input class="form-control mb-2 mr-sm-2" type="number" id="stationInput" min=1 max=4 placeholder="Station">
         </div>
       </div>
     </div>
@@ -59,6 +59,12 @@
               <input class="form-check-input" onclick="settings.toggleShowText(this)" type="checkbox" id="showNumbersCheck">
               <label class="form-check-label" for="showNumbersCheck">Show values</label>
             </div>
+            <div>
+              Empty <input id="emptyColor" type="color">
+            </div>
+            <div>
+              Signal color<input id="fullColor" type="color">
+            </div>
           </div>
         </div>
       </div>
@@ -73,7 +79,7 @@
       <button class="btn btn-sm btn-warning" onclick="save()">Submit</button>
     </div>
     <div class="col-md-3">
-      <a class="btn btn-sm btn-info" href="/label/">SKIP</a>
+      <button class="btn btn-sm btn-info" ">SKIP</button>
     </div>
   </div>
   <script src="{{url_for('static', filename='settings.js')}}"></script>
