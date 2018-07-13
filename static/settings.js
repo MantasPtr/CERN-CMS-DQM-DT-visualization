@@ -2,7 +2,7 @@ const settings = {}
 
 settings.showText = null; 
 
-settings.toggleShowText = function toggleShowText(d) {
+settings.toggleShowText = (d) => {
     settings.showText = document.querySelector("#showNumbersCheck").checked
     if (cacheData) {
         createTable(cacheData)

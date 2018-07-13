@@ -1,17 +1,23 @@
 const bootstrapErrorClass = "is-invalid";
 const apiErrorBannerId= "apiError";
 
-function loadData(){
-    let run =  getStringValueFromInputField("runInput");
-    let wheel = getStringValueFromInputField("wheelInput");
-    let sector = getStringValueFromInputField("sectorInput");
-    let station = getStringValueFromInputField("stationInput");
+let run;
+let wheel;
+let sector;
+let station;
 
-    if (!(run && wheel && sector && station)) {
+
+function loadData(){
+    let runValue =  getStringValueFromInputField("runInput");
+    let wheelValue = getStringValueFromInputField("wheelInput");
+    let sectorValue = getStringValueFromInputField("sectorInput");
+    let stationValue = getStringValueFromInputField("stationInput");
+
+    if (!(runValue && wheelValue && sectorValue && stationValue)) {
         console.log("some value is empty")
         return;
     }
-    fetch("/" +run+ "/" + wheel + "/" + sector + "/" + station + "/labels.json").then(
+    fetch("/" +runValue+ "/" + wheelValue + "/" + sectorValue + "/" + stationValue + "/labels.json").then(
         (response) => {
             validateApiResponseCode(response)
             response.json().then(processJsonResponse)
@@ -27,6 +33,10 @@ function loadData(){
                 let matrix = hist.bins.content;
                 createTable(matrix);
                 hideApiError();
+                run = runValue;
+                wheel = wheelValue;
+                sector = sectorValue;
+                station = stationValue;
             }
     };
 }
@@ -61,9 +71,13 @@ function hideApiError(){
     errorbanner.text = "";
 }
 
+function save(){
+    getCheckedValues();
+}
 
-function getCheckBoxValues(){
-    
+function getCheckedValues(){
+    const checkboxes = Array.from(document.querySelectorAll('.layer-selection'));
+    return logs(checkboxes.filter(c => c.checked).map(c => c.getAttribute("index")));
 }
 
 

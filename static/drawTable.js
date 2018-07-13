@@ -1,4 +1,3 @@
-const LAYER_SUFFIX = "Layer ";
 let maxLayers = 0;
 let maxValue = 0;
 
@@ -33,14 +32,19 @@ function createTable(tableData) {
         };
     }
 
-    function addLayerSelector(text){
+    function addLayerSelector(layerIndex){
+        const LAYER_SUFFIX = "Layer ";
+        const LAYER_CLASS = "layer-selection";
+        const index = maxLayers - layerIndex;
         let span = document.createElement('span');
         span.classList.add("input-group-addon");
         let input = document.createElement("input");
+        input.classList.add(LAYER_CLASS);
+        input.setAttribute("index", index); 
         input.type = "checkbox";
         input.checked = true;
         span.appendChild(input);
-        span.appendChild(document.createTextNode(LAYER_SUFFIX + (maxLayers - text)));
+        span.appendChild(document.createTextNode(LAYER_SUFFIX + index));
         return wrap("td", span);
     }
 };

@@ -47,7 +47,8 @@
     </div>
     <!-- SETTINGS -->
     <div class="col-md-4">
-      <button class="btn btn-primary" type="button" data-toggle="collapse" data-target=".multi-collapse" aria-expanded="false"
+    <button class="btn btn-primary"  onclick=loadData()>Load</button>
+      <button class="btn btn-secondary" type="button" data-toggle="collapse" data-target=".multi-collapse" aria-expanded="false"
         aria-controls="multiCollapseExample1">
         <i class="fas fa-cog"></i>
       </button>
@@ -63,16 +64,13 @@
       </div>
     </div>
   </div>
-  <div class="col-md-2">
-    <button class="btn btn-primary mb-2" onclick=loadData()>Load</button>
-  </div>
   <div class="row"/>
     <div class="col-md-10" id="image"></div>
     <div class="col-md-2" id="colorbar"></div>
   </div>
   <div class="row">
     <div class="col-md-3">
-      <input class="btn btn-sm btn-warning" type="submit">
+      <button class="btn btn-sm btn-warning" onclick="save()">Submit</button>
     </div>
     <div class="col-md-3">
       <a class="btn btn-sm btn-info" href="/label/">SKIP</a>
