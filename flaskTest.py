@@ -4,6 +4,7 @@ from dataLoading.urlBuilder import validateAndBuildUrl
 from flask import Flask, render_template,  make_response, jsonify
 import plotting.adrian as aplot
 import matplotlib
+matplotlib.use('Agg')
 
 app = Flask(__name__)
 MAIN_PAGE='index.html'
@@ -33,6 +34,7 @@ def simple(run, wheel, sector, station):
 
 @app.route("/<int:run>/<string:wheel>/<int:sector>/<int:station>/labels.json")
 def labelsJson(run, wheel, sector, station):
+    # returns full json from url since it does not need to parse and format json again
     wheel = int(wheel) 
     url = validateAndBuildUrl(run, wheel, sector, station)
     return getDataJsonFromProtectedUrl(url)

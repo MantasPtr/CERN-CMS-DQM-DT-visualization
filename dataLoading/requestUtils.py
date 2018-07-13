@@ -10,9 +10,9 @@ def getLabelsFromProtectedUrl(url=DEMO_REQUEST_URL):
     return getLabels(parseJsonResult(dataJson))
 
 def getDataJsonFromProtectedUrl(url=DEMO_REQUEST_URL):
+    print("URL" + url)
     authObj = authUtils.AuthContainer().loadData()
     return getContentFromProtectedUrl(url, authObj)
-
 
 def getContentFromProtectedUrl(url, authObj: authUtils.AuthContainer): 
     context = ssl.SSLContext()
@@ -22,7 +22,7 @@ def getContentFromProtectedUrl(url, authObj: authUtils.AuthContainer):
 def getLabels(valueDictionary):
     hist = valueDictionary.get('hist')
     if isinstance(hist, str):
-        raise ValueError("cannot load data from url")
+        raise ValueError("Cannot load data from url")
     return valueDictionary.get('hist').get('bins').get('content')      
 
 def parseJsonResult(jsonString):
