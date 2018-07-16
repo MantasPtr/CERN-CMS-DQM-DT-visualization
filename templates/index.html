@@ -1,18 +1,19 @@
 <!doctype html>
 
 <head>
+  <title>CMS DQM</title>
   <script src="https://d3js.org/d3.v3.min.js"></script>
   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" integrity="sha384-WskhaSGFgHYWDcbwN70/dfYBj47jz9qbsMId/iRN3ewGhXQFZCSftd1LZCfmhktB"
     crossorigin="anonymous">
-  <link rel="stylesheet" href={{url_for( 'static', filename='style.css' )}}/>
+  <link rel="stylesheet" href="{{url_for( 'static', filename='style.css')}}" />
   <script src="{{url_for('static', filename='actions.js')}}"></script>
   <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
     crossorigin="anonymous"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49"
     crossorigin="anonymous"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js" integrity="sha384-smHYKdLADwkXOn1EmN1qk/HfnUcbVRZyYmZ4qpPea6sjB/pTJ0euyQp0Mk8ck+5T"
-      crossorigin="anonymous"></script>
-    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.1.0/css/all.css" integrity="sha384-lKuwvrZot6UHsBSfcMvOkWwlCMgc0TaWr+30HWe3a4ltaBwTZhyTEggF5tJv8tbt"
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js" integrity="sha384-smHYKdLADwkXOn1EmN1qk/HfnUcbVRZyYmZ4qpPea6sjB/pTJ0euyQp0Mk8ck+5T"
+    crossorigin="anonymous"></script>
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.1.0/css/all.css" integrity="sha384-lKuwvrZot6UHsBSfcMvOkWwlCMgc0TaWr+30HWe3a4ltaBwTZhyTEggF5tJv8tbt"
     crossorigin="anonymous">
 </head>
 
@@ -24,8 +25,8 @@
   </div>
   <div class="alert alert-danger" id="apiError" hidden="true" role="alert"></div>
   <div class="row">
+    <!-- INPUT -->
     <div class="col-md-8">
-      <!-- INPUT -->
       <div class="form-row">
         <div class="form-group col-md-3">
           <label for="runInput">Run</label>
@@ -33,44 +34,54 @@
         </div>
         <div class="form-group col-md-3">
           <label for="runInput">Wheel</label>
-          <input class="form-control mb-2 mr-sm-2" type="number" min=-2 max=2 id="wheelInput" required placeholder="Wheel">
+          <input class="form-control mb-2 mr-sm-2" type="number" min="-2" max="2" id="wheelInput" required placeholder="Wheel">
         </div>
         <div class="form-group col-md-3">
           <label for="runInput">Sector</label>
-          <input class="form-control" type="number" id="sectorInput"  min=1 max=14 required placeholder="Sector">
+          <input class="form-control" type="number" id="sectorInput" min="1" max="14" required placeholder="Sector">
         </div>
         <div class="form-group col-md-3">
           <label for="runInput">Station</label>
-          <input class="form-control mb-2 mr-sm-2" type="number" id="stationInput" min=1 max=4 placeholder="Station">
+          <input class="form-control mb-2 mr-sm-2" type="number" id="stationInput" min="1" max="4" placeholder="Station">
         </div>
       </div>
     </div>
-    <!-- SETTINGS -->
-    <div class="col-md-4">
-    <button class="btn btn-primary"  onclick=loadData()>Load</button>
-      <button class="btn btn-secondary" type="button" data-toggle="collapse" data-target=".multi-collapse" aria-expanded="false"
-        aria-controls="multiCollapseExample1">
-        <i class="fas fa-cog"></i>
-      </button>
-      <div class="row">
-        <div class="col">
-          <div class="collapse multi-collapse" id="multiCollapseExample1">
-            <div class="form-check">
-              <input class="form-check-input" onclick="settings.toggleShowText(this)" type="checkbox" id="showNumbersCheck">
-              <label class="form-check-label" for="showNumbersCheck">Show values</label>
-            </div>
-            <div>
-              Empty <input id="emptyColor" type="color">
-            </div>
-            <div>
-              Signal color<input id="fullColor" type="color">
-            </div>
-          </div>
-        </div>
+    <div class="col-md-4 mt-auto form-group">
+      <div class="mb-2">
+        <button class="btn btn-primary" onclick="loadData()">Load</button>
+        <button class="btn btn-secondary" type="button" data-toggle="collapse" data-target=".multi-collapse" aria-expanded="false"
+          aria-controls="settingColapse">
+          <i class="fas fa-cog"></i>
+        </button>
       </div>
     </div>
   </div>
-  <div class="row"/>
+  <div class="collapse multi-collapse row" id="settingColapse">
+    <div class="col">
+      <div class="form-check">
+        <input class="form-check-input" onclick="settings.toggleShowText(this)" type="checkbox" id="showNumbersCheck">
+        <label class="form-check-label" for="showNumbersCheck">Show values</label>
+      </div>
+    </div>
+    <div class="col">
+      <div class="form-check">
+        <input class="form-check-input" onclick="" type="checkbox" id="maxColor">
+        <label class="form-check-label" for="maxColor">Use max color value</label>
+        <input type="number" min="1" max="255" value="255">
+      </div>
+    </div>
+    <div class="col">
+      <div>
+        Empty color:
+        <input id="emptyColor" type="color">
+      </div>
+      <div>
+        Signal color:
+        <input id="fullColor" type="color">
+      </div>
+    </div>
+  </div>
+  <div class="row">
     <div class="col-md-10" id="image"></div>
     <div class="col-md-2" id="colorbar"></div>
   </div>
@@ -79,11 +90,11 @@
       <button class="btn btn-sm btn-warning" onclick="save()">Submit</button>
     </div>
     <div class="col-md-3">
-      <button class="btn btn-sm btn-info" ">SKIP</button>
+      <button class="btn btn-sm btn-info">SKIP</button>
     </div>
   </div>
-  <script src="{{url_for('static', filename='settings.js')}}"></script>
-  <script src="{{url_for('static', filename='draw.js')}}"></script>
-  <script src="{{url_for('static', filename='drawTable.js')}}"></script>
-  <script src="{{url_for('static', filename='drawCommon.js')}}"></script>
+  <script src="{{url_for( 'static', filename='settings.js' )}} "></script>
+  <script src="{{url_for( 'static', filename='draw.js' )}} "></script>
+  <script src="{{url_for( 'static', filename='drawTable.js' )}} "></script>
+  <script src="{{url_for( 'static', filename='drawCommon.js' )}} "></script>
 </body>

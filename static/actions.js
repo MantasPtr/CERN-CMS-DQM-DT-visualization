@@ -69,7 +69,7 @@ function hideApiError(){
     let errorbanner = document.getElementById(apiErrorBannerId);
     errorbanner.hidden = true;
     errorbanner.text = "";
-}
+}   
 
 function save(){
     if (cacheData === null) {
