@@ -15,6 +15,9 @@
     crossorigin="anonymous"></script>
   <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.1.0/css/all.css" integrity="sha384-lKuwvrZot6UHsBSfcMvOkWwlCMgc0TaWr+30HWe3a4ltaBwTZhyTEggF5tJv8tbt"
     crossorigin="anonymous">
+  <script src="{{url_for( 'static', filename='settings.js' )}} "></script>
+  <script src="{{url_for( 'static', filename='drawTable.js' )}} "></script>
+  <script src="{{url_for( 'static', filename='drawCommon.js' )}} "></script>
 </head>
 
 <body>
@@ -63,23 +66,6 @@
         <label class="form-check-label" for="showNumbersCheck">Show values</label>
       </div>
     </div>
-    <div class="col">
-      <div class="form-check">
-        <input class="form-check-input" onclick="" type="checkbox" id="maxColor">
-        <label class="form-check-label" for="maxColor">Use max color value</label>
-        <input type="number" min="1" max="255" value="255">
-      </div>
-    </div>
-    <div class="col">
-      <div>
-        Empty color:
-        <input id="emptyColor" type="color">
-      </div>
-      <div>
-        Signal color:
-        <input id="fullColor" type="color">
-      </div>
-    </div>
   </div>
   <div class="row">
     <div class="col-md-10" id="image"></div>
@@ -93,8 +79,5 @@
       <button class="btn btn-sm btn-info">SKIP</button>
     </div>
   </div>
-  <script src="{{url_for( 'static', filename='settings.js' )}} "></script>
-  <script src="{{url_for( 'static', filename='draw.js' )}} "></script>
-  <script src="{{url_for( 'static', filename='drawTable.js' )}} "></script>
-  <script src="{{url_for( 'static', filename='drawCommon.js' )}} "></script>
+
 </body>

@@ -56,9 +56,9 @@ function drawColorPalet() {
     let ctx = canvas.getContext("2d");
 
     let grd = ctx.createLinearGradient(0, 0, 0, 100);
+    grd.addColorStop(1, getColor(maxValue, maxValue));
     grd.addColorStop(0, getColor(0, maxValue));
     //grd.addColorStop(0.5, "red");
-    grd.addColorStop(1, getColor(maxValue, maxValue));
 
     ctx.fillStyle = grd;
     ctx.fillRect(0, 0,  20, 200);

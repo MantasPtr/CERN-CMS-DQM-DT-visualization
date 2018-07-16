@@ -17,16 +17,36 @@ function loadData(){
         console.log("some value is empty")
         return;
     }
+
     fetch("/" +runValue+ "/" + wheelValue + "/" + sectorValue + "/" + stationValue + "/labels.json").then(
         (response) => {
             validateApiResponseCode(response)
             response.json().then(processJsonResponse)
         }
-    )
+    );
+
+
+    function getStringValueFromInputField(selector){
+        let element = document.getElementById(selector)
+        return document.getElementById(selector).value.trim();
+    }
+
+    function validateApiResponseCode(response){
+        if (response.status == 200) {
+            hideApiError();
+            return true;
+        } else {
+            if (response.BodyUsed) {
+                response.json().then(v => showApiError(v))
+            } else {
+                showApiError(response.status + ": " + response.statusText )
+            }
+        }
+    }
 
     function processJsonResponse (json){
             let hist = json.hist;
-            if (typeof hist === 'string') {
+            if (typeof hist === "string") {
                 showApiError("Error while retrieving data - API returned: " + hist);
             }
             else {
@@ -39,37 +59,19 @@ function loadData(){
                 station = stationValue;
             }
     };
-}
 
-function getStringValueFromInputField(selector){
-    let element = document.getElementById(selector)
-    return document.getElementById(selector).value.trim();
-}
-
-function validateApiResponseCode(response){
-    if (response.status == 200) {
-        hideApiError();
-        return true;
-    } else {
-        if (response.BodyUsed) {
-            response.json().then(v => showApiError(v))
-        } else {
-            showApiError(response.status + ": " + response.statusText )
-        }
+    function showApiError(message){
+        let errorbanner = document.getElementById(apiErrorBannerId);
+        errorbanner.hidden = false;
+        errorbanner.textContent = message;
     }
-}
 
-function showApiError(message){
-    let errorbanner = document.getElementById(apiErrorBannerId);
-    errorbanner.hidden = false;
-    errorbanner.textContent = message;
+    function hideApiError(){
+        let errorbanner = document.getElementById(apiErrorBannerId);
+        errorbanner.hidden = true;
+        errorbanner.text = "";
+    }   
 }
-
-function hideApiError(){
-    let errorbanner = document.getElementById(apiErrorBannerId);
-    errorbanner.hidden = true;
-    errorbanner.text = "";
-}   
 
 function save(){
     if (cacheData === null) {
@@ -82,12 +84,14 @@ function save(){
     saveObject.station = station;
     saveObject.layers =  getCheckedValues();
     logs(saveObject)
+
+    function getCheckedValues(){
+        const checkboxes = Array.from(document.querySelectorAll(".layer-selection"));
+        return checkboxes.filter(c => c.checked).map(c => c.getAttribute("index"));
+    }
 }
 
-function getCheckedValues(){
-    const checkboxes = Array.from(document.querySelectorAll('.layer-selection'));
-    return checkboxes.filter(c => c.checked).map(c => c.getAttribute("index"));
-}
+
 
 
 
