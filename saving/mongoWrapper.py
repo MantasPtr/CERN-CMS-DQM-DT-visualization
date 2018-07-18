@@ -13,8 +13,8 @@ class MongoCollectionWrapper:
     def getAll(self):
         return self.collection.find({})
     
-    def find(self):
-        raise NotImplementedError
+    def find(self, filter):
+        return self.collection.find(filter)
     
     def deleteAll(self):
         self.collection.delete_many({})
@@ -22,8 +22,8 @@ class MongoCollectionWrapper:
     def findOne(self, filter = {}):
         return self.collection.find_one(filter)
 
-    def count(self):
-        return self.collection.count()
+    def count(self, filter={}):
+        return self.collection.count_documents(filter)
 
 
 class MongoDbFactory():
