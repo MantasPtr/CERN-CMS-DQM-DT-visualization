@@ -1,9 +1,9 @@
 import configparser
 from pathlib import Path
 
-def getConfig(enviroment):
+def getConfig(enviroment='DEFAULT', configLocation='config/config.ini'):
     config = configparser.ConfigParser()
-    config.read('config/config.ini')
+    config.read(configLocation)
     return config[enviroment]
 
 def getHomePath():

@@ -16,7 +16,7 @@ class AuthContainer():
         return f.read()
 
     def loadData(self):
-        config = cfg.getConfig('DEFAULT')
+        config = cfg.getConfig()
         homePath = cfg.getHomePath()
         self.pathToCerticate= homePath + config['pathToCert']
         self.pathToCerticatePass= homePath + config['pathToCertKey']
