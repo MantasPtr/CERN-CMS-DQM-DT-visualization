@@ -1,25 +1,24 @@
 from dataLoading.requestUtils import getLabelsFromProtectedUrl, getDataJsonFromProtectedUrl
-import plotting.plotUtils as plt
+import gui.plotting.plotUtils as plt
 from dataLoading.urlBuilder import validateAndBuildUrl
 from flask import Flask, render_template,  make_response, jsonify
-import plotting.adrian as aplot
+import gui.plotting.adrian as aplot
 import matplotlib
 matplotlib.use('Agg')
 
-app = Flask(__name__)
+app = Flask(__name__, template_folder="gui/templates", static_folder="gui/static")
 MAIN_PAGE_TEMPLATE='index.html'
 FETCH_PAGE_TEMPLATE='fetch.html'
-IMAGE_URL='/i'
 
 @app.route('/')
 def default():
-    return render_template(MAIN_PAGE_TEMPLATE, title = 317111, imageUrl = IMAGE_URL)
+    return render_template(MAIN_PAGE_TEMPLATE, title = 317111)
 
-@app.route('/')
+@app.route('/fetch')
 def fetch():
     return render_template(FETCH_PAGE_TEMPLATE)
 
-@app.route(IMAGE_URL)
+@app.route('/i')
 def img():
     labels = getLabelsFromProtectedUrl()
     imgBytes = aplot.plot_occupancy_hitmap(labels, "title", "a.u.")
