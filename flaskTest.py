@@ -7,12 +7,17 @@ import matplotlib
 matplotlib.use('Agg')
 
 app = Flask(__name__)
-MAIN_PAGE='index.html'
+MAIN_PAGE_TEMPLATE='index.html'
+FETCH_PAGE_TEMPLATE='fetch.html'
 IMAGE_URL='/i'
 
 @app.route('/')
 def default():
-    return render_template(MAIN_PAGE, title = 317111, imageUrl = IMAGE_URL)
+    return render_template(MAIN_PAGE_TEMPLATE, title = 317111, imageUrl = IMAGE_URL)
+
+@app.route('/')
+def fetch():
+    return render_template(FETCH_PAGE_TEMPLATE)
 
 @app.route(IMAGE_URL)
 def img():
@@ -23,7 +28,7 @@ def img():
     return response
 
 @app.route("/<int:run>/<string:wheel>/<int:sector>/<int:station>/labels.png")
-def simple(run, wheel, sector, station):
+def get(run, wheel, sector, station):
     wheel = int(wheel) 
     url = validateAndBuildUrl(run, wheel, sector, station)
     labels = getLabelsFromProtectedUrl(url)
@@ -44,3 +49,4 @@ def handle_invalid_usage(error: ValueError):
     response = jsonify(str(error))
     response.status_code = 400
     return response
+

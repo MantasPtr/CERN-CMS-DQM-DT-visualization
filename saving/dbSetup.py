@@ -1,4 +1,5 @@
 from config.configUtils import getConfig
+from mongoWrapper import MongoDbFactory, MongoCollectionWrapper
 
 client = None
 database = None
@@ -8,4 +9,5 @@ def getDatabaseAndCollectionName():
     config = getConfig(configLocation=DB_CONFIG_LOCATION)
     databaseName = config['database']
     collectionName = config['collection']
-    return {"database":databaseName, "collection":collectionName}
+    return databaseName, collectionName
+
