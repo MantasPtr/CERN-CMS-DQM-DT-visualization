@@ -1,4 +1,4 @@
-from pymongo import MongoClient, collection
+from pymongo import MongoClient, collection, operations
 
 class MongoCollectionWrapper:
     def __init__(self,collection: collection.Collection):
@@ -24,6 +24,18 @@ class MongoCollectionWrapper:
 
     def count(self, filter={}):
         return self.collection.count_documents(filter)
+
+    def createIndex(self, indexField, indexName):
+        return self.collection.create_index(indexField, name=indexName)
+
+    def dropIndex(self, indexName):
+        self.collection.drop_index(indexName)
+
+    def dropIndexes(self):
+        self.collection.drop_indexes()
+
+    def dropCollection(self):
+        self.collection.drop()
 
 # class MongoFilter():
 #     "$eq"	#Matches values that are equal to a specified value.

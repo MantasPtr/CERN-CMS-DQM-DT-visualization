@@ -1,4 +1,4 @@
-from dataLoading.requestUtils import getLabelsFromProtectedUrl, getDataJsonFromProtectedUrl
+from dataLoading.requestUtils import getLabelsFromProtectedUrl, getJsonDataFromProtectedUrl
 import gui.plotting.plotUtils as plt
 from dataLoading.urlBuilder import validateAndBuildUrl
 from flask import Flask, render_template,  make_response, jsonify
@@ -41,7 +41,7 @@ def labelsJson(run, wheel, sector, station):
     # returns full json from url since it does not need to parse and format json again
     wheel = int(wheel) 
     url = validateAndBuildUrl(run, wheel, sector, station)
-    return getDataJsonFromProtectedUrl(url)
+    return getJsonDataFromProtectedUrl(url)
 
 @app.errorhandler(ValueError)
 def handle_invalid_usage(error: ValueError):

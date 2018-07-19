@@ -6,10 +6,10 @@ from dataLoading import authUtils
 DEMO_REQUEST_URL= "https://cmsweb.cern.ch/dqm/online/jsonfairy/archive/317111/Global/Online/ALL/DT/01-Digi/Wheel-1/Sector2/Station1/OccupancyAllHits_perCh_W-1_St1_Sec2"
 
 def getLabelsFromProtectedUrl(url=DEMO_REQUEST_URL):
-    dataJson = getDataJsonFromProtectedUrl(url)
+    dataJson = getJsonDataFromProtectedUrl(url)
     return getLabels(parseJsonResult(dataJson))
 
-def getDataJsonFromProtectedUrl(url=DEMO_REQUEST_URL):
+def getJsonDataFromProtectedUrl(url=DEMO_REQUEST_URL):
     print("URL" + url)
     authObj = authUtils.AuthContainer().loadData()
     return getContentFromProtectedUrl(url, authObj)

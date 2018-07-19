@@ -8,7 +8,7 @@ Based on https://docs.mongodb.com/manual/tutorial/install-mongodb-on-red-hat/
 {  
     "_id" : "AUTO-GENERATED",
     "run" : "123456",
-    "fetch_time": "timestamp"
+    "fetch_time": "timestamp",
     "data": [
         {
             "params": {
