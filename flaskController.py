@@ -1,6 +1,6 @@
 from dataLoading.requestExecutor import getMatrixFromProtectedUrl, getJsonDataFromProtectedUrl
 import gui.plotting.plotUtils as plt
-from dataLoading.dataLoader import fetchAllRunData
+from logic.dataFetch import loadDataAndSave
 from dataLoading.urlBuilder import validateAndBuildUrl
 from flask import Flask, render_template,  make_response, jsonify
 import gui.plotting.adrian as aplot
@@ -22,7 +22,7 @@ def fetch():
 
 @app.route('/fetch/<int:run>')
 def fetchRun(run):
-    response=make_response(json.dumps(fetchAllRunData(run)) )
+    response=make_response(json.dumps(loadDataAndSave(run)) )
     response.headers['Content-Type'] = 'text/json'
     return response
 

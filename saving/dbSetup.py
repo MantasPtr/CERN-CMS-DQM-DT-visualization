@@ -1,5 +1,5 @@
 from config.configUtils import getConfig
-from mongoWrapper import MongoDbFactory, MongoCollectionWrapper
+from saving.mongoWrapper import MongoDbFactory, MongoCollectionWrapper
 
 client = None
 database = None
