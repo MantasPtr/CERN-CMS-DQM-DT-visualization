@@ -8,6 +8,7 @@ Based on https://docs.mongodb.com/manual/tutorial/install-mongodb-on-red-hat/
 {  
     "_id" : "AUTO-GENERATED",
     "run" : "123456",
+    "fetch_time": "timestamp"
     "data": [
         {
             "params": {
@@ -15,7 +16,17 @@ Based on https://docs.mongodb.com/manual/tutorial/install-mongodb-on-red-hat/
                 "station":1,
                 "sector":1
             },
-            "matrix": [[1,1,1],[1,1,1],[1,1,1]]
+            "matrix": [[1,1,1],[1,1,1],[1,1,1]],
+            "user_scores": [
+               { 
+                 "good_layers":[1,2,14],
+                 "eval_time": "timestamp"
+               },
+               { 
+                 "good_layers":[2,14],
+                 "eval_time": "timestamp"
+               }
+            ]
         },
         {
             "params": {
