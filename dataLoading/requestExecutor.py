@@ -5,9 +5,9 @@ from dataLoading import authUtils
 
 DEMO_REQUEST_URL= "https://cmsweb.cern.ch/dqm/online/jsonfairy/archive/317111/Global/Online/ALL/DT/01-Digi/Wheel-1/Sector2/Station1/OccupancyAllHits_perCh_W-1_St1_Sec2"
 
-def getLabelsFromProtectedUrl(url=DEMO_REQUEST_URL):
+def getMatrixFromProtectedUrl(url=DEMO_REQUEST_URL):
     dataJson = getJsonDataFromProtectedUrl(url)
-    return getLabels(parseJsonResult(dataJson))
+    return getMatrix(parseJsonResult(dataJson))
 
 def getJsonDataFromProtectedUrl(url=DEMO_REQUEST_URL):
     print("URL" + url)
@@ -19,7 +19,7 @@ def getContentFromProtectedUrl(url, authObj: authUtils.AuthContainer):
     context.load_cert_chain(authObj.pathToCerticate, authObj.pathToCerticatePass, authObj.password)
     return request.urlopen(url, context=context).read()
 
-def getLabels(valueDictionary):
+def getMatrix(valueDictionary):
     hist = valueDictionary.get('hist')
     if isinstance(hist, str):
         raise ValueError("Cannot load data from url")

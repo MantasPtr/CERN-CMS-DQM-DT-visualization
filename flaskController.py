@@ -1,9 +1,11 @@
-from dataLoading.requestUtils import getLabelsFromProtectedUrl, getJsonDataFromProtectedUrl
+from dataLoading.requestExecutor import getMatrixFromProtectedUrl, getJsonDataFromProtectedUrl
 import gui.plotting.plotUtils as plt
+from dataLoading.dataLoader import fetchAllRunData
 from dataLoading.urlBuilder import validateAndBuildUrl
 from flask import Flask, render_template,  make_response, jsonify
 import gui.plotting.adrian as aplot
 import matplotlib
+import json
 matplotlib.use('Agg')
 
 app = Flask(__name__, template_folder="gui/templates", static_folder="gui/static")
@@ -18,9 +20,15 @@ def default():
 def fetch():
     return render_template(FETCH_PAGE_TEMPLATE)
 
+@app.route('/fetch/<int:run>')
+def fetchRun(run):
+    response=make_response(json.dumps(fetchAllRunData(run)) )
+    response.headers['Content-Type'] = 'text/json'
+    return response
+
 @app.route('/i')
 def img():
-    labels = getLabelsFromProtectedUrl()
+    labels = getMatrixFromProtectedUrl()
     imgBytes = aplot.plot_occupancy_hitmap(labels, "title", "a.u.")
     response = make_response(imgBytes.getvalue())
     response.headers['Content-Type'] = 'image/png'
@@ -30,7 +38,7 @@ def img():
 def get(run, wheel, sector, station):
     wheel = int(wheel) 
     url = validateAndBuildUrl(run, wheel, sector, station)
-    labels = getLabelsFromProtectedUrl(url)
+    labels = getMatrixFromProtectedUrl(url)
     imgBytes = plt.getImageBytes(labels)
     response=make_response(imgBytes.getvalue())
     response.headers['Content-Type'] = 'image/png'

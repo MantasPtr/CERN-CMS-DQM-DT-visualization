@@ -11,7 +11,7 @@ def buildFromContainer(container: ParamContainer):
 
 def validateAndBuildUrl(runNumber, wheel ,sector, station ):
     validateParams(runNumber, wheel, sector, station)
-    return URL_BASE.format(runNumber, wheel, sector, station)
+    return buildUrl(runNumber, wheel, sector, station)
 
 def buildUrl(run, wheel,sector,station):
     return URL_BASE.format(run, wheel, sector, station)
