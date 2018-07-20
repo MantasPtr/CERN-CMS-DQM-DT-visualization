@@ -13,8 +13,8 @@ class MongoCollectionWrapper:
     def getAll(self):
         return self.collection.find({})
     
-    def find(self, filter):
-        return self.collection.find(filter)
+    def find(self, filter, projection=None):
+        return self.collection.find(filter,projection)
     
     def deleteAll(self):
         self.collection.delete_many({})

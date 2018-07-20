@@ -39,6 +39,14 @@ class MongoCrudTest(unittest.TestCase):
         
         self.__assertDict(saveObject2, retrivedObject)
 
+    def test_projection(self):
+        saveObject = {"a":"d","c":"d"}
+       
+        self.dbWrapper.save(saveObject)
+        retrivedObject = self.dbWrapper.find({},{"c":1})[0]
+        self.assertEqual(retrivedObject.get("c"), saveObject.get("c"))
+        self.assertEqual(retrivedObject.get("a"), None)
+
     def test_count(self):
         
         saveObject0 = {"a":"d","c":"d"}
@@ -61,6 +69,7 @@ class MongoCrudTest(unittest.TestCase):
         self.dbWrapper.createIndex("a", "a_index")
         self.dbWrapper.collection.drop_index("a_index")
 
+    @unittest.skip
     def test_without_index(self):
         print("---Test without index---")
         start = time.time()
@@ -72,7 +81,8 @@ class MongoCrudTest(unittest.TestCase):
         start = self.lapTime(start ,"Queried >1000000 in: " )
         result = self.dbWrapper.findOne({"a": 2418025})
         start = self.lapTime(start, "Queried =2418025 in: ")
-        
+    
+    @unittest.skip
     def test_index(self):
         print("---Test with index---")
         start = time.time()
@@ -97,4 +107,4 @@ class MongoCrudTest(unittest.TestCase):
 
     def __assertDict(self, oldDict:dict, newDict: dict):
         for key in oldDict.keys():
-            self.assertEqual(newDict[key], oldDict[key], "cannot find matching value for key" + str(key))
+            self.assertEqual(oldDict.get(key), newDict.get(key), ("cannot find matching value for key" + str(key)))

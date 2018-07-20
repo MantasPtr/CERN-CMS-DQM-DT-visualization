@@ -11,6 +11,7 @@
     crossorigin="anonymous"></script>
   <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js" integrity="sha384-smHYKdLADwkXOn1EmN1qk/HfnUcbVRZyYmZ4qpPea6sjB/pTJ0euyQp0Mk8ck+5T"
     crossorigin="anonymous"></script>
+  <script src="{{url_for( 'static', filename='websocket.js' )}} "></script>
 </head>
 
 <body>
@@ -28,18 +29,6 @@
           <label for="runInput">Run</label>
           <input class="form-control mb-2 mr-sm-2" id="runInput" type="number" min="1" required placeholder="Run number">
         </div>
-        <div class="form-group col-md-3">
-          <label for="runInput">Wheel</label>
-          <input class="form-control mb-2 mr-sm-2" type="number" min="-2" max="2" id="wheelInput" required placeholder="Wheel">
-        </div>
-        <div class="form-group col-md-3">
-          <label for="runInput">Sector</label>
-          <input class="form-control" type="number" id="sectorInput" min="1" max="14" required placeholder="Sector">
-        </div>
-        <div class="form-group col-md-3">
-          <label for="runInput">Station</label>
-          <input class="form-control mb-2 mr-sm-2" type="number" id="stationInput" min="1" max="4" placeholder="Station">
-        </div>
       </div>
     </div>
     <div class="col-md-4 mt-auto form-group">
@@ -48,4 +37,9 @@
       </div>
     </div>
   </div>
+  <row>
+    {% for item in runs %}
+      <div> {{ item }} </div>
+    {% endfor %}
+  </row>
 </body>

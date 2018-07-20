@@ -1,6 +1,6 @@
 from dataLoading.requestExecutor import getMatrixFromProtectedUrl, getJsonDataFromProtectedUrl
 import gui.plotting.plotUtils as plt
-from logic.dataFetch import loadDataAndSave
+from logic.dataFetch import loadDataAndSave, getFetchedRuns
 from dataLoading.urlBuilder import validateAndBuildUrl
 from flask import Flask, render_template,  make_response, jsonify
 import gui.plotting.adrian as aplot
@@ -18,7 +18,8 @@ def default():
 
 @app.route('/fetch')
 def fetch():
-    return render_template(FETCH_PAGE_TEMPLATE)
+    runs = getFetchedRuns()
+    return render_template(FETCH_PAGE_TEMPLATE, runs = runs)
 
 @app.route('/fetch/<int:run>')
 def fetchRun(run):
