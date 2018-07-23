@@ -5,10 +5,14 @@ PARAM_RANGES = {
         "min": -2,
         "max": 2
     },
-    "sector": {
+    "sectorMB123": {
         "min": 1,
         "max": 12
     },
+    "sectorMB4": {
+        "min": 1,
+        "max": 14
+    },  
     "station": {
         "min": 1,
         "max": 4
@@ -24,9 +28,17 @@ class WheelValidator(BetweenValidator):
     def getErrorMessage(cls):
         return "Invalid wheel number: " + BetweenValidator.getErrorMessage(cls)
 
-class SectorValidator(BetweenValidator):
-    minValue = PARAM_RANGES["sector"]["min"]
-    maxValue = PARAM_RANGES["sector"]["max"]
+class SectorMB123Validator(BetweenValidator):
+    minValue = PARAM_RANGES["sectorMB123"]["min"]
+    maxValue = PARAM_RANGES["sectorMB123"]["max"]
+
+    @classmethod
+    def getErrorMessage(cls):
+        return "Invalid sector number: " + BetweenValidator.getErrorMessage(cls)
+
+class SectorMB4Validator(BetweenValidator):
+    minValue = PARAM_RANGES["sectorMB4"]["min"]
+    maxValue = PARAM_RANGES["sectorMB4"]["max"]
 
     @classmethod
     def getErrorMessage(cls):
