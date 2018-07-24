@@ -1,6 +1,14 @@
-# Installing mongoDB 4.0
+## Installing mongoDB 4.0
 
 Based on https://docs.mongodb.com/manual/tutorial/install-mongodb-on-red-hat/
+
+## Opening port on inptables
+
+by default using port 5000
+
+```bash
+sudo iptables -I INPUT -p tcp --dport 5000 -j ACCEPT
+```
 
 ## Database format
 
