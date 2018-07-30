@@ -16,8 +16,8 @@ sudo iptables -I INPUT -p tcp --dport 5000 -j ACCEPT
 {  
     "_id" : "AUTO-GENERATED",
     "run" : 123456,
-    "status": LOADIN | FINISHED | ERROR",
-    "save_time: "timetamp",
+    "status": "LOADING | FINISHED | ERROR",
+    "save_time": "timestamp",
     "data": [       {
             "params": {
                 "wheel":0,
