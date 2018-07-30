@@ -1,4 +1,8 @@
 {% extends "layout.html" %}
+{% block head %}
+  {{ super() }}
+  <script src="{{url_for( 'static', filename='fetchActions.js' )}} "></script>
+{% endblock %}
 {% block body %}
   <div class="row">
     <div class="col-md-12">
@@ -18,13 +22,28 @@
     </div>
     <div class="col-md-4 mt-auto form-group">
       <div class="mb-2">
-        <button class="btn btn-primary" onclick="loadData()">Fetch</button>
+        <button class="btn btn-primary" onclick="onFetchData()">Fetch</button>
       </div>
     </div>
   </div>
   <row>
+    <table class="col-md-6 table-striped">
+      <tr>
+        <th>Run number:</th>
+        <th>Status:</th>
+        <th>Fetch time:</th>
+        <th/>
+      </tr>
     {% for item in runs %}
-      <div> {{ item }} </div>
+    <tr>
+        <td>{{item.run}}</td>
+        <td class="status {{item.status}}">{{item.status}}</td>
+        <td>{{item.save_time}}</td>
+        {% if item.status == "FINISHED" %}
+         <td><button type="button" class="btn btn-success">Load</button></td>
+        {% endif %}
+      </tr>
     {% endfor %}
+    </table>
   </row>
 {% endblock %}

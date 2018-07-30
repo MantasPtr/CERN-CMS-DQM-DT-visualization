@@ -1,5 +1,6 @@
 from database.databaseController import dbController 
 from dataLoading.dataLoader import asyncFetchAllRunData
+from errors.errors import FetchError
 import asyncUtils
 
 def getRunData(runNumber):
@@ -11,9 +12,12 @@ def getRunData(runNumber):
     return runData 
 
 async def loadDataAndSave(run):
-    data = await asyncFetchAllRunData(run)
-    print(f":: Successfully fetch data for run:{run}")
-    dbController.update(run, data)
+    try:
+        data = await asyncFetchAllRunData(run)
+        print(f":: Successfully fetch data for run:{run}")
+        dbController.update(run, data)
+    except FetchError:
+        dbController.markAsError(run)
     return data
 
 def getFetchedRuns():

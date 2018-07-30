@@ -16,8 +16,8 @@ async def asyncFetchAllRunData(runNumber):
 async def asyncLoad(runNumber, wheel, sector, station):
     url = buildUrl(runNumber, wheel, sector, station)
     matrix = await getRequestExecutor().getMatrixFromProtectedUrl(url)
-    return formatMatrixResult(wheel, sector, station, matrix)
-
+    return formatMatrixResult(wheel, sector, station, matrix) 
+    
 def formatMatrixResult(wheel, sector, station, matrix):
     return {
         "params": {

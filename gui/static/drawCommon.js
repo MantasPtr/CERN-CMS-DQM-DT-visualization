@@ -9,8 +9,6 @@ const getColor = (value, max) => {
     return "hsl(100,"+  value/max*100 + "%, 50%)";
 };
 
-const logs = (d) => {console.log(d); return d;}
-
 function wrap(outerElementString, innerElement){
     let outer = document.createElement(outerElementString);
     outer.appendChild(innerElement);

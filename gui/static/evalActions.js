@@ -7,7 +7,7 @@ let sector;
 let station;
 
 
-function loadData(){
+function onLoadData(){
     let runValue =  getStringValueFromInputField("runInput");
     let wheelValue = getStringValueFromInputField("wheelInput");
     let sectorValue = getStringValueFromInputField("sectorInput");
@@ -20,29 +20,10 @@ function loadData(){
 
     fetch("/" +runValue+ "/" + wheelValue + "/" + sectorValue + "/" + stationValue + "/labels.json").then(
         (response) => {
-            validateApiResponseCode(response)
-            response.json().then(processJsonResponse)
+            validateApiResponseCode(response);
+            response.json().then(processJsonResponse);
         }
     );
-
-
-    function getStringValueFromInputField(selector){
-        let element = document.getElementById(selector)
-        return document.getElementById(selector).value.trim();
-    }
-
-    function validateApiResponseCode(response){
-        if (response.status == 200) {
-            hideApiError();
-            return true;
-        } else {
-            if (response.BodyUsed) {
-                response.json().then(v => showApiError(v))
-            } else {
-                showApiError(response.status + ": " + response.statusText )
-            }
-        }
-    }
 
     function processJsonResponse (json){
             let hist = json.hist;

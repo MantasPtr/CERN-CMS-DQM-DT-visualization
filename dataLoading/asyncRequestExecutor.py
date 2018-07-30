@@ -1,6 +1,7 @@
 import ssl
 import json
 import aiohttp
+from errors.errors import FetchError
 from dataLoading import authUtils
 
 DEMO_REQUEST_URL= "https://cmsweb.cern.ch/dqm/online/jsonfairy/archive/317111/Global/Online/ALL/DT/01-Digi/Wheel-1/Sector2/Station1/OccupancyAllHits_perCh_W-1_St1_Sec2"
@@ -38,7 +39,7 @@ class asyncRequestExecutor():
     def getMatrix(self, valueDictionary):
         hist = valueDictionary.get('hist')
         if isinstance(hist, str):
-            raise ValueError("Cannot load data from URL: Invalid json structure: " + str(valueDictionary) )
+            raise FetchError("Cannot load data from URL: Invalid json structure: " + str(valueDictionary) )
         return valueDictionary.get('hist').get('bins').get('content')      
 
     def parseJsonResult(self, jsonString):
