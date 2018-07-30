@@ -10,7 +10,7 @@ import json
 matplotlib.use('Agg')
 app = Flask(__name__, template_folder="gui/templates", static_folder="gui/static")
 
-MAIN_PAGE_TEMPLATE='index.html'
+MAIN_PAGE_TEMPLATE='eval.html'
 FETCH_PAGE_TEMPLATE='fetch.html'
 
 @app.route('/')
