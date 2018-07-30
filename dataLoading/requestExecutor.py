@@ -10,7 +10,7 @@ def getMatrixFromProtectedUrl(url=DEMO_REQUEST_URL):
     return getMatrix(parseJsonResult(dataJson))
 
 def getJsonDataFromProtectedUrl(url=DEMO_REQUEST_URL):
-    print("URL" + url)
+    print("URL: " + url)
     authObj = authUtils.AuthContainer().loadData()
     return getContentFromProtectedUrl(url, authObj)
 

@@ -1,5 +1,5 @@
 import unittest
-from saving.mongoWrapper import MongoDbFactory
+from database.mongoWrapper import MongoDbFactory
 import time
 
 class MongoCrudTest(unittest.TestCase):
@@ -69,6 +69,10 @@ class MongoCrudTest(unittest.TestCase):
         self.dbWrapper.createIndex("a", "a_index")
         self.dbWrapper.collection.drop_index("a_index")
 
+    def test_find_one_not_existing_object(self):
+       result = self.dbWrapper.findOne({"not exiting stuff": 314})
+       self.assertEqual(result, None)
+
     @unittest.skip
     def test_without_index(self):
         print("---Test without index---")
@@ -103,7 +107,6 @@ class MongoCrudTest(unittest.TestCase):
     def lapTime(oldTime, message):
         print("%s %.8f" % (message, (time.time() - oldTime)))
         return time.time()
-
 
     def __assertDict(self, oldDict:dict, newDict: dict):
         for key in oldDict.keys():

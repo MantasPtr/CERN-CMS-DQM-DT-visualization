@@ -4,9 +4,12 @@ class MongoCollectionWrapper:
     def __init__(self,collection: collection.Collection):
         self.collection = collection
 
-    def save(self,record):  
+    def save(self, record):  
         self.collection.insert_one(record)
     
+    def update(self, filter, record):  
+        self.collection.replace_one(filter, record)
+
     def saveAll(self,recordsIterator):  
         self.collection.insert_many(recordsIterator)
     
@@ -20,13 +23,13 @@ class MongoCollectionWrapper:
         self.collection.delete_many({})
 
     def findOne(self, filter = {}):
-        return self.collection.find_one(filter)
-
+        return self.collection.find_one(filter=filter)
+    
     def count(self, filter={}):
         return self.collection.count_documents(filter)
 
-    def createIndex(self, indexField, indexName):
-        return self.collection.create_index(indexField, name=indexName)
+    def createIndex(self, indexField, indexName, unique = "False"):
+        return self.collection.create_index(indexField, name=indexName, unique=unique)
 
     def dropIndex(self, indexName):
         self.collection.drop_index(indexName)

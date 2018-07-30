@@ -19,6 +19,13 @@ PARAM_RANGES = {
     }
 }
 
+def getSectorRangeDict(station):
+    if station == 4:
+        return PARAM_RANGES["sectorMB4"]
+    elif 0 < station <= 3:
+        return PARAM_RANGES["sectorMB123"]
+    else: 
+        raise IndexError("Invalid station value")
 
 class WheelValidator(BetweenValidator):
     minValue = PARAM_RANGES["wheel"]["min"]
