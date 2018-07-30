@@ -1,6 +1,6 @@
 from validators.urlParamValidators import PARAM_RANGES, getSectorRangeDict
 from dataLoading.urlBuilder import buildUrl
-from dataLoading.asyncRequestExecutor import requestExecutor
+from dataLoading.asyncRequestExecutor import getRequestExecutor
 import asyncio
 
 async def asyncFetchAllRunData(runNumber):
@@ -15,7 +15,7 @@ async def asyncFetchAllRunData(runNumber):
     
 async def asyncLoad(runNumber, wheel, sector, station):
     url = buildUrl(runNumber, wheel, sector, station)
-    matrix = await requestExecutor.getMatrixFromProtectedUrl(url)
+    matrix = await getRequestExecutor().getMatrixFromProtectedUrl(url)
     return formatMatrixResult(wheel, sector, station, matrix)
 
 def formatMatrixResult(wheel, sector, station, matrix):

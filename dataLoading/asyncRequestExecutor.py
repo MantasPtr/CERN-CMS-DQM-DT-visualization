@@ -5,6 +5,16 @@ from dataLoading import authUtils
 
 DEMO_REQUEST_URL= "https://cmsweb.cern.ch/dqm/online/jsonfairy/archive/317111/Global/Online/ALL/DT/01-Digi/Wheel-1/Sector2/Station1/OccupancyAllHits_perCh_W-1_St1_Sec2"
 
+
+requestExecutor = None
+
+def getRequestExecutor():
+    global requestExecutor
+    if requestExecutor is None:
+        requestExecutor = asyncRequestExecutor()
+    return requestExecutor
+    
+
 class asyncRequestExecutor():
     
     def __init__(self):
@@ -34,4 +44,3 @@ class asyncRequestExecutor():
     def parseJsonResult(self, jsonString):
         return json.loads(jsonString)
 
-requestExecutor = asyncRequestExecutor()

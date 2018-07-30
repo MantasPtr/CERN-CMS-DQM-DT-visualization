@@ -12,6 +12,7 @@ def getRunData(runNumber):
 
 async def loadDataAndSave(run):
     data = await asyncFetchAllRunData(run)
+    print(f":: Successfully fetch data for run:{run}")
     dbController.update(run, data)
     return data
 
