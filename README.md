@@ -16,7 +16,7 @@ sudo iptables -I INPUT -p tcp --dport 5000 -j ACCEPT
 {  
     "_id" : "AUTO-GENERATED",
     "run" : 123456,
-    "status": "loading | finished",
+    "status": "LOADING | FINISHED",
     "save_time": "timestamp",
     "data": [
         {
@@ -50,5 +50,5 @@ sudo iptables -I INPUT -p tcp --dport 5000 -j ACCEPT
 ```
 
 * "run" field contains unique index!
-* status has one of values - "loading" - if data is still fetching or "finished" - if data is fully loaded
+* status has one of values - "LOADING" - if data is still fetching or "FINISHED" - if data is fully loaded
 * matrix is empty if status is "loading"

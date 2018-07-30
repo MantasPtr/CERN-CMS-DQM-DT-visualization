@@ -1,10 +1,6 @@
-from database.databaseController import DbController
-from dataLoading.dataLoader import fetchAllRunDataAsync
-import concurrent 
+from database.databaseController import dbController 
+from dataLoading.dataLoader import asyncFetchAllRunData
 import asyncUtils
-
-dbController = DbController()
-executor = concurrent.futures.ThreadPoolExecutor(max_workers=5)
 
 def getRunData(runNumber):
     runData = dbController.getRun(runNumber) 
@@ -15,11 +11,8 @@ def getRunData(runNumber):
     return runData 
 
 async def loadDataAndSave(run):
-    print("|||||||||||||||||||||||||||||||||||")
-    data = await fetchAllRunDataAsync(run)
-    print("|||||||||||||||||||||||||||||||||||")
+    data = await asyncFetchAllRunData(run)
     dbController.update(run, data)
-    print("|||||||||||||||||||||||||||||||||||")
     return data
 
 def getFetchedRuns():

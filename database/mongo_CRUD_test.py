@@ -2,6 +2,8 @@ import unittest
 from database.mongoWrapper import MongoDbFactory
 import time
 
+# tests were writen to test to get familiar with mongodb, not to be maintained 
+
 class MongoCrudTest(unittest.TestCase):
     
     @classmethod

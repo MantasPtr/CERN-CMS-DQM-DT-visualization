@@ -5,13 +5,6 @@ from dataLoading import authUtils
 
 DEMO_REQUEST_URL= "https://cmsweb.cern.ch/dqm/online/jsonfairy/archive/317111/Global/Online/ALL/DT/01-Digi/Wheel-1/Sector2/Station1/OccupancyAllHits_perCh_W-1_St1_Sec2"
 
-executor = None
-def getSingletonExecutor():
-    global executor
-    if executor is None:
-        executor = asyncRequestExecutor()
-    return executor
-
 class asyncRequestExecutor():
     
     def __init__(self):
@@ -35,8 +28,10 @@ class asyncRequestExecutor():
     def getMatrix(self, valueDictionary):
         hist = valueDictionary.get('hist')
         if isinstance(hist, str):
-            raise ValueError("Cannot load data from url")
+            raise ValueError("Cannot load data from URL: Invalid json structure: " + str(valueDictionary) )
         return valueDictionary.get('hist').get('bins').get('content')      
 
     def parseJsonResult(self, jsonString):
         return json.loads(jsonString)
+
+requestExecutor = asyncRequestExecutor()

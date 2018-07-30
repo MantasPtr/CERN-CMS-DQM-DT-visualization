@@ -7,8 +7,7 @@ class AuthContainer():
     pathToCerticatePass = None
     password = None
 
-    @staticmethod
-    def readPasswordFile(file):
+    def __readPasswordFile__(self, file):
         if not isfile(file):
             warnings.warn('Password file file not found', RuntimeWarning)
             return ''
@@ -20,6 +19,8 @@ class AuthContainer():
         homePath = cfg.getHomePath()
         self.pathToCerticate= homePath + config['pathToCert']
         self.pathToCerticatePass= homePath + config['pathToCertKey']
-        self.password= self.readPasswordFile(config['passwordFile'])
+        self.password= self.__readPasswordFile__(config['passwordFile'])
         return self
+
+container = AuthContainer()
 

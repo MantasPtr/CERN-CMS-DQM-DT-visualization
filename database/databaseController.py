@@ -16,18 +16,18 @@ class DbController():
 
     def save(self, run, matrix = None):
         record = self.__build_DT_record(run, matrix)
-        self.__save_DT_record(record)
+        self.__save_DT_record__(record)
 
     def update(self, run, matrix):
         record = self.__build_DT_record(run, matrix)
-        self.__update_DT_record({"run" : run}, record)
+        self.__update_DT_record__({"run" : run}, record)
 
     def __build_DT_record(self, run, matrix):
         
         if matrix == None:
-            status = "loading"
+            status = "LOADING"
         else:
-            status = "finished"
+            status = "FINISHED"
         return {
             "run": run,
             "status": status,
@@ -35,10 +35,10 @@ class DbController():
             "data": matrix
         }
 
-    def __update_DT_record(self, filter, record):
+    def __update_DT_record__(self, filter, record):
         self.runData.update(filter, record)
 
-    def __save_DT_record(self, record):
+    def __save_DT_record__(self, record):
         self.runData.save(record)
 
     def getRun(self, run):
@@ -47,3 +47,6 @@ class DbController():
     def getFetchRunNumbers(self):
         runs = self.runData.find({}, {"run":1})
         return map(lambda x: x.get("run"),runs)
+
+dbController = DbController()
+

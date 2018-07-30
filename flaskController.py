@@ -6,18 +6,10 @@ from flask import Flask, render_template,  make_response, jsonify
 import gui.plotting.adrian as aplot
 import matplotlib
 import json
-import webSocketController
-import logging
-import asyncio
 
 matplotlib.use('Agg')
 app = Flask(__name__, template_folder="gui/templates", static_folder="gui/static")
-print("________Flask app initialized")
-#webSocketController.loopTest()
-print("________Web socket initialized")
-loop = asyncio.new_event_loop()
-asyncio.set_event_loop(loop)
-  
+
 MAIN_PAGE_TEMPLATE='index.html'
 FETCH_PAGE_TEMPLATE='fetch.html'
     
@@ -34,8 +26,6 @@ def fetch():
 @app.route('/fetch/<int:run>')
 def fetchRun(run):
     responseData = getRunData(run)
-    #loop = asyncio.new_event_loop()
-    #responseData = loop.run_until_complete(loadDataAndSave(run))
     if responseData == None:
         return "Started!"
     responseData.pop("_id", None)
