@@ -1,6 +1,6 @@
 from validators.urlParamValidators import PARAM_RANGES, getSectorRangeDict
 from dataLoading.urlBuilder import buildUrl
-import dataLoading.asyncRequestExecutor import requestExecutor
+from dataLoading.asyncRequestExecutor import requestExecutor
 import asyncio
 
 async def asyncFetchAllRunData(runNumber):

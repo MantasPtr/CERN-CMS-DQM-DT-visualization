@@ -12,7 +12,6 @@ app = Flask(__name__, template_folder="gui/templates", static_folder="gui/static
 
 MAIN_PAGE_TEMPLATE='index.html'
 FETCH_PAGE_TEMPLATE='fetch.html'
-    
 
 @app.route('/')
 def default():

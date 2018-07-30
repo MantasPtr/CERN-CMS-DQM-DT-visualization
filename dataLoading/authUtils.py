@@ -23,4 +23,3 @@ class AuthContainer():
         return self
 
 container = AuthContainer()
-

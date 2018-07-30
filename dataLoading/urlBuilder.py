@@ -13,8 +13,3 @@ def validateAndBuildUrl(runNumber, wheel ,sector, station ):
 
 def buildUrl(run, wheel,sector,station):
     return URL_BASE.format(run, wheel, sector, station)
-
-    
-
-
-    
