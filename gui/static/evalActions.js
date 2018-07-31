@@ -1,5 +1,3 @@
-const apiErrorBannerId= "apiError";
-
 let run;
 let wheel;
 let sector;
