@@ -1,4 +1,3 @@
-const bootstrapErrorClass = "is-invalid";
 const apiErrorBannerId= "apiError";
 
 let run;
@@ -40,18 +39,6 @@ function onLoadData(){
                 station = stationValue;
             }
     };
-
-    function showApiError(message){
-        let errorbanner = document.getElementById(apiErrorBannerId);
-        errorbanner.hidden = false;
-        errorbanner.textContent = message;
-    }
-
-    function hideApiError(){
-        let errorbanner = document.getElementById(apiErrorBannerId);
-        errorbanner.hidden = true;
-        errorbanner.text = "";
-    }   
 }
 
 function save(){

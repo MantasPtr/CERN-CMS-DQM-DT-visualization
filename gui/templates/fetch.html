@@ -41,8 +41,10 @@
         <td>{{item.save_time}}</td>
         {% if item.status == "FINISHED" %}
          <td><button type="button" class="btn btn-success">Load</button></td>
+        {% elif item.status == "ERROR" %}
+          <td><button type="button" class="btn btn-info" data-toggle="tooltip" data-placement="right" title="Error: {{item.exception}}">i</button></td>
         {% endif %}
-      </tr>
+        </tr>
     {% endfor %}
     </table>
   </row>

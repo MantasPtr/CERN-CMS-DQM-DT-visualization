@@ -12,6 +12,20 @@ function validateApiResponseCode(response){
     }
 }
 
+const apiErrorBannerId= "apiError";
+
+function showApiError(message){
+    let errorbanner = document.getElementById(apiErrorBannerId);
+    errorbanner.hidden = false;
+    errorbanner.textContent = message;
+}
+
+function hideApiError(){
+    let errorbanner = document.getElementById(apiErrorBannerId);
+    errorbanner.hidden = true;
+    errorbanner.text = "";
+}   
+
 function getStringValueFromInputField(selector){
     let element = document.getElementById(selector)
     return document.getElementById(selector).value.trim();

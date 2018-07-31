@@ -46,7 +46,7 @@ class DbController():
         return self.runData.findOne({"run": run})
 
     def getFetchRunNumbers(self):
-        runs = self.runData.find({}, {"run": 1, "status": 1, "save_time": 1})
+        runs = self.runData.find({}, {"run": 1, "status": 1, "save_time": 1, "exception": 1})
         return map(self.__formatFetchedRunData, runs)
 
     def __formatFetchedRunData(self, run: dict):
