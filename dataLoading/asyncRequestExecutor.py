@@ -9,24 +9,17 @@ DEMO_REQUEST_URL= "https://cmsweb.cern.ch/dqm/online/jsonfairy/archive/317111/Gl
 
 requestExecutor = None
 
-def getRequestExecutor():
-    global requestExecutor
-    if requestExecutor is None:
-        requestExecutor = asyncRequestExecutor()
-    return requestExecutor
-    
-
 class asyncRequestExecutor():
     
-    def __init__(self):
-        self.session = aiohttp.ClientSession()
+    def __init__(self, session: aiohttp.ClientSession):
+        self.session = session
 
     async def getMatrixFromProtectedUrl(self, url=DEMO_REQUEST_URL):
         dataJson = await self.getJsonDataFromProtectedUrl(url)
         return self.getMatrix(self.parseJsonResult(dataJson))
     
     async def getJsonDataFromProtectedUrl(self, url=DEMO_REQUEST_URL):
-        print("URL: " + url)
+        print("Request URL: " + url)
         authObj = authUtils.AuthContainer().loadData()
         return await self.getContentFromProtectedUrl(url, authObj)
 
@@ -44,4 +37,3 @@ class asyncRequestExecutor():
 
     def parseJsonResult(self, jsonString):
         return json.loads(jsonString)
-

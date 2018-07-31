@@ -14,11 +14,16 @@ def getRunData(runNumber):
 async def loadDataAndSave(run):
     try:
         data = await asyncFetchAllRunData(run)
-        print(f":: Successfully fetch data for run:{run}")
+        print(f":: Successfully fetch data for run: {run}")
         dbController.update(run, data)
-    except FetchError:
-        dbController.markAsError(run)
-    return data
+    except FetchError as fetchError:
+        print(f"Known error occurred while downloading: {fetchError}")
+        dbController.markAsError(run, fetchError)
+    except Exception as exception:
+        print(f"Unknown error occurred while downloading: {fetchError}")
+        dbController.markAsError(run, exception)
+        raise exception
+    
 
 def getFetchedRuns():
     return dbController.getFetchRunNumbers()

@@ -12,17 +12,17 @@
   <div class="alert alert-danger" id="apiError" hidden="true" role="alert"></div>
   <div class="row">
     <!-- INPUT -->
-    <div class="col-md-8">
+    <div class="col-md-3">
       <div class="form-row">
-        <div class="form-group col-md-3">
+        <div class="form-group">
           <label for="runInput">Run</label>
-          <input class="form-control mb-2 mr-sm-2" id="runInput" type="number" min="1" required placeholder="Run number">
+          <input class="form-control mb-2 mr-sm-2" id="runInput" min="1" required placeholder="Run number">
         </div>
       </div>
     </div>
-    <div class="col-md-4 mt-auto form-group">
-      <div class="mb-2">
+    <div class="mt-auto form-group">
         <button class="btn btn-primary" onclick="onFetchData()">Fetch</button>
+      <div class="mb-2">
       </div>
     </div>
   </div>
@@ -31,7 +31,7 @@
       <tr>
         <th>Run number:</th>
         <th>Status:</th>
-        <th>Fetch time:</th>
+        <th>Status update time:</th>
         <th/>
       </tr>
     {% for item in runs %}
