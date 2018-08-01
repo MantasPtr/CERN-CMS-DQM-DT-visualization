@@ -3,7 +3,7 @@
 function onFetchData(){
     let runValue =  getStringValueFromInputField("runInput");
     if (!runValue){
-        console.log("empty run value");
+        showApiError("Empty RUN input value");
     }
 
     fetch("/fetch/" + runValue).then(

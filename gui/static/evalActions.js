@@ -11,7 +11,7 @@ function onLoadData(){
     let stationValue = getStringValueFromInputField("stationInput");
 
     if (!(runValue && wheelValue && sectorValue && stationValue)) {
-        console.log("some value is empty")
+        showApiError("At least one of input values is empty")
         return;
     }
 

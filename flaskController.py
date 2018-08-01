@@ -68,7 +68,12 @@ def runData(run, wheel, sector, station):
     # returns full json from url since it does not need to parse and format json again
     wheel = int(wheel)
     matrix = dataLoad.getMatrixFromDB(run, wheel, sector, station)
-    return jsonify(matrix.get("data")[0].get("matrix"))
+    if (matrix == None):
+        response = make_response("Record not found")
+        response.status_code = 404
+        return response
+    else:
+        return jsonify(matrix.get("data")[0].get("matrix"))
 
 @app.errorhandler(ValueError)
 def handle_invalid_usage(error: ValueError):

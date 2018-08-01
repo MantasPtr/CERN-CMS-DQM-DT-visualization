@@ -35,7 +35,7 @@ class Mongo_4_DB_controller():
         return self.runsCollection.find_one({"run": run})
 
     def getMatrix(self, run, wheel, sector, station):
-        return self.runsCollection.aggregate([
+        cursor = self.runsCollection.aggregate([
             {
                 "$match":{ "run": run }
             },
@@ -57,8 +57,11 @@ class Mongo_4_DB_controller():
                     } 
                 }
             }
-        ]).next()
-    
+        ])
+        if not cursor.alive:
+            return None
+        return cursor.next()
+
     def getFetchRunNumbers(self):
         runs = self.runsCollection.find({}, {"run": 1, "status": 1, "save_time": 1, "exception": 1})
         return map(self.__formatFetchedRunData__, runs)
