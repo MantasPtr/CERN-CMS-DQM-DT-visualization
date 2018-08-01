@@ -3,12 +3,12 @@ from database.mongoWrapper import MongoDbFactory, MongoCollectionWrapper
 import datetime
 import time
 
-class DbController():
+class Mongo_4_DB_controller():
     def __init__(self):
         config = getDatabaseConfig()
         db = config["database"]
         col = config["collection"]
-        self.runData: MongoCollectionWrapper = MongoDbFactory(db).getMongoCollectionWrapper(col)
+        self.runData: MongoCollectionWrapper = MongoDbFactory(db).getMongoCollectionWrapper(col) #.collection
         self.timeOffset = datetime.datetime.now() - datetime.datetime.utcnow()
         # TODO: create indexes only is not exist 
         # unique_indexes = config["uniqueIndex"].split(",")
@@ -45,6 +45,9 @@ class DbController():
     def getRun(self, run):
         return self.runData.findOne({"run": run})
 
+    def getMatrix(self, run, wheel, sector, station):
+        a =  self.runData.findMatrix(run, wheel, sector, station)
+        return a.next()
     def getFetchRunNumbers(self):
         runs = self.runData.find({}, {"run": 1, "status": 1, "save_time": 1, "exception": 1})
         return map(self.__formatFetchedRunData, runs)
@@ -55,5 +58,5 @@ class DbController():
         run["save_time"]= "%d-%02d-%02d %02d:%02d:%02d" % (datatime.year, datatime.month, datatime.day, datatime.hour, datatime.minute, datatime.second)
         return run
     
-dbController = DbController()
+dbController = Mongo_4_DB_controller()
 

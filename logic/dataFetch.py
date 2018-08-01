@@ -23,7 +23,6 @@ async def loadDataAndSave(run):
         print(f"Unknown error occurred while downloading: {fetchError}")
         dbController.markAsError(run, exception)
         raise exception
-    
 
 def getFetchedRuns():
     return dbController.getFetchRunNumbers()

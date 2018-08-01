@@ -4,12 +4,7 @@
   <script src="{{url_for( 'static', filename='fetchActions.js' )}} "></script>
 {% endblock %}
 {% block body %}
-  <div class="row">
-    <div class="col-md-12">
-      {{title}}
-    </div>
-  </div>
-  <div class="alert alert-danger" id="apiError" hidden="true" role="alert"></div>
+  {{ super() }}
   <div class="row">
     <!-- INPUT -->
     <div class="col-md-3">
@@ -40,9 +35,9 @@
         <td class="status {{item.status}}">{{item.status}}</td>
         <td>{{item.save_time}}</td>
         {% if item.status == "FINISHED" %}
-         <td><button type="button" class="btn btn-success">Load</button></td>
+         <td><a type="button" class="btn btn-success" href="/{{item.run}}">Load</a></td>
         {% elif item.status == "ERROR" %}
-          <td><button type="button" class="btn btn-info" data-toggle="tooltip" data-placement="right" title="Error: {{item.exception}}">i</button></td>
+          <td><a type="button" class="btn btn-info" data-toggle="tooltip" data-placement="right" title="Error: {{item.exception}}">i</a></td>
         {% endif %}
         </tr>
     {% endfor %}

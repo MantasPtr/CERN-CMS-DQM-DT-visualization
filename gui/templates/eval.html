@@ -7,19 +7,14 @@
   <script src="{{url_for( 'static', filename='evalActions.js' )}} "></script>
 {% endblock %}
 {% block body %}
-  <div class="row">
-    <div class="col-md-12">
-      {{title}}
-    </div>
-  </div>
-  <div class="alert alert-danger" id="apiError" hidden="true" role="alert"></div>
+  {{ super() }}
   <div class="row" id="input-row">
     <!-- INPUT -->
     <div class="col-md-8">
       <div class="form-row">
         <div class="form-group col-md-3">
           <label for="runInput">Run</label>
-          <input class="form-control mb-2 mr-sm-2" id="runInput" type="number" min="1" required placeholder="Run number">
+          <input class="form-control mb-2 mr-sm-2" id="runInput" type="number" min="1" value="{{run}}" required placeholder="Run number">
         </div>
         <div class="form-group col-md-3">
           <label for="runInput">Wheel</label>
@@ -38,6 +33,7 @@
     <div class="col-md-4 mt-auto form-group">
       <div class="mb-2">
         <button class="btn btn-primary" onclick="onLoadData()">Load</button>
+        <button class="btn btn-primary" onclick="onLoadDataFromDB()">Load from db</button>
         <button class="btn btn-secondary" type="button" data-toggle="collapse" data-target=".multi-collapse" aria-expanded="false"
           aria-controls="settingColapse">
           <!-- <i class="fas fa-cog"></i> -->

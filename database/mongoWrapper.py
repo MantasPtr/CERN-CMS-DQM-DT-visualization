@@ -40,6 +40,34 @@ class MongoCollectionWrapper:
     def dropCollection(self):
         self.collection.drop()
 
+    def findMatrix(self, run, wheel, section, station):
+        return self.collection.aggregate([
+            {
+                "$match":{ "run": 300000 }
+            },
+            {
+                "$project":{ 
+                    "run":1,
+                    "data": {
+                        "$filter":{ 
+                            "input":"$data", 
+                            "as":"item", 
+                            "cond":{ 
+                                "$and": [
+                                    {"$eq": ["$$item.params.wheel",0]},
+                                    {"$eq": ["$$item.params.sector",1]},
+                                    {"$eq": ["$$item.params.station",1]} 
+                                ]
+                            }
+                        }
+                    } 
+                }
+            }
+        ])
+
+
+
+
 # class MongoFilter():
 #     "$eq"	#Matches values that are equal to a specified value.
 #     "$gt"	#Matches values that are greater than a specified value.

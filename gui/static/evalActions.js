@@ -39,6 +39,35 @@ function onLoadData(){
     };
 }
 
+function onLoadDataFromDB(){
+    let runValue =  getStringValueFromInputField("runInput");
+    let wheelValue = getStringValueFromInputField("wheelInput");
+    let sectorValue = getStringValueFromInputField("sectorInput");
+    let stationValue = getStringValueFromInputField("stationInput");
+
+    if (!(runValue && wheelValue && sectorValue && stationValue)) {
+        console.log("some value is empty")
+        return;
+    }
+
+    fetch("/" +runValue+ "/" + wheelValue + "/" + sectorValue + "/" + stationValue + "/data").then(
+        (response) => {
+            validateApiResponseCode(response);
+            response.json().then(processJsonResponse);
+        }
+    );
+
+    function processJsonResponse (matrix){ 
+        createTable(matrix);
+        hideApiError();
+        run = runValue;
+        wheel = wheelValue;
+        sector = sectorValue;
+        station = stationValue;
+    }
+};
+
+
 function save(){
     if (cacheData === null) {
         return;

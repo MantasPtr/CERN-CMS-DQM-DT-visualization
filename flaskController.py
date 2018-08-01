@@ -1,6 +1,6 @@
 from dataLoading.requestExecutor import getMatrixFromProtectedUrl, getJsonDataFromProtectedUrl
 import gui.plotting.plotUtils as plt
-from logic.dataFetch import loadDataAndSave, getFetchedRuns, getRunData
+from logic import dataFetch, dataLoad
 from dataLoading.urlBuilder import validateAndBuildUrl
 from flask import Flask, render_template,  make_response, jsonify
 import gui.plotting.adrian as aplot
@@ -15,16 +15,21 @@ FETCH_PAGE_TEMPLATE='fetch.html'
 
 @app.route('/')
 def default():
-    return render_template(MAIN_PAGE_TEMPLATE, title = 317111)
+    return render_template(MAIN_PAGE_TEMPLATE)
+
+@app.route('/<int:run>')
+def evalRun(run):
+    return render_template(MAIN_PAGE_TEMPLATE, run = run)
+
 
 @app.route('/fetch')
 def fetch():
-    runs = getFetchedRuns()
+    runs = dataFetch.getFetchedRuns()
     return render_template(FETCH_PAGE_TEMPLATE, runs = runs)
    
 @app.route('/fetch/<int:run>')
 def fetchRun(run):
-    responseData = getRunData(run)
+    responseData = dataFetch.getRunData(run)
     if responseData == None:
         return "Started!"
     responseData.pop("_id", None)
@@ -58,6 +63,13 @@ def labelsJson(run, wheel, sector, station):
     url = validateAndBuildUrl(run, wheel, sector, station)
     return getJsonDataFromProtectedUrl(url)
 
+@app.route("/<int:run>/<string:wheel>/<int:sector>/<int:station>/data")
+def runData(run, wheel, sector, station):
+    # returns full json from url since it does not need to parse and format json again
+    wheel = int(wheel)
+    matrix = dataLoad.getMatrixFromDB(run, wheel, sector, station)
+    return jsonify(matrix.get("data")[0].get("matrix"))
+
 @app.errorhandler(ValueError)
 def handle_invalid_usage(error: ValueError):
     response = jsonify(str(error))
@@ -69,4 +81,3 @@ def handle_other_error(error: Exception):
     response = jsonify(str(error))
     response.status_code = 500
     return response
-
