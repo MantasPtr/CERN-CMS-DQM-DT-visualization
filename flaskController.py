@@ -78,6 +78,7 @@ def handle_invalid_usage(error: ValueError):
 
 @app.errorhandler(Exception)
 def handle_other_error(error: Exception):
+    print("ERROR: ",error)
     response = jsonify(str(error))
     response.status_code = 500
     return response

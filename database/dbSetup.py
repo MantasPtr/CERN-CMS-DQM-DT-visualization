@@ -1,9 +1,16 @@
 from config.configUtils import getConfig
-from database.mongoWrapper import MongoDbFactory, MongoCollectionWrapper
+from database.mongoController import Mongo_4_DB_controller
+from database.mongoDbFactory import MongoDbFactory
 
-client = None
-database = None
 DB_CONFIG_LOCATION='config/mongodb.config.ini'
 
-def getDatabaseConfig():
-    return getConfig(configLocation=DB_CONFIG_LOCATION)
+def getDefaultDatabaseConfig():
+    config = getConfig(configLocation=DB_CONFIG_LOCATION)
+    database = config["database"]
+    collection = config["collection"]
+    return database, collection
+
+def initDatabase() -> Mongo_4_DB_controller:
+    db, col = getDefaultDatabaseConfig()
+    collection = MongoDbFactory(db).getCollection(col)
+    return Mongo_4_DB_controller(collection)

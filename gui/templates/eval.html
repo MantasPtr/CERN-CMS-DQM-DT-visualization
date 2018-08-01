@@ -34,22 +34,17 @@
       <div class="mb-2">
         <button class="btn btn-primary" onclick="onLoadData()">Load</button>
         <button class="btn btn-primary" onclick="onLoadDataFromDB()">Load from db</button>
-        <button class="btn btn-secondary" type="button" data-toggle="collapse" data-target=".multi-collapse" aria-expanded="false"
-          aria-controls="settingColapse">
-          <!-- <i class="fas fa-cog"></i> -->
-          Settings
-        </button>
-      </div>
+     </div>
     </div>
   </div>
-  <div class="collapse multi-collapse row" id="settingColapse">
-    <div class="col">
+  <div class="row">
+    <div class="col-sm">
       <div class="form-check">
         <input class="form-check-input" onclick="settings.toggleShowText(this)" type="checkbox" id="showNumbersCheck">
         <label class="form-check-label" for="showNumbersCheck">Show values</label>
       </div>
     </div>
-  </div>
+  </div> 
   <div class="row">
     <div class="col-md-10" id="image"></div>
     <div class="col-md-2" id="colorbar"></div>
