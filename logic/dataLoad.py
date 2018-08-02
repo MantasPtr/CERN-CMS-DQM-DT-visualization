@@ -1,4 +1,8 @@
-import database.databaseController
+import database.databaseController as db
+from logic.runContainer import RunContainer
 
-def getMatrixFromDB(run, wheel, sector, station):
-    return database.databaseController.dbController.getMatrix(run, wheel, sector, station)
+def getMatrixFromDB(run :RunContainer):
+    return db.dbController.getMatrix(run)
+
+def updateUserScores(run, wheel, sector, station):
+    return None

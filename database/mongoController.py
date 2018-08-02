@@ -1,5 +1,6 @@
 import datetime
 import time
+from logic.runContainer import RunContainer
 
 class Mongo_4_DB_controller():
     def __init__(self, collection):
@@ -34,10 +35,10 @@ class Mongo_4_DB_controller():
     def getRun(self, run):
         return self.runsCollection.find_one({"run": run})
 
-    def getMatrix(self, run, wheel, sector, station):
+    def getMatrix(self, run: RunContainer):
         cursor = self.runsCollection.aggregate([
             {
-                "$match":{ "run": run }
+                "$match":{ "run": run.run }
             },
             {
                 "$project":{ 
@@ -48,9 +49,9 @@ class Mongo_4_DB_controller():
                             "as":"item", 
                             "cond":{ 
                                 "$and": [
-                                    {"$eq": ["$$item.params.wheel",   wheel]},
-                                    {"$eq": ["$$item.params.sector",  sector]},
-                                    {"$eq": ["$$item.params.station", station]} 
+                                    {"$eq": ["$$item.params.wheel",   run.wheel]},
+                                    {"$eq": ["$$item.params.sector",  run.sector]},
+                                    {"$eq": ["$$item.params.station", run.station]} 
                                 ]
                             }
                         }

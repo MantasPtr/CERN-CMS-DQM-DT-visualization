@@ -26,13 +26,10 @@ sudo iptables -I INPUT -p tcp --dport 5000 -j ACCEPT
                 "sector":1
             },
             "matrix": [[1,1,1],[1,1,1],[1,1,1]],
+            "scores": [0.5,0.5,0.5,0.5,0.5,0.5,0.5,0.5,0.5,0.5,0.5,0.5],
             "user_scores": [
                {
-                 "good_layers":[1,2,14],
-                 "eval_time": "timestamp"
-               },
-               {
-                 "good_layers":[2,14],
+                 "good_layers":[1,2,12],
                  "eval_time": "timestamp"
                }
             ]

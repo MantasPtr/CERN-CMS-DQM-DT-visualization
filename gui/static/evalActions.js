@@ -50,7 +50,7 @@ function onLoadDataFromDB(){
         return;
     }
 
-    fetch("/" +runValue+ "/" + wheelValue + "/" + sectorValue + "/" + stationValue + "/data").then(
+    fetch("/" +runValue+ "/" + wheelValue + "/" + sectorValue + "/" + stationValue + "/").then(
         (response) => {
             validateApiResponseCode(response);
             response.json().then(processJsonResponse);
@@ -78,7 +78,13 @@ function save(){
     saveObject.sector = sector;
     saveObject.station = station;
     saveObject.layers =  getCheckedValues();
-    logs(saveObject)
+
+    fetch("/save/", {
+        method:"POST",
+        body:JSON.stringify(saveObject),
+        headers:{
+            "Content-Type": "application/json; charset=utf-8",
+        }})
 
     function getCheckedValues(){
         const checkboxes = Array.from(document.querySelectorAll(".layer-selection"));

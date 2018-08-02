@@ -1,11 +1,12 @@
 from dataLoading.requestExecutor import getMatrixFromProtectedUrl, getJsonDataFromProtectedUrl
 import gui.plotting.plotUtils as plt
 from logic import dataFetch, dataLoad
-from dataLoading.urlBuilder import validateAndBuildUrl
-from flask import Flask, render_template,  make_response, jsonify
+from dataLoading.urlBuilder import buildUrl
+from flask import Flask, render_template, request, make_response, jsonify
 import gui.plotting.adrian as aplot
 import matplotlib
 import json
+from logic.runContainer import RunContainer
 
 matplotlib.use('Agg')
 app = Flask(__name__, template_folder="gui/templates", static_folder="gui/static")
@@ -48,8 +49,8 @@ def img():
 
 @app.route("/<int:run>/<string:wheel>/<int:sector>/<int:station>/labels.png")
 def get(run, wheel, sector, station):
-    wheel = int(wheel) 
-    url = validateAndBuildUrl(run, wheel, sector, station)
+    container = RunContainer(run, int(wheel) , sector, station)
+    url = buildUrl(container)
     labels = getMatrixFromProtectedUrl(url)
     imgBytes = plt.getImageBytes(labels)
     response=make_response(imgBytes.getvalue())
@@ -59,21 +60,26 @@ def get(run, wheel, sector, station):
 @app.route("/<int:run>/<string:wheel>/<int:sector>/<int:station>/labels.json")
 def labelsJson(run, wheel, sector, station):
     # returns full json from url since it does not need to parse and format json again
-    wheel = int(wheel) 
-    url = validateAndBuildUrl(run, wheel, sector, station)
+    runContainer = RunContainer(run, int(wheel), sector, station)
+    url = buildUrl(runContainer)
     return getJsonDataFromProtectedUrl(url)
 
-@app.route("/<int:run>/<string:wheel>/<int:sector>/<int:station>/data")
+@app.route("/<int:run>/<string:wheel>/<int:sector>/<int:station>/", methods = ['GET'])
 def runData(run, wheel, sector, station):
-    # returns full json from url since it does not need to parse and format json again
-    wheel = int(wheel)
-    matrix = dataLoad.getMatrixFromDB(run, wheel, sector, station)
+    runContainer = RunContainer(run, int(wheel), sector, station)
+    matrix = dataLoad.getMatrixFromDB(runContainer)
     if (matrix == None):
         response = make_response("Record not found")
         response.status_code = 404
         return response
     else:
         return jsonify(matrix.get("data")[0].get("matrix"))
+
+@app.route("/save/", methods = ['POST'])
+def score():
+    # {'run': '300000', 'wheel': '0', 'sector': '1', 'station': '1', 'layers': ['12', '11', '10', '9', '8', '7', '6', '5', '4', '3', '2', '1']}
+    values = request.get_json()
+    return 
 
 @app.errorhandler(ValueError)
 def handle_invalid_usage(error: ValueError):
