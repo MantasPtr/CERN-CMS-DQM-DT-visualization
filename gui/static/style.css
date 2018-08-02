@@ -7,7 +7,7 @@ body {
     margin: 10px;
 }
 
-#image th, td {
+#image th, #image td {
     border: 1px solid white;
     min-width: 20px;
 }
@@ -30,4 +30,17 @@ td.status.FINISHED{
 
 td.status.ERROR{
     background-color: rgba(255, 0, 0, 0.5);
+}
+
+#colorbar_table {
+    height: 100%;
+}
+
+#max_colorbar {
+    vertical-align: top;
+}
+
+
+#min_colorbar {
+    vertical-align: bottom;
 }

@@ -50,17 +50,22 @@ function createTable(tableData) {
 };
 
 function drawColorPalet() {
+    let canvas = document.createElement("canvas")
     let canvasDiv = document.querySelector("#colorbar");
     canvasDiv.innerHTML = "";
-    let canvas = document.createElement("canvas")
-    let ctx = canvas.getContext("2d");
 
-    let grd = ctx.createLinearGradient(0, 0, 0, 100);
-    grd.addColorStop(1, getColor(maxValue, maxValue));
-    grd.addColorStop(0, getColor(0, maxValue));
-    //grd.addColorStop(0.5, "red");
+    canvas.height = 325
+    canvas.width = 30
+
+    let ctx = canvas.getContext("2d");
+    let grd = ctx.createLinearGradient(0, 0, 0, 200);
+    grd.addColorStop(0, getColor(maxValue, maxValue));
+    grd.addColorStop(1, getColor(0, maxValue));
+
+    document.querySelector("#max_colorbar").textContent = maxValue;
+    document.querySelector("#min_colorbar").textContent = 0;
 
     ctx.fillStyle = grd;
-    ctx.fillRect(0, 0,  20, 200);
+    ctx.fillRect(0, 0, 30, 1000);
     canvasDiv.appendChild(canvas)
 }
