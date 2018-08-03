@@ -79,17 +79,19 @@ def runData(run, wheel, sector, station):
 def score():
     # {'run': '300000', 'wheel': '0', 'sector': '1', 'station': '1', 'layers': ['12', '11', '10', '9', '8', '7', '6', '5', '4', '3', '2', '1']}
     values = request.get_json()
-    return 
-
+    runContainer = RunContainer(int(values["run"]), int(values["wheel"]), int(values["sector"]), int(values["station"]))
+    badLayers = values["layers"]
+    return jsonify(dataLoad.updateUserScore(runContainer, badLayers))
+   
 @app.errorhandler(ValueError)
 def handle_invalid_usage(error: ValueError):
     response = jsonify(str(error))
     response.status_code = 400
     return response
 
-@app.errorhandler(Exception)
-def handle_other_error(error: Exception):
-    print("ERROR: ",error)
-    response = jsonify(str(error))
-    response.status_code = 500
-    return response
+# @app.errorhandler(Exception)
+# def handle_other_error(error: Exception):
+#     print("ERROR: ",error)
+#     response = jsonify(str(error))
+#     response.status_code = 500
+#     return response

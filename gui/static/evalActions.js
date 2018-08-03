@@ -82,12 +82,18 @@ function save(){
     fetch("/save/", {
         method:"POST",
         body:JSON.stringify(saveObject),
-        headers:{
-            "Content-Type": "application/json; charset=utf-8",
-        }})
+        headers:{"Content-Type": "application/json; charset=utf-8",}
+    }).then((response) => {
+        validateApiResponseCode(response);
+        response.json().then(processJsonResponse);
+    })
 
     function getCheckedValues(){
         const checkboxes = Array.from(document.querySelectorAll(".layer-selection"));
         return checkboxes.filter(c => c.checked).map(c => c.getAttribute("index"));
+    }
+
+    function processJsonResponse (json){
+        showApiMessage("Run "  + run + (json.updated ?" updated!": " saved!"))
     }
 }

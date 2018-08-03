@@ -29,7 +29,7 @@ sudo iptables -I INPUT -p tcp --dport 5000 -j ACCEPT
             "scores": [0.5,0.5,0.5,0.5,0.5,0.5,0.5,0.5,0.5,0.5,0.5,0.5],
             "user_scores": [
                {
-                 "good_layers":[1,2,12],
+                 "bad_layers":[1,2,12],
                  "eval_time": "timestamp"
                }
             ]

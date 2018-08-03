@@ -12,18 +12,34 @@ function validateApiResponseCode(response){
     }
 }
 
-const apiErrorBannerId= "apiError";
+const apiErrorBannerID= "apiError";
+const apiMessageBannerID = "apiMessage";
+
 
 function showApiError(message){
-    let errorbanner = document.getElementById(apiErrorBannerId);
+    hideApiMessage()
+    let errorbanner = document.getElementById(apiErrorBannerID);
     errorbanner.hidden = false;
     errorbanner.textContent = message;
 }
 
 function hideApiError(){
-    let errorbanner = document.getElementById(apiErrorBannerId);
+    let errorbanner = document.getElementById(apiErrorBannerID);
     errorbanner.hidden = true;
     errorbanner.text = "";
+}
+
+function showApiMessage(message){
+    hideApiError()
+    let messagebanner = document.getElementById(apiMessageBannerID);
+    messagebanner.hidden = false;
+    messagebanner.textContent = message;
+}
+
+function hideApiMessage(){
+    let messageBanner = document.getElementById(apiMessageBannerID);
+    messageBanner.hidden = true;
+    messageBanner.text = "";
 }   
 
 function getStringValueFromInputField(selector){

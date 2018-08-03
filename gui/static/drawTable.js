@@ -9,12 +9,26 @@ function createTable(tableData) {
     cacheData = tableData;
     maxLayers = tableData.length;
     let table = document.createElement('table');
+
+    table.appendChild(createTableHeader(tableData))
     let tableBody = document.createElement('tbody');
     tableData.forEach(createRows);
     table.appendChild(tableBody);
     let container = document.querySelector("#image");
     container.innerHTML = "";
     container.appendChild(table);
+
+    function createTableHeader(tableData){
+        let thead = document.createElement("thead");
+        let headerRow = thead.appendChild(document.createElement("tr"));
+        let cellHeader =document.createElement("th");
+        cellHeader.setAttribute("colspan", tableData[0].length);
+        headerRow.appendChild(cellHeader);
+        let layerHeader = document.createElement("th")
+        layerHeader.textContent = "Bad layers:";
+        headerRow.appendChild(layerHeader);
+        return thead;
+    }
 
     function createRows(rowData, rowIndex) {
         let row = document.createElement('tr');
@@ -42,7 +56,7 @@ function createTable(tableData) {
         input.classList.add(LAYER_CLASS);
         input.setAttribute("index", index); 
         input.type = "checkbox";
-        input.checked = true;
+        input.checked = false;
         span.appendChild(input);
         span.appendChild(document.createTextNode(LAYER_SUFFIX + index));
         return wrap("td", span);

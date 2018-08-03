@@ -20,6 +20,10 @@ td span{
     white-space: nowrap;
 }
 
+th {
+    white-space: nowrap;
+}
+
 td.status.LOADING{
     background-color: rgba(255, 255, 0, 0.5);
 }
@@ -39,7 +43,6 @@ td.status.ERROR{
 #max_colorbar {
     vertical-align: top;
 }
-
 
 #min_colorbar {
     vertical-align: bottom;

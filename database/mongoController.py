@@ -24,14 +24,6 @@ class Mongo_4_DB_controller():
         record["exception"] = str(exception)
         self.runsCollection.update({"run" : run}, record)
 
-    def __build_DT_record__(self, run, matrix, status):
-        return {
-            "run": run,
-            "status": status,
-            "save_time": datetime.datetime.utcnow(),
-            "data": matrix
-        }
-
     def getRun(self, run):
         return self.runsCollection.find_one({"run": run})
 
@@ -72,3 +64,23 @@ class Mongo_4_DB_controller():
         run.pop("_id")
         run["save_time"]= "%d-%02d-%02d %02d:%02d:%02d" % (datatime.year, datatime.month, datatime.day, datatime.hour, datatime.minute, datatime.second)
         return run
+
+    def __build_DT_record__(self, run, matrix, status):
+        return {
+            "run": run,
+            "status": status,
+            "save_time": datetime.datetime.utcnow(),
+            "data": matrix
+        }
+
+    def updateUserScore(self, run: RunContainer, badLayers):
+        rez = self.runsCollection.update(
+            {
+                "run":run.run,
+                "data.params.wheel":run.wheel,
+                "data.params.sector":run.sector,
+                "data.params.station":run.station 
+            },{
+                "$set" : { "data.$.user_scores":badLayers }
+            })
+        return {"matched":rez["n"], "updated": not rez["nModified"] != 0 }
