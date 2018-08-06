@@ -1,7 +1,7 @@
 from dataLoading.requestExecutor import getMatrixFromProtectedUrl, getJsonDataFromProtectedUrl
 import gui.plotting.plotUtils as plt
 from logic import dataFetch, dataLoad
-from dataLoading.urlBuilder import buildUrl
+from dataLoading.urlBuilder import buildUrlFromContainer
 from flask import Flask, render_template, request, make_response, jsonify
 import gui.plotting.adrian as aplot
 import matplotlib
@@ -50,7 +50,7 @@ def img():
 @app.route("/<int:run>/<string:wheel>/<int:sector>/<int:station>/labels.png")
 def get(run, wheel, sector, station):
     container = RunContainer(run, int(wheel) , sector, station)
-    url = buildUrl(container)
+    url = buildUrlFromContainer(container)
     labels = getMatrixFromProtectedUrl(url)
     imgBytes = plt.getImageBytes(labels)
     response=make_response(imgBytes.getvalue())
@@ -61,7 +61,7 @@ def get(run, wheel, sector, station):
 def labelsJson(run, wheel, sector, station):
     # returns full json from url since it does not need to parse and format json again
     runContainer = RunContainer(run, int(wheel), sector, station)
-    url = buildUrl(runContainer)
+    url = buildUrlFromContainer(runContainer)
     return getJsonDataFromProtectedUrl(url)
 
 @app.route("/<int:run>/<string:wheel>/<int:sector>/<int:station>/", methods = ['GET'])
