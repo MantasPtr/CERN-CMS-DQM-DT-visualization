@@ -3,7 +3,7 @@ rect {
     stroke-width: .1px;
 } 
 
-body {
+.page-container {
     margin: 10px;
 }
 
