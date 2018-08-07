@@ -20,7 +20,7 @@ async def loadDataAndSave(run):
         print(f"Known error occurred while downloading: {fetchError}")
         dbController.markAsError(run, fetchError)
     except Exception as exception:
-        print(f"Unknown error occurred while downloading: {fetchError}")
+        print(f"Unknown error occurred while downloading: {exception}")
         dbController.markAsError(run, exception)
         raise exception
 
