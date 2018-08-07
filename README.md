@@ -4,10 +4,12 @@ Based on https://docs.mongodb.com/manual/tutorial/install-mongodb-on-red-hat/
 
 ## Opening port on inptables
 
-by default using port 5000
+by default using port 8080 and redirecting to it from port 80
 
 ```bash
-sudo iptables -I INPUT -p tcp --dport 5000 -j ACCEPT
+sudo iptables -I INPUT -p tcp --dport 8080 -j ACCEPT
+sudo iptables -t nat -A PREROUTING -p tcp --dport 80 -j REDIRECT --to-port 8080
+
 ```
 
 ## Database format
