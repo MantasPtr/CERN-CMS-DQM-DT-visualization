@@ -82,7 +82,11 @@ def score():
     runContainer = RunContainer(int(values["run"]), int(values["wheel"]), int(values["sector"]), int(values["station"]))
     badLayers = values["layers"]
     return jsonify(dataLoad.updateUserScore(runContainer, badLayers))
-   
+
+@app.route("/<int:runNumber>", methods = ['DELETE'])
+def delete(runNumber):
+    return jsonify(dataLoad.deleteRun(runNumber))
+
 @app.errorhandler(ValueError)
 def handle_invalid_usage(error: ValueError):
     response = jsonify(str(error))

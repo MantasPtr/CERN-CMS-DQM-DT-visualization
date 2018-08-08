@@ -6,3 +6,6 @@ def getMatrixFromDB(runContainer: RunContainer):
 
 def updateUserScore(runContainer: RunContainer, layers):
     return db.dbController.updateUserScore(runContainer, layers)
+
+def deleteRun(runNumber):
+    return db.dbController.deleteRun(runNumber)

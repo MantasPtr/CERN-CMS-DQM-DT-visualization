@@ -14,7 +14,7 @@ class NetTest(unittest.TestCase):
     def tearDown(self):
         pass
 
-    def testNothing(self):
-        matrix = np.random.rand(100,10)
+    def testPrediction(self):
+        matrix = np.random.rand(100,47)
         rez = machineLearning.eval.predict(matrix)
-        print(rez)
+        self.assertEqual(len(rez), 100)

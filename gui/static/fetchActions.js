@@ -1,5 +1,3 @@
-
-
 function onFetchData(){
     let runValue =  getStringValueFromInputField("runInput");
     if (!runValue){
@@ -13,3 +11,14 @@ function onFetchData(){
         }
     );
 }
+
+function deleteRun(run){
+    fetch(run,{
+        method:"DELETE"
+    }).then(
+        response => { 
+            validateResponseCode(response);
+            showApiMessage("Deleted " +response.text + "file")
+        }
+    )
+};

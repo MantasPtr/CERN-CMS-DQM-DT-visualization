@@ -36,4 +36,7 @@ class asyncRequestExecutor():
         return valueDictionary.get('hist').get('bins').get('content')      
 
     def parseJsonResult(self, jsonString):
-        return json.loads(jsonString)
+        try:
+            return json.loads(jsonString)
+        except ValueError as ve:
+            raise FetchError(f"Invalid json structure: {ve}")

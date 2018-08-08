@@ -17,15 +17,15 @@
 </head>
 <body>
   <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-      <div class="navbar-nav mr-auto">
-          <a class="nav-item nav-link" href="/">Evaluate</a>
-          <a class="nav-link" href="/fetch">Fetch</a>
-      </div>
+    <div class="navbar-nav mr-auto">
+      <a class="nav-item nav-link" href="/">Evaluate</a>
+      <a class="nav-link" href="/fetch">Fetch</a>
+      <div class="float-right alert alert-danger" id="apiError" hidden="true" role="alert"></div>
+      <div class="alert alert-success" id="apiMessage" hidden="true" role="alert"></div>
+    </div>
   </nav>
   <div class="page-container" >
     {% block body %}
-    <div class="alert alert-danger" id="apiError" hidden="true" role="alert"></div>
-    <div class="alert alert-success" id="apiMessage" hidden="true" role="alert"></div>
     {% endblock %}
   </div>
 </body>

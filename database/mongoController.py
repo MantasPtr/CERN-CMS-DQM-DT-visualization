@@ -1,6 +1,7 @@
 import datetime
 import time
 from logic.runContainer import RunContainer
+import pymongo
 
 class Mongo_4_DB_controller():
     def __init__(self, collection):
@@ -56,7 +57,7 @@ class Mongo_4_DB_controller():
         return cursor.next()
 
     def getFetchRunNumbers(self):
-        runs = self.runsCollection.find({}, {"run": 1, "status": 1, "save_time": 1, "exception": 1})
+        runs = self.runsCollection.find({}, {"run": 1, "status": 1, "save_time": 1, "exception": 1}).sort("save_time", pymongo.DESCENDING)
         return map(self.__formatFetchedRunData__, runs)
 
     def __formatFetchedRunData__(self, run: dict):
@@ -84,3 +85,7 @@ class Mongo_4_DB_controller():
                 "$set" : { "data.$.user_scores":badLayers }
             })
         return {"matched":rez["n"], "updated": not rez["nModified"] != 0 }
+
+    def deleteRun(self, runNumber):
+        rez = self.runsCollection.delete_one({"run": runNumber})
+        return rez.deleted_count

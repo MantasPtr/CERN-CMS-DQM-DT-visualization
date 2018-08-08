@@ -29,9 +29,3 @@ class NetTest(unittest.TestCase):
         rez = machineLearning.transform.resizeMatrix(matrix)
         for x in rez:
             self.assertEqual(len(x), 2)
-
-
-    def testNothing(self):
-        matrix = [[1,123,777], [6,1,6,1,6,1], [1,2,3]]
-        rez = machineLearning.transform.resizeMatrix(matrix)
-        print(" rez:", rez)

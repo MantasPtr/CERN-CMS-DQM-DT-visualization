@@ -28,6 +28,7 @@
         <th>Status:</th>
         <th>Status update time:</th>
         <th/>
+        <th/>
       </tr>
     {% for item in runs %}
     <tr>
@@ -35,10 +36,17 @@
         <td class="status {{item.status}}">{{item.status}}</td>
         <td>{{item.save_time}}</td>
         {% if item.status == "FINISHED" %}
-         <td><a type="button" class="btn btn-success" href="/{{item.run}}">Load</a></td>
+        <td>
+          <a type="button" class="btn btn-success" href="/{{item.run}}">Load</a>
+        </td>
         {% elif item.status == "ERROR" %}
-          <td><a type="button" class="btn btn-info" data-toggle="tooltip" data-placement="right" title="Error: {{item.exception}}">i</a></td>
-        {% endif %}
+        <td>
+          <a type="button" class="btn btn-info" data-toggle="tooltip" data-placement="right" title="Error: {{item.exception}}">Error</a>
+        </td>
+          {% endif %}
+        <td>
+          <button type="button" class="btn btn-danger" onclick="deleteRun({{item.run}})">Delete</button>
+        </td>
         </tr>
     {% endfor %}
     </table>
