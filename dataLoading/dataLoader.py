@@ -3,21 +3,21 @@ from dataLoading.urlBuilder import buildUrl
 from dataLoading.asyncRequestExecutor import asyncRequestExecutor
 import asyncio
 import aiohttp
-from machineLearning.model import Model
+import machineLearning.model as model
+
 async def asyncFetchAllRunData(runNumber):
     tasks = []
-    model = Model()
     async with aiohttp.ClientSession() as client:
         executor = asyncRequestExecutor(client)
         for wheel in range(PARAM_RANGES["wheel"]["min"], PARAM_RANGES["wheel"]["max"]+1):
             for station in range(PARAM_RANGES["station"]["min"], PARAM_RANGES["station"]["max"]+1):
                 rangeDict = getSectorRangeDict(station) 
                 for sector in range(rangeDict["min"], rangeDict["max"]+1):
-                    asyncLoadTask = asyncLoad(runNumber, wheel, sector, station, executor, model)
+                    asyncLoadTask = asyncLoad(runNumber, wheel, sector, station, executor)
                     tasks.append(asyncLoadTask)
         return await asyncio.gather(*tasks)
     
-async def asyncLoad(runNumber, wheel, sector, station, executor, model):
+async def asyncLoad(runNumber, wheel, sector, station, executor):
     url = buildUrl(runNumber, wheel, sector, station)
     matrix = await executor.getMatrixFromProtectedUrl(url)
     scores = model.getScoreForMatrix(matrix).tolist()

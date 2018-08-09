@@ -22,16 +22,17 @@
     </div>
   </div>
   <row>
-    <table class="col-md-6 table-striped">
+    <table class="col-md-12 table-striped">
       <tr>
         <th>Run number:</th>
         <th>Status:</th>
         <th>Status update time:</th>
         <th/>
         <th/>
+        <th>Network scores</th>
       </tr>
-    {% for item in runs %}
-    <tr>
+      {% for item in runs %}
+      <tr>
         <td>{{item.run}}</td>
         <td class="status {{item.status}}">{{item.status}}</td>
         <td>{{item.save_time}}</td>
@@ -47,7 +48,20 @@
         <td>
           <button type="button" class="btn btn-danger" onclick="deleteRun({{item.run}})">Delete</button>
         </td>
-        </tr>
+        <td>
+          {% set outer_loop = loop %}
+          {% for a in runs[outer_loop.index-1]  %}
+            {% set inner_loop = loop %}
+            {% for b in runs[outer_loop.index-1].data[inner_loop.index-1]  %}
+              <div>
+                {% for c in runs[outer_loop.index-1].data[inner_loop.index-1].scores  %}
+                {{ "%.3f"|format(c) }} 
+               {% endfor %}
+              </div>
+            {% endfor %}
+          {% endfor %}
+        </td>  
+      </tr>
     {% endfor %}
     </table>
   </row>

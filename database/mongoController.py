@@ -57,8 +57,8 @@ class Mongo_4_DB_controller():
         return cursor.next()
 
     def getFetchRunNumbers(self):
-        runs = self.runsCollection.find({}, {"run": 1, "status": 1, "save_time": 1, "exception": 1}).sort("save_time", pymongo.DESCENDING)
-        return map(self.__formatFetchedRunData__, runs)
+        runs = self.runsCollection.find({}, {"run": 1, "status": 1, "save_time": 1, "data":1, "exception": 1}).sort("save_time", pymongo.DESCENDING)
+        return list(map(self.__formatFetchedRunData__, runs))
 
     def __formatFetchedRunData__(self, run: dict):
         datatime = run["save_time"] + self.timeOffset

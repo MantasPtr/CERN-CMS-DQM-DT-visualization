@@ -1,12 +1,12 @@
 import unittest
-import machineLearning.model
+import machineLearning.model as model
 from numpy.testing import assert_allclose
 import numpy as np
 class NetTest(unittest.TestCase):
     
     @classmethod
     def setUpClass(cls):
-        cls.model = machineLearning.model.Model() 
+        pass
 
     def setUp(self):
         pass
