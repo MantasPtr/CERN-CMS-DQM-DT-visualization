@@ -18,7 +18,7 @@ def scaleMatrix(matrix):
 
 def scaleLayer(layer):
     layer = layer.reshape(-1, 1)
-    layer = SCALER.fit(layer).transform(layer)
+    layer = SCALER().fit(layer).transform(layer)
     return layer.reshape(1, -1)[0]
 
 def processMatrix(matrix):

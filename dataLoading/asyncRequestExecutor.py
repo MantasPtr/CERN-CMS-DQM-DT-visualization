@@ -5,8 +5,6 @@ from errors.errors import FetchError
 from dataLoading import authUtils
 
 DEMO_REQUEST_URL= "https://cmsweb.cern.ch/dqm/online/jsonfairy/archive/317111/Global/Online/ALL/DT/01-Digi/Wheel-1/Sector2/Station1/OccupancyAllHits_perCh_W-1_St1_Sec2"
-
-
 requestExecutor = None
 
 class asyncRequestExecutor():
