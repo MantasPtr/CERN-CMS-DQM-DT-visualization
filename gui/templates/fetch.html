@@ -49,16 +49,17 @@
           <button type="button" class="btn btn-danger" onclick="deleteRun({{item.run}})">Delete</button>
         </td>
         <td>
+          
           {% set outer_loop = loop %}
-          {% for a in runs[outer_loop.index-1]  %}
+          {% for a in runs[outer_loop.index0].data  %}
+            <div>
             {% set inner_loop = loop %}
-            {% for b in runs[outer_loop.index-1].data[inner_loop.index-1]  %}
-              <div>
-                {% for c in runs[outer_loop.index-1].data[inner_loop.index-1].scores  %}
-                {{ "%.3f"|format(c) }} 
-               {% endfor %}
-              </div>
-            {% endfor %}
+              Params: {{ runs[outer_loop.index0].data[inner_loop.index0].params }}
+              Scores: 
+                {% for c in runs[outer_loop.index0].data[inner_loop.index0].scores  %}
+                 {{ "%.3f"|format(c) }}
+                {% endfor %}
+            </div> 
           {% endfor %}
         </td>  
       </tr>

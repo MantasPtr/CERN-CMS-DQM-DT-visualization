@@ -55,3 +55,9 @@ sudo iptables -t nat -A PREROUTING -p tcp --dport 80 -j REDIRECT --to-port 8080
   * ERROR - if error was encoutered while fetching
 * "matrix" is empty unless status is "FINISHED"
 * "exception" does not exist unless status is "ERROR"
+* "scores" show how bad layers is according to neural network
+
+### Warnings:
+
+* Your CPU supports instructions that this TensorFlow binary was not compiled to use: AVX2 FMA
+* UserWarning: Error in loading the saved optimizer state. As a result, your model is starting with a freshly initialized optimizer.
