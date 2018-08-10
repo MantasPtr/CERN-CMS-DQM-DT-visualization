@@ -72,7 +72,7 @@ function drawColorPalet() {
     canvas.width = 30
 
     let ctx = canvas.getContext("2d");
-    let grd = ctx.createLinearGradient(0, 0, 0, 200);
+    let grd = ctx.createLinearGradient(0, 0, 0, 325);
     grd.addColorStop(0, getColor(maxValue, maxValue));
     grd.addColorStop(1, getColor(0, maxValue));
 
@@ -80,6 +80,6 @@ function drawColorPalet() {
     document.querySelector("#min_colorbar").textContent = 0;
 
     ctx.fillStyle = grd;
-    ctx.fillRect(0, 0, 30, 1000);
+    ctx.fillRect(0, 0, 30, 325);
     canvasDiv.appendChild(canvas)
 }
