@@ -10,6 +10,16 @@ rect {
 #image th, #image td {
     border: 1px solid white;
     min-width: 20px;
+ }
+
+#image td {
+    max-width: 20px;
+    font-size: 10px;
+}
+
+#image td span.input-group-addon {
+    font-size: 16px;
+    max-width: 100px;
 }
 
 #colorbar > canvas {
@@ -19,6 +29,7 @@ rect {
 td span{
     white-space: nowrap;
 }
+
 
 th {
     white-space: nowrap;
