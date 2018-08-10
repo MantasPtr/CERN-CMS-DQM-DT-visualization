@@ -6,7 +6,7 @@ const getColor = (value, max) => {
         return emptyColor;
     }
     v =  value/max;
-    return "hsl(100,"+  value/max*100 + "%, 50%)";
+    return "hsl(" + (255 - value/max*255)+ ","+  "100" + "%, 50%)";
 };
 
 function wrap(outerElementString, innerElement){
