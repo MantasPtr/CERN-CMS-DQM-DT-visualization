@@ -14,8 +14,11 @@ class asyncRequestExecutor():
 
     async def getMatrixFromProtectedUrl(self, url=DEMO_REQUEST_URL):
         dataJson = await self.getJsonDataFromProtectedUrl(url)
-        return self.getMatrix(self.parseJsonResult(dataJson))
-    
+        try:
+            return self.getMatrix(json.loads(dataJson))
+        except ValueError as ve:
+            raise FetchError(f"Invalid json structure from url:{url} \n Error: {ve}")
+
     async def getJsonDataFromProtectedUrl(self, url=DEMO_REQUEST_URL):
         print("Request URL: " + url)
         authObj = authUtils.AuthContainer().loadData()
@@ -32,9 +35,3 @@ class asyncRequestExecutor():
         if isinstance(hist, str):
             raise FetchError("Cannot load data from URL: Invalid json structure: " + str(valueDictionary) )
         return valueDictionary.get('hist').get('bins').get('content')      
-
-    def parseJsonResult(self, jsonString):
-        try:
-            return json.loads(jsonString)
-        except ValueError as ve:
-            raise FetchError(f"Invalid json structure: {ve}")

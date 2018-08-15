@@ -10,6 +10,7 @@ rect {
 #image th, #image td {
     border: 1px solid white;
     min-width: 20px;
+    color: black;
  }
 
 #image td {

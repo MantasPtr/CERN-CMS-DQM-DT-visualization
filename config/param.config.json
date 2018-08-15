@@ -1,0 +1,25 @@
+{
+    "wheel":{
+        "type": "static",
+        "min": -2,
+        "max": 2
+    },
+    "station":{
+       "type": "static", 
+        "min":1,
+        "max":4
+    },
+    "sector":{
+        "type": "dependant",
+        "on": "station",
+        "values":[{
+            "if_values": [1,2,3],
+            "min": 1,
+            "max": 12
+        },{
+            "if_values": [4],
+            "min": 1,
+            "max": 14
+        }]
+    }
+}   
