@@ -1,3 +1,3 @@
 import database.dbSetup
 
-dbController = database.dbSetup.initDatabase()
+dbController = database.dbSetup.init_database()

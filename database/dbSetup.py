@@ -4,13 +4,13 @@ from database.mongoDbFactory import MongoDbFactory
 
 DB_CONFIG_LOCATION='config/mongodb.config.ini'
 
-def getDefaultDatabaseConfig():
+def init_database() -> Mongo_4_DB_controller:
+    db, col = get_default_database_config()
+    collection = MongoDbFactory(db).getCollection(col)
+    return Mongo_4_DB_controller(collection)
+
+def get_default_database_config():
     config = getConfig(configLocation=DB_CONFIG_LOCATION)
     database = config["database"]
     collection = config["collection"]
     return database, collection
-
-def initDatabase() -> Mongo_4_DB_controller:
-    db, col = getDefaultDatabaseConfig()
-    collection = MongoDbFactory(db).getCollection(col)
-    return Mongo_4_DB_controller(collection)

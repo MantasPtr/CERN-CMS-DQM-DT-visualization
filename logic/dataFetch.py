@@ -4,7 +4,7 @@ from errors.errors import FetchError
 import asyncUtils
 
 def getDataByIdentifier(identifier: dict):
-    data = dbController.getOne(identifier)
+    data = dbController.get_one(identifier)
     if data == None:
         dbController.save(identifier)
         asyncUtils.run_in_thread(loadDataAndSave, identifier)
@@ -18,11 +18,11 @@ async def loadDataAndSave(identifier):
         dbController.update(identifier, data)
     except FetchError as fetchError:
         print(f"Known error occurred while fetching: {fetchError}")
-        dbController.markAsError(identifier, fetchError)
+        dbController.mark_as_error(identifier, fetchError)
     except Exception as exception:
         print(f"Unknown error occurred while fetching: {exception}")
-        dbController.markAsError(identifier, exception)
+        dbController.mark_as_error(identifier, exception)
         raise exception
 
 def getFetchedData():
-    return dbController.getAllFetchedData()
+    return dbController.get_all()
