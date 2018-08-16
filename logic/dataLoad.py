@@ -1,11 +1,11 @@
 import database.databaseController as db
 from logic.runContainer import RunContainer
 
-def getMatrixFromDB(runContainer: RunContainer):
-    return db.dbController.getMatrix(runContainer)
+def getMatrixFromDB(identifier: dict, params: dict):
+    return db.dbController.getMatrix(identifier, params)
 
-def updateUserScore(runContainer: RunContainer, layers):
-    return db.dbController.updateUserScore(runContainer, layers)
+def updateUserScore(identifier: dict, params: dict, layers):
+    return db.dbController.updateUserScore(identifier, params, layers)
 
-def deleteRun(runNumber):
-    return db.dbController.deleteRun(runNumber)
+def delete(identifier: dict):
+    return db.dbController.delete(identifier)

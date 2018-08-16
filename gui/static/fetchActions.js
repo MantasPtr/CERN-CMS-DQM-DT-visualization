@@ -12,8 +12,8 @@ function onFetchData(){
     );
 }
 
-function deleteRun(run){
-    fetch(run,{
+function deleteRun(identifier){
+    fetch(identifier.run,{
         method:"DELETE"
     }).then(
         response => { 

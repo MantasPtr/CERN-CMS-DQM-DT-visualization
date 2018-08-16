@@ -9,7 +9,6 @@ by default using port 8080 and redirecting to it from port 80
 ```bash
 sudo iptables -I INPUT -p tcp --dport 8080 -j ACCEPT
 sudo iptables -t nat -A PREROUTING -p tcp --dport 80 -j REDIRECT --to-port 8080
-
 ```
 
 ## Database format
@@ -17,9 +16,9 @@ sudo iptables -t nat -A PREROUTING -p tcp --dport 80 -j REDIRECT --to-port 8080
 ```json
 {  
     "_id" : "AUTO-GENERATED",
-    "run" : 123456,
+    "identifier" : {"run":123456},
     "status": "LOADING | FINISHED | ERROR",
-    "exception": "some exception exception",
+    "exception": "some exception",
     "save_time": "timestamp",
     "data": [       {
             "params": {

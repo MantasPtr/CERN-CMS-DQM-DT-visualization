@@ -22,15 +22,14 @@ def default():
 def evalRun(run):
     return render_template(MAIN_PAGE_TEMPLATE, run = run)
 
-
 @app.route('/fetch')
 def fetch():
-    runs = dataFetch.getFetchedRuns()
+    runs = dataFetch.getFetchedData()
     return render_template(FETCH_PAGE_TEMPLATE, runs = runs)
    
 @app.route('/fetch/<int:run>')
 def fetchRun(run):
-    responseData = dataFetch.getRunData(run)
+    responseData = dataFetch.getDataByIdentifier({"run":run})
     if responseData == None:
         return "Started!"
     responseData.pop("_id", None)
@@ -67,7 +66,8 @@ def labelsJson(run, wheel, sector, station):
 @app.route("/<int:run>/<string:wheel>/<int:sector>/<int:station>/", methods = ['GET'])
 def runData(run, wheel, sector, station):
     runContainer = RunContainer(run, int(wheel), sector, station)
-    matrix = dataLoad.getMatrixFromDB(runContainer)
+    identifier, params  = runContainer.toDicts()
+    matrix = dataLoad.getMatrixFromDB(identifier, params)
     if (matrix == None):
         response = make_response("Record not found")
         response.status_code = 404
@@ -81,21 +81,9 @@ def score():
     values = request.get_json()
     runContainer = RunContainer(int(values["run"]), int(values["wheel"]), int(values["sector"]), int(values["station"]))
     badLayers = values["layers"]
-    return jsonify(dataLoad.updateUserScore(runContainer, badLayers))
+    identifier, params  = runContainer.toDicts()
+    return jsonify(dataLoad.updateUserScore(identifier, params, badLayers))
 
 @app.route("/<int:runNumber>", methods = ['DELETE'])
 def delete(runNumber):
-    return jsonify(dataLoad.deleteRun(runNumber))
-
-@app.errorhandler(ValueError)
-def handle_invalid_usage(error: ValueError):
-    response = jsonify(str(error))
-    response.status_code = 400
-    return response
-
-# @app.errorhandler(Exception)
-# def handle_other_error(error: Exception):
-#     print("ERROR: ",error)
-#     response = jsonify(str(error))
-#     response.status_code = 500
-#     return response
+    return jsonify(dataLoad.delete({"run":runNumber}))

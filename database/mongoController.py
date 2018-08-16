@@ -1,51 +1,47 @@
 import datetime
 import time
-from logic.runContainer import RunContainer
 import pymongo
 
 class Mongo_4_DB_controller():
     def __init__(self, collection):
-        self.runsCollection = collection
+        self.dbCollection = collection
         self.timeOffset = datetime.datetime.now() - datetime.datetime.utcnow()
-        # TODO: create indexes only is not exist 
-        # unique_indexes = config["uniqueIndex"].split(",")
-        # for indexFieldName in unique_indexes:
-        #     self.runData.createIndex(indexFieldName, indexFieldName + "_index", True)
 
-    def save(self, run, matrix = None):
-        record = self.__build_DT_record__(run, matrix, "LOADING")
-        self.runsCollection.save(record)
+    def save(self, identifier: dict, matrix = None):
+        record = self.__build_DT_record__(identifier, matrix, "LOADING")
+        self.dbCollection.save(record)
 
-    def update(self, run, matrix):
-        record = self.__build_DT_record__(run, matrix, "FINISHED")
-        self.runsCollection.update({"run" : run}, record)
+    def update(self, identifier: dict, matrix):
+        record = self.__build_DT_record__(identifier, matrix, "FINISHED")
+        self.__assure_update__(identifier, record)
 
-    def markAsError(self, run, exception):
-        record = self.__build_DT_record__(run, None, "ERROR")
+    def markAsError(self, identifier: dict, exception):
+        record = self.__build_DT_record__(identifier, None, "ERROR")
         record["exception"] = str(exception)
-        self.runsCollection.update({"run" : run}, record)
+        self.__assure_update__(identifier, record)
 
-    def getRun(self, run):
-        return self.runsCollection.find_one({"run": run})
+    def __assure_update__(self, *args):
+        rez = self.dbCollection.update(*args)
+        if rez["nModified"] == 0:
+            print(f"WARNING: update with criteria:{args[0]} did not update any records!")
 
-    def getMatrix(self, run: RunContainer):
-        cursor = self.runsCollection.aggregate([
+    def getOne(self, identifier: dict):
+        return self.dbCollection.find_one(identifier)
+
+    def getMatrix(self, identifier: dict, paramsDict: dict):
+        cursor = self.dbCollection.aggregate([
             {
-                "$match":{ "run": run.run }
+                "$match":{ "identifier": identifier}
             },
             {
                 "$project":{ 
-                    "run":1,
+                    "identifier":1,
                     "data": {
                         "$filter":{ 
                             "input":"$data", 
                             "as":"item", 
                             "cond":{ 
-                                "$and": [
-                                    {"$eq": ["$$item.params.wheel",   run.wheel]},
-                                    {"$eq": ["$$item.params.sector",  run.sector]},
-                                    {"$eq": ["$$item.params.station", run.station]} 
-                                ]
+                                "$and": [{"$eq": criteria for criteria in self.__buildParamObjectFilter__("$$item.params.", paramsDict)}]
                             }
                         }
                     } 
@@ -56,36 +52,37 @@ class Mongo_4_DB_controller():
             return None
         return cursor.next()
 
-    def getFetchRunNumbers(self):
-        runs = self.runsCollection.find({}, {"run": 1, "status": 1, "save_time": 1, "data":1, "exception": 1}).sort("save_time", pymongo.DESCENDING)
-        return list(map(self.__formatFetchedRunData__, runs))
+    def __buildParamObjectFilter__(self, prename: str, paramsDict: dict ):
+        return [(prename + key,value) for key, value in paramsDict.items()]
 
-    def __formatFetchedRunData__(self, run: dict):
-        datatime = run["save_time"] + self.timeOffset
-        run.pop("_id")
-        run["save_time"]= "%d-%02d-%02d %02d:%02d:%02d" % (datatime.year, datatime.month, datatime.day, datatime.hour, datatime.minute, datatime.second)
-        return run
+    def getAllFetchedData(self):
+        data = self.dbCollection.find({}, {"identifier": 1, "status": 1, "save_time": 1, "data":1, "exception": 1}).sort("save_time", pymongo.DESCENDING)
+        return list(map(self.__formatFetchedData__, data))
 
-    def __build_DT_record__(self, run, matrix, status):
+    def __formatFetchedData__(self, record: dict):
+        datatime = record["save_time"] + self.timeOffset
+        record.pop("_id")
+        record["save_time"]= "%d-%02d-%02d %02d:%02d:%02d" % (datatime.year, datatime.month, datatime.day, datatime.hour, datatime.minute, datatime.second)
+        return record
+
+    def __build_DT_record__(self, identier: dict, matrix, status):
         return {
-            "run": run,
+            "identifier": identier,
             "status": status,
             "save_time": datetime.datetime.utcnow(),
             "data": matrix
         }
 
-    def updateUserScore(self, run: RunContainer, badLayers):
-        rez = self.runsCollection.update(
-            {
-                "run":run.run,
-                "data.params.wheel":run.wheel,
-                "data.params.sector":run.sector,
-                "data.params.station":run.station 
-            },{
+    def updateUserScore(self, identifierDict: dict, paramDict: dict, badLayers: list):
+        paramFilter = dict(self.__buildParamObjectFilter__("data.params.",paramDict))
+        paramFilter.update({"identifier":identifierDict})
+        rez = self.dbCollection.update(paramFilter
+            ,{
                 "$set" : { "data.$.user_scores":badLayers }
             })
-        return {"matched":rez["n"], "updated": not rez["nModified"] != 0 }
+        return {"matched":rez["n"], "updated": rez["nModified"] == 0 }
 
-    def deleteRun(self, runNumber):
-        rez = self.runsCollection.delete_one({"run": runNumber})
+    def delete(self, identifier: dict):
+        print(identifier)
+        rez = self.dbCollection.delete_one({"identifier": identifier})
         return rez.deleted_count

@@ -1,28 +1,28 @@
 from database.databaseController import dbController 
-from dataLoading.dataLoader import asyncFetchAllRunData
+from dataLoading.dataLoader import asyncFetchAllData
 from errors.errors import FetchError
 import asyncUtils
 
-def getRunData(runNumber):
-    runData = dbController.getRun(runNumber) 
-    if runData == None:
-        dbController.save(runNumber)
-        asyncUtils.run_in_thread(loadDataAndSave, runNumber)
+def getDataByIdentifier(identifier: dict):
+    data = dbController.getOne(identifier)
+    if data == None:
+        dbController.save(identifier)
+        asyncUtils.run_in_thread(loadDataAndSave, identifier)
         return None
-    return runData 
+    return data 
 
-async def loadDataAndSave(run):
+async def loadDataAndSave(identifier):
     try:
-        data = await asyncFetchAllRunData(run)
-        print(f":: Successfully fetch data for run: {run}")
-        dbController.update(run, data)
+        data = await asyncFetchAllData(identifier)
+        print(f":: Successfully fetch data for: {identifier}")
+        dbController.update(identifier, data)
     except FetchError as fetchError:
         print(f"Known error occurred while fetching: {fetchError}")
-        dbController.markAsError(run, fetchError)
+        dbController.markAsError(identifier, fetchError)
     except Exception as exception:
         print(f"Unknown error occurred while fetching: {exception}")
-        dbController.markAsError(run, exception)
+        dbController.markAsError(identifier, exception)
         raise exception
 
-def getFetchedRuns():
-    return dbController.getFetchRunNumbers()
+def getFetchedData():
+    return dbController.getAllFetchedData()

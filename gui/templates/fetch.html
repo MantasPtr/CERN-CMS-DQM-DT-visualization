@@ -33,12 +33,12 @@
       </tr>
       {% for item in runs %}
       <tr>
-        <td>{{item.run}}</td>
+        <td>{{item.identifier}}</td>
         <td class="status {{item.status}}">{{item.status}}</td>
         <td>{{item.save_time}}</td>
         {% if item.status == "FINISHED" %}
         <td>
-          <a type="button" class="btn btn-success" href="/{{item.run}}">Load</a>
+          <a type="button" class="btn btn-success" href="/{{item.identifier}}">Load</a>
         </td>
         {% elif item.status == "ERROR" %}
         <td>
@@ -46,11 +46,11 @@
         </td>
           {% endif %}
         <td>
-          <button type="button" class="btn btn-danger" onclick="deleteRun({{item.run}})">Delete</button>
+          <button type="button" class="btn btn-danger" onclick="deleteRun({{item.identifier}})">Delete</button>
         </td>
         <td>
 
-          {% set outer_loop = loop %}
+          <!-- {% set outer_loop = loop %}
           {% if runs[outer_loop.index0].data   %}
           {% for a in runs[outer_loop.index0].data  %}
 
@@ -63,7 +63,7 @@
                 {% endfor %}
             </div> 
           {% endfor %}
-          {% endif %}
+          {% endif %} -->
         </td>  
       </tr>
     {% endfor %}

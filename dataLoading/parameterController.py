@@ -35,6 +35,6 @@ def handleDependantParams(key, parameters):
                 newParamDict.extend([dict(oldParam,**{key:newValue}) for newValue in paramRange])                   
     return newParamDict
 
-def getUrlsGenerator(run: []):
+def getUrlsGenerator(identifier: dict):
     for params in getParamDicts():
-        yield url.format(*run,**params), params
+        yield url.format(**identifier,**params), params
