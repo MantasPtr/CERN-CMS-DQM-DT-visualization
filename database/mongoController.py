@@ -23,11 +23,14 @@ class Mongo_4_DB_controller():
         self._assure_update(identifier, record)
 
     def update_user_score(self, identifier: dict, paramDict: dict, badLayers: list):
-        # {'identifier': {'run': 272011}, "data": {$elemMatch: { "params.wheel": 1, "params.station":3, "params.sector":1}}} ,  {"$set": {"data.$.user_scores": [3]}} 
+        # {'identifier': {'xy': 123},"data": {$elemMatch: { "params.x_key": x_value, "params.y_key:y_value}}},{"$set": {"data.$.user_scores": [1,2,3]}} 
         return self._assure_update(
-            {   "identifier": identifier, 
-                "data": {"$elemMatch": { ("params."+ str(key)):value for  key,value in paramDict.items() }}},
-            { "$set": {"data.$.user_scores":badLayers} }
+            {   
+                "identifier": identifier, 
+                "data": {"$elemMatch": { ("params."+str(key)):value for key,value in paramDict.items() }}
+            },{
+                "$set": {"data.$.user_scores":badLayers}
+            }
             )
 
     def delete(self, identifier: dict):
@@ -41,7 +44,6 @@ class Mongo_4_DB_controller():
     def get_all(self):
         data = self.dbCollection.find({}, {"identifier": 1, "status": 1, "save_time": 1, "data":1, "exception": 1}).sort("save_time", pymongo.DESCENDING)
         return list(map(self._format_db_result, data))
-
 
     def get_matrix(self, identifier: dict, paramsDict: dict):
         cursor = self.dbCollection.aggregate([
@@ -67,20 +69,20 @@ class Mongo_4_DB_controller():
                 }
             }
         ])
-        if not cursor.alive:
-            return None
         return cursor.next()
 
     def get_all_user_scores(self):
         cursor = self.dbCollection.aggregate([
+        #     {"$unwind": "$data" },
+        #     {"$match": {"data.user_scores": {"$exists": True}} },
+        #     {"$group": {"_id":"$identifier", "params":{"$push": "$data.params"}, "user_scores":{"$push":'$data.user_scores'}} },
+        #     {"$project": {"_id":0, "identifier":"$_id", "user_scores":1, "params":1} } 
+        # ])
             {"$unwind": "$data" },
             {"$match": {"data.user_scores": {"$exists": True}} },
-            {"$group": {"_id":"$identifier", "params":{"$push": "$data.params"}, "user_scores":{"$push":'$data.user_scores'}} },
-            {"$project": {"_id":0, "identifier":"$_id", "user_scores":1, "params":1} } 
+            {"$project": {"_id":0, "identifier":"1", "data.user_scores":1, "data.params":1} } 
         ])
-        if not cursor.alive:
-            return None
-        return cursor.next()
+        return list(cursor)
 
     def _assure_update(self, *args):
         rez = self.dbCollection.update(*args)
