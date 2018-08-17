@@ -24,7 +24,7 @@ def evalRun(run):
 
 @app.route('/fetch')
 def fetch():
-    runs = dataFetch.getFetchedData()
+    runs = dataLoad.getFetchedData()
     return render_template(FETCH_PAGE_TEMPLATE, runs = runs)
    
 @app.route('/fetch/<int:run>')
@@ -80,10 +80,15 @@ def score():
     # {'run': '300000', 'wheel': '0', 'sector': '1', 'station': '1', 'layers': ['12', '11', '10', '9', '8', '7', '6', '5', '4', '3', '2', '1']}
     values = request.get_json()
     runContainer = RunContainer(int(values["run"]), int(values["wheel"]), int(values["sector"]), int(values["station"]))
-    badLayers = values["layers"]
+    badLayers = list(map(int,values["layers"]))
     identifier, params  = runContainer.toDicts()
     return jsonify(dataLoad.updateUserScore(identifier, params, badLayers))
 
 @app.route("/<int:runNumber>", methods = ['DELETE'])
 def delete(runNumber):
     return jsonify(dataLoad.delete({"run":runNumber}))
+
+@app.route("/scores")
+def scores():
+    return jsonify(dataLoad.getScoresData())
+

@@ -2,6 +2,7 @@ import datetime
 import time
 import pymongo
 import warnings
+from typing import Tuple, List
 
 class Mongo_4_DB_controller():
     def __init__(self, collection):
@@ -22,8 +23,12 @@ class Mongo_4_DB_controller():
         self._assure_update(identifier, record)
 
     def update_user_score(self, identifier: dict, paramDict: dict, badLayers: list):
-        paramFilter = self._build_filter_with_identifier("data.params.", paramDict, identifier)
-        return self._assure_update(paramFilter, {"$set" : {"data.$.user_scores":badLayers} })
+        # {'identifier': {'run': 272011}, "data": {$elemMatch: { "params.wheel": 1, "params.station":3, "params.sector":1}}} ,  {"$set": {"data.$.user_scores": [3]}} 
+        return self._assure_update(
+            {   "identifier": identifier, 
+                "data": {"$elemMatch": { ("params."+ str(key)):value for  key,value in paramDict.items() }}},
+            { "$set": {"data.$.user_scores":badLayers} }
+            )
 
     def delete(self, identifier: dict):
         print(identifier)
@@ -31,7 +36,7 @@ class Mongo_4_DB_controller():
         return rez.deleted_count
 
     def get_one(self, identifier: dict):
-        return self.dbCollection.find_one(identifier)
+        return self.dbCollection.find_one({"identifier": identifier})
 
     def get_all(self):
         data = self.dbCollection.find({}, {"identifier": 1, "status": 1, "save_time": 1, "data":1, "exception": 1}).sort("save_time", pymongo.DESCENDING)
@@ -51,12 +56,27 @@ class Mongo_4_DB_controller():
                             "input":"$data", 
                             "as":"item", 
                             "cond":{ 
-                                "$and": [{"$eq": criteria for criteria in self._build_param_filter("$$item.params.", paramsDict)}]
+                                # "$and": [
+                                #       {"$eq": ["$$item.params.x_key", x_value]}
+                                #       {"$eq": ["$$item.params.y_key", y_value]}
+                                #   ]
+                                "$and": [{"$eq": [("$$item.params." + str(key)), value] for key, value in paramsDict.items()}]
                             }
                         }
                     } 
                 }
             }
+        ])
+        if not cursor.alive:
+            return None
+        return cursor.next()
+
+    def get_all_user_scores(self):
+        cursor = self.dbCollection.aggregate([
+            {"$unwind": "$data" },
+            {"$match": {"data.user_scores": {"$exists": True}} },
+            {"$group": {"_id":"$identifier", "params":{"$push": "$data.params"}, "user_scores":{"$push":'$data.user_scores'}} },
+            {"$project": {"_id":0, "identifier":"$_id", "user_scores":1, "params":1} } 
         ])
         if not cursor.alive:
             return None
@@ -82,14 +102,6 @@ class Mongo_4_DB_controller():
             "data": matrix
         }
 
-    def _build_param_filter(self, prename: str, paramsDict: dict ):
-        return [(prename + key,value) for key, value in paramsDict.items()]
-
-    def _build_filter_with_identifier(self, prename: str ,paramDict: dict, identifier: dict):
-        paramFilter = dict(self._build_param_filter(prename ,paramDict))
-        paramFilter.update({"identifier":identifier})
-        return paramFilter
-
-    # def getEvaluatedScores(self, id)
+   
 
     

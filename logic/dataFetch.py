@@ -23,6 +23,3 @@ async def loadDataAndSave(identifier):
         print(f"Unknown error occurred while fetching: {exception}")
         dbController.mark_as_error(identifier, exception)
         raise exception
-
-def getFetchedData():
-    return dbController.get_all()

@@ -9,3 +9,9 @@ def updateUserScore(identifier: dict, params: dict, layers):
 
 def delete(identifier: dict):
     return db.dbController.delete(identifier)
+
+def getFetchedData():
+    return db.dbController.get_all()
+
+def getScoresData():
+    return db.dbController.get_all_user_scores()
