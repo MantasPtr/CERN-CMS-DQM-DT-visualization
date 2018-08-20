@@ -80,7 +80,7 @@ class Mongo_4_DB_controller():
         # ])
             {"$unwind": "$data" },
             {"$match": {"data.user_scores": {"$exists": True}} },
-            {"$project": {"_id":0, "identifier":"1", "data.user_scores":1, "data.params":1} } 
+            {"$project": {"_id":0, "identifier":1, "data.user_scores":1, "data.params":1} } 
         ])
         return list(cursor)
 

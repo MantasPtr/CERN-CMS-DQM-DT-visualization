@@ -2,6 +2,10 @@ from validators.validation import validateRun
 
 class RunContainer():
     def __init__(self, run, wheel, sector, station):
+       run = int(run)
+       wheel = int(wheel)
+       sector = int(sector)
+       station = int(station)       
        validateRun(run, sector, station, wheel)
        self.run = run
        self.wheel = wheel

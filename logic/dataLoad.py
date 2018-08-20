@@ -4,7 +4,7 @@ from logic.runContainer import RunContainer
 def getMatrixFromDB(identifier: dict, params: dict):
     return dbController.get_matrix(identifier, params)
 
-def updateUserScore(identifier: dict, params: dict, layers):
+def updateUserScore(identifier: dict, params: dict, layers: list):
     return dbController.update_user_score(identifier, params, layers)
 
 def delete(identifier: dict):

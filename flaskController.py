@@ -34,9 +34,7 @@ def fetchRun(run):
         return "Started!"
     responseData.pop("_id", None)
     responseData.pop("save_time", None)
-    response = make_response(json.dumps(responseData))
-    response.headers['Content-Type'] = 'text/json'
-    return response
+    return jsonify(responseData)
     
 @app.route('/i')
 def img():
@@ -48,7 +46,7 @@ def img():
 
 @app.route("/<int:run>/<string:wheel>/<int:sector>/<int:station>/labels.png")
 def get(run, wheel, sector, station):
-    container = RunContainer(run, int(wheel) , sector, station)
+    container = RunContainer(run, wheel, sector, station)
     url = buildUrlFromContainer(container)
     labels = getMatrixFromProtectedUrl(url)
     imgBytes = plt.getImageBytes(labels)
@@ -59,7 +57,7 @@ def get(run, wheel, sector, station):
 @app.route("/<int:run>/<string:wheel>/<int:sector>/<int:station>/labels.json")
 def labelsJson(run, wheel, sector, station):
     # returns full json from url since it does not need to parse and format json again
-    runContainer = RunContainer(run, int(wheel), sector, station)
+    runContainer = RunContainer(run, wheel, sector, station)
     url = buildUrlFromContainer(runContainer)
     return getJsonDataFromProtectedUrl(url)
 
@@ -78,9 +76,9 @@ def runData(run, wheel, sector, station):
 @app.route("/save/", methods = ['POST'])
 def score():
     # {'run': '300000', 'wheel': '0', 'sector': '1', 'station': '1', 'layers': ['12', '11', '10', '9', '8', '7', '6', '5', '4', '3', '2', '1']}
-    values = request.get_json()
-    runContainer = RunContainer(int(values["run"]), int(values["wheel"]), int(values["sector"]), int(values["station"]))
-    badLayers = list(map(int,values["layers"]))
+    body = request.get_json()
+    runContainer = RunContainer(body["run"], body["wheel"], body["sector"], body["station"])
+    badLayers = list(map(int,body["layers"]))
     identifier, params  = runContainer.toDicts()
     return jsonify(dataLoad.updateUserScore(identifier, params, badLayers))
 
