@@ -1,4 +1,4 @@
-from database.databaseController import dbController 
+from database.dbSetup import dbController 
 from dataLoading.dataLoader import asyncFetchAllData
 from errors.errors import FetchError
 import asyncUtils

@@ -14,3 +14,5 @@ def get_default_database_config():
     database = config["database"]
     collection = config["collection"]
     return database, collection
+
+dbController = init_database()
