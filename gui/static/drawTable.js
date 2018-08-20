@@ -4,14 +4,18 @@ let maxValue = 0;
 let cacheData = null;
 
 function createTable(tableData) {
+    //inverting data because its done in prod
+    // slice just copies data because reverse modifies array
+    tableData.slice().reverse();
+
     maxValue = getMax(tableData);
     drawColorPalet();
     cacheData = tableData;
     maxLayers = tableData.length;
-    let table = document.createElement('table');
+    let table = document.createElement("table");
 
     table.appendChild(createTableHeader(tableData))
-    let tableBody = document.createElement('tbody');
+    let tableBody = document.createElement("tbody");
     tableData.forEach(createRows);
     table.appendChild(tableBody);
     let container = document.querySelector("#image");
@@ -31,14 +35,14 @@ function createTable(tableData) {
     }
 
     function createRows(rowData, rowIndex) {
-        let row = document.createElement('tr');
+        let row = document.createElement("tr");
         rowData.forEach(createCell);
         let layerS = addLayerSelector(rowIndex);
         row.appendChild(layerS)
         tableBody.appendChild(row);
 
         function createCell(cellData) {
-            let cell = document.createElement('td');
+            let cell = document.createElement("td");
             if (settings.getShowText())
                 cell.appendChild(document.createTextNode(cellData));
             cell.style.backgroundColor = getColor(cellData, maxValue);
@@ -49,8 +53,8 @@ function createTable(tableData) {
     function addLayerSelector(layerIndex){
         const LAYER_SUFFIX = "Layer ";
         const LAYER_CLASS = "layer-selection";
-        const index = maxLayers - layerIndex;
-        let span = document.createElement('span');
+        const index = layerIndex + 1 ; // zero based -> one based
+        let span = document.createElement("span");
         span.classList.add("input-group-addon");
         let input = document.createElement("input");
         input.classList.add(LAYER_CLASS);

@@ -20,7 +20,7 @@ function showApiError(message){
     hideApiMessage()
     let errorbanner = document.getElementById(apiErrorBannerID);
     errorbanner.hidden = false;
-    errorbanner.textContent = message;
+    errorbanner.textContent = "Error: " + message;
 }
 
 function hideApiError(){

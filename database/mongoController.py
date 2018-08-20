@@ -2,6 +2,7 @@ import datetime
 import time
 import pymongo
 import warnings
+from errors.errors import NotSingleResultError
 from typing import Tuple, List
 
 class Mongo_4_DB_controller():
@@ -69,7 +70,7 @@ class Mongo_4_DB_controller():
                 }
             }
         ])
-        return cursor.next()
+        return self._get_single_result(cursor)
 
     def get_all_user_scores(self):
         cursor = self.dbCollection.aggregate([
@@ -103,6 +104,14 @@ class Mongo_4_DB_controller():
             "save_time": datetime.datetime.utcnow(),
             "data": matrix
         }
+
+    def _get_single_result(self, cursor: pymongo.CursorType):
+        result = list(cursor)
+        if (len(result) > 1):
+            raise NotSingleResultError(f"Query returned more than one result. Actual result: {list(cursor)}.")
+        if (len(result) == 0):
+             return None
+        return result[0]
 
    
 
