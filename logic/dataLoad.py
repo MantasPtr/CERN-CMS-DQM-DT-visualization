@@ -1,5 +1,4 @@
 from database.dbSetup import dbController
-from logic.runContainer import RunContainer
 
 def getMatrixFromDB(identifier: dict, params: dict):
     return dbController.get_matrix(identifier, params)

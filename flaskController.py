@@ -1,14 +1,9 @@
 from dataLoading.requestExecutor import getMatrixFromProtectedUrl, getJsonDataFromProtectedUrl
-import gui.plotting.plotUtils as plt
 from logic import dataFetch, dataLoad
-from dataLoading.urlBuilder import buildUrlFromContainer
 from flask import Flask, render_template, request, make_response, jsonify
 import gui.plotting.adrian as aplot
-import matplotlib
 import json
-from logic.runContainer import RunContainer
-
-matplotlib.use('Agg')
+from logic.dictBuilder import buildDicts
 app = Flask(__name__, template_folder="gui/templates", static_folder="gui/static")
 
 MAIN_PAGE_TEMPLATE='eval.html'
@@ -36,36 +31,19 @@ def fetchRun(run):
     responseData.pop("_id", None)
     responseData.pop("save_time", None)
     return jsonify(responseData)
-    
-@app.route('/i')
-def img():
-    labels = getMatrixFromProtectedUrl()
-    imgBytes = aplot.plot_occupancy_hitmap(labels, "title", "a.u.")
+
+@app.route("/<int:run>/<string:wheel>/<int:sector>/<int:station>/i")
+def get_adrian(run, wheel, sector, station):
+    identifier, params  = buildDicts(run, wheel, sector, station)
+    data = dataLoad.getMatrixFromDB(identifier, params)
+    imgBytes = aplot.plot_occupancy_hitmap(data.get("data")[0].get("matrix"), "title", "a.u.")
     response = make_response(imgBytes.getvalue())
     response.headers['Content-Type'] = 'image/png'
     return response
 
-@app.route("/<int:run>/<string:wheel>/<int:sector>/<int:station>/labels.png")
-def get(run, wheel, sector, station):
-    container = RunContainer(run, wheel, sector, station)
-    url = buildUrlFromContainer(container)
-    labels = getMatrixFromProtectedUrl(url)
-    imgBytes = plt.getImageBytes(labels)
-    response=make_response(imgBytes.getvalue())
-    response.headers['Content-Type'] = 'image/png'
-    return response
-
-@app.route("/<int:run>/<string:wheel>/<int:sector>/<int:station>/labels.json")
-def labelsJson(run, wheel, sector, station):
-    # returns full json from url since it does not need to parse and format json again
-    runContainer = RunContainer(run, wheel, sector, station)
-    url = buildUrlFromContainer(runContainer)
-    return getJsonDataFromProtectedUrl(url)
-
 @app.route("/<int:run>/<string:wheel>/<int:sector>/<int:station>/", methods = ['GET'])
 def runData(run, wheel, sector, station):
-    runContainer = RunContainer(run, int(wheel), sector, station)
-    identifier, params  = runContainer.toDicts()
+    identifier, params  = buildDicts(run, wheel, sector, station)
     matrix = dataLoad.getMatrixFromDB(identifier, params)
     if (matrix == None):
         response = make_response("Record not found")
@@ -78,9 +56,8 @@ def runData(run, wheel, sector, station):
 def score():
     # {'run': '300000', 'wheel': '0', 'sector': '1', 'station': '1', 'layers': ['12', '11', '10', '9', '8', '7', '6', '5', '4', '3', '2', '1']}
     body = request.get_json()
-    runContainer = RunContainer(body["run"], body["wheel"], body["sector"], body["station"])
     badLayers = list(map(int,body["layers"]))
-    identifier, params  = runContainer.toDicts()
+    identifier, params = buildDicts(body["run"], body["wheel"], body["sector"], body["station"])
     return jsonify(dataLoad.updateUserScore(identifier, params, badLayers))
 
 @app.route("/<int:runNumber>", methods = ['DELETE'])

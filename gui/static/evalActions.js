@@ -3,42 +3,6 @@ let wheel;
 let sector;
 let station;
 
-
-function onLoadData(){
-    let runValue =  getStringValueFromInputField("runInput");
-    let wheelValue = getStringValueFromInputField("wheelInput");
-    let sectorValue = getStringValueFromInputField("sectorInput");
-    let stationValue = getStringValueFromInputField("stationInput");
-
-    if (!(runValue && wheelValue && sectorValue && stationValue)) {
-        showApiError("At least one of input values is empty")
-        return;
-    }
-
-    fetch("/" +runValue+ "/" + wheelValue + "/" + sectorValue + "/" + stationValue + "/labels.json").then(
-        (response) => {
-            validateApiResponseCode(response);
-            response.json().then(processJsonResponse);
-        }
-    );
-
-    function processJsonResponse (json){
-            let hist = json.hist;
-            if (typeof hist === "string") {
-                showApiError("Error while retrieving data - API returned: " + hist);
-            }
-            else {
-                let matrix = hist.bins.content;
-                createTable(matrix);
-                hideApiError();
-                run = runValue;
-                wheel = wheelValue;
-                sector = sectorValue;
-                station = stationValue;
-            }
-    };
-}
-
 function onLoadDataFromDB(){
     let runValue =  getStringValueFromInputField("runInput");
     let wheelValue = getStringValueFromInputField("wheelInput");

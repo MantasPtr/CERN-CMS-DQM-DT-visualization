@@ -1,10 +1,13 @@
 # https://github.com/AdrianAlan/DT-Digi-Occupancy/blob/master/notebooks/local-approach.ipynb
-import matplotlib.pyplot as plt
 import matplotlib
+matplotlib.use('Agg')
+
+import matplotlib.pyplot as plt
 import io
 import numpy as np
 from matplotlib.backends.backend_agg import FigureCanvasAgg as FigureCanvas
 from mpl_toolkits.axes_grid1 import make_axes_locatable
+
 
 def plot_occupancy_hitmap(data, title, unit):
     """Visualizes occupancy hitmap"""
