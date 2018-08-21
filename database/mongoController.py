@@ -24,15 +24,12 @@ class Mongo_4_DB_controller():
         self._assure_update(identifier, record)
 
     def update_user_score(self, identifier: dict, paramDict: dict, badLayers: list):
-        # {'identifier': {'xy': 123},"data": {$elemMatch: { "params.x_key": x_value, "params.y_key:y_value}}},{"$set": {"data.$.user_scores": [1,2,3]}} 
-        return self._assure_update(
-            {   
+        return self._assure_update({   
                 "identifier": identifier, 
                 "data": {"$elemMatch": { ("params."+str(key)):value for key,value in paramDict.items() }}
             },{
                 "$set": {"data.$.user_scores":badLayers}
-            }
-            )
+            })
 
     def delete(self, identifier: dict):
         print(identifier)
@@ -43,8 +40,13 @@ class Mongo_4_DB_controller():
         return self.dbCollection.find_one({"identifier": identifier})
 
     def get_all(self):
-        data = self.dbCollection.find({}, {"identifier": 1, "status": 1, "save_time": 1, "data":1, "exception": 1}).sort("save_time", pymongo.DESCENDING)
-        return list(map(self._format_db_result, data))
+        data = self.dbCollection.find({}, {"_id": 0 ,"identifier": 1, "status": 1, "save_time": 1, "data":1, "exception": 1}).sort("save_time", pymongo.DESCENDING)
+        return list(map(self._format_db_result_datatime, data))
+
+    def _format_db_result_datatime(self, record: dict):
+        datatime = record["save_time"] + self.timeOffset
+        record["save_time"]= "%d-%02d-%02d %02d:%02d:%02d" % (datatime.year, datatime.month, datatime.day, datatime.hour, datatime.minute, datatime.second)
+        return record
 
     def get_matrix(self, identifier: dict, paramsDict: dict):
         cursor = self.dbCollection.aggregate([
@@ -58,11 +60,7 @@ class Mongo_4_DB_controller():
                         "$filter":{ 
                             "input":"$data", 
                             "as":"item", 
-                            "cond":{ 
-                                # "$and": [
-                                #       {"$eq": ["$$item.params.x_key", x_value]}
-                                #       {"$eq": ["$$item.params.y_key", y_value]}
-                                #   ]
+                            "cond":{
                                 "$and": [{"$eq": [("$$item.params." + str(key)), value] for key, value in paramsDict.items()}]
                             }
                         }
@@ -74,14 +72,36 @@ class Mongo_4_DB_controller():
 
     def get_all_user_scores(self):
         cursor = self.dbCollection.aggregate([
-        #     {"$unwind": "$data" },
-        #     {"$match": {"data.user_scores": {"$exists": True}} },
-        #     {"$group": {"_id":"$identifier", "params":{"$push": "$data.params"}, "user_scores":{"$push":'$data.user_scores'}} },
-        #     {"$project": {"_id":0, "identifier":"$_id", "user_scores":1, "params":1} } 
-        # ])
             {"$unwind": "$data" },
             {"$match": {"data.user_scores": {"$exists": True}} },
             {"$project": {"_id":0, "identifier":1, "data.user_scores":1, "data.params":1} } 
+        ])
+        return list(cursor)
+
+    def get_all_network_scores(self, limit = 20):
+        cursor = self.dbCollection.aggregate( [
+            {"$match": {"status":"FINISHED"}},
+            {"$unwind": "$data" },
+            {"$project": {
+                "_id":0,
+                "identifier":1,
+                "data.params":1,
+                "data.scores":1,
+                "rating":{
+                    "$reduce": {
+                        "input": "$data.scores",
+                        "initialValue": 0.5,
+                        "in": {
+                            "$min":[
+                                "$$value",
+                                { "$abs":  {"$subtract": [0.5, "$$this"]}}
+                            ]
+                        }
+                    }
+                }
+            }},
+            {"$sort": {"rating":1}},
+            {"$limit": limit}
         ])
         return list(cursor)
 
@@ -90,12 +110,6 @@ class Mongo_4_DB_controller():
         if rez["nModified"] == 0:
             warnings.warn(f"Update with criteria:{args[0]} did not update any records!")
         return {"matched":rez["n"], "updated": rez["nModified"] == 0 }
-
-    def _format_db_result(self, record: dict):
-        datatime = record["save_time"] + self.timeOffset
-        record.pop("_id")
-        record["save_time"]= "%d-%02d-%02d %02d:%02d:%02d" % (datatime.year, datatime.month, datatime.day, datatime.hour, datatime.minute, datatime.second)
-        return record
 
     def _build_db_record(self, identier: dict, matrix, status):
         return {
@@ -112,7 +126,3 @@ class Mongo_4_DB_controller():
         if (len(result) == 0):
              return None
         return result[0]
-
-   
-
-    

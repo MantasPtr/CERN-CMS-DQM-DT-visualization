@@ -90,3 +90,6 @@ def delete(runNumber):
 def scores():
     return jsonify(dataLoad.getScoresData())
 
+@app.route("/net_scores")
+def net_scores():
+    return jsonify(dataLoad.get_network_scores())

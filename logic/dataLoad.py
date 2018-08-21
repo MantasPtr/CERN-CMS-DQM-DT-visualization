@@ -15,3 +15,6 @@ def getFetchedData():
 
 def getScoresData():
     return dbController.get_all_user_scores()
+
+def get_network_scores():
+    return dbController.get_all_network_scores()
