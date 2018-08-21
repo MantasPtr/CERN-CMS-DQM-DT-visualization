@@ -1,0 +1,35 @@
+{% extends "layout.html" %}
+{% block head %}
+  {{ super() }}
+  <script src="{{url_for( 'static', filename='fetchActions.js' )}} "></script>
+{% endblock %}
+{% block body %}
+  {{ super() }}
+  <div>
+    <table class="col-md-12 table-striped">
+      <tr>
+        <th>Identifier:</th>
+        <th>Params:</th>
+        <th>Network score:</th>
+        <th>Certainty score:</th>
+        <th/>
+      </tr>
+      {% for item in scores %}
+      <tr>
+        <td>{{item.identifier}}</td>
+        <td>{{item.data.params}}</td>
+        <td>
+          |
+          {% for c in item.data.scores %}   
+            {{ "%.3f|"|format(c) }}
+          {% endfor %}
+        </td>
+        <td>{{"%.5f"|format(item.rating)}}</td>
+        <td>
+          <a type="button" class="btn btn-success" href="/{{item.identifier.run}}">Load</a>
+        </td>
+       </tr>
+    {% endfor %}
+    </table>
+  </div>
+{% endblock %}

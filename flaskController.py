@@ -13,6 +13,7 @@ app = Flask(__name__, template_folder="gui/templates", static_folder="gui/static
 
 MAIN_PAGE_TEMPLATE='eval.html'
 FETCH_PAGE_TEMPLATE='fetch.html'
+FETCH_PAGE_TEMPLATE='scores.html'
 
 @app.route('/')
 def default():
@@ -90,6 +91,11 @@ def delete(runNumber):
 def scores():
     return jsonify(dataLoad.getScoresData())
 
+@app.route("/net_scores.json")
+def net_scores_json():
+    return jsonify(dataLoad.get_network_scores())
+
 @app.route("/net_scores")
 def net_scores():
-    return jsonify(dataLoad.get_network_scores())
+    scores = dataLoad.get_network_scores()
+    return render_template(FETCH_PAGE_TEMPLATE, scores = scores)
