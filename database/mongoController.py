@@ -60,8 +60,8 @@ class Mongo_4_DB_controller():
                         "$filter":{ 
                             "input":"$data", 
                             "as":"item", 
-                            "cond":{
-                                "$and": [{"$eq": [("$$item.params." + str(key)), value] for key, value in paramsDict.items()}]
+                            "cond":{                     
+                                "$and": [{"$eq": ["$$item.params." + str(key),value]} for key, value in paramsDict.items()]
                             }
                         }
                     } 
@@ -78,7 +78,7 @@ class Mongo_4_DB_controller():
         ])
         return list(cursor)
 
-    def get_all_network_scores(self, limit = 20):
+    def get_all_network_scores(self, limit):
         cursor = self.dbCollection.aggregate( [
             {"$match": {"status":"FINISHED"}},
             {"$unwind": "$data" },

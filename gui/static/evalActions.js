@@ -26,15 +26,15 @@ function onLoadDataFromDB(){
     }
 
     function fetchdata() {
-        let url = "/data/" + runValue + "/" + wheelValue + "/" + sectorValue + "/" + stationValue + "/"
+        let url = "/data/" + runValue + "/" + wheelValue + "/" + sectorValue + "/" + stationValue + "/";
         fetch(url).then((response) => {
             validateApiResponseCode(response);
             response.json().then(processJsonResponse);
         });
     }
 
-    function processJsonResponse (matrix){
-        createTable(matrix);
+    function processJsonResponse (data){
+        createTable(data.matrix, data.scores);
         hideApiError();
         run = runValue;
         wheel = wheelValue;

@@ -1,16 +1,20 @@
 let maxLayers = 0;
 let maxValue = 0;
+const NETWORK_SCORE_DIGITS = 3;
 
 let cacheData = null;
+let catchedScores = null;
 
-function createTable(tableData) {
+function createTable(tableData, scores = catchedScores) {
     //inverting data because its done in prod
     // slice just copies data because reverse modifies array
-    tableData.slice().reverse();
+    cacheData = tableData;
+    catchedScores = scores; 
+    tableData = tableData.slice().reverse();
+    scores = scores.slice().reverse();
 
     maxValue = getMax(tableData);
     drawColorPalet();
-    cacheData = tableData;
     maxLayers = tableData.length;
     let table = document.createElement("table");
 
@@ -31,14 +35,22 @@ function createTable(tableData) {
         let layerHeader = document.createElement("th")
         layerHeader.textContent = "Bad layers:";
         headerRow.appendChild(layerHeader);
+        let scoreHeader = document.createElement("th");
+        scoreHeader.textContent = "Bad score:";
+        headerRow.appendChild(scoreHeader);
         return thead;
     }
 
     function createRows(rowData, rowIndex) {
         let row = document.createElement("tr");
         rowData.forEach(createCell);
+
         let layerS = addLayerSelector(rowIndex);
-        row.appendChild(layerS)
+        row.appendChild(layerS);
+
+        let networkScore =  addNetworkScores(rowIndex);
+        row.appendChild(networkScore);
+
         tableBody.appendChild(row);
 
         function createCell(cellData) {
@@ -65,6 +77,15 @@ function createTable(tableData) {
         span.appendChild(document.createTextNode(LAYER_SUFFIX + index));
         return wrap("td", span);
     }
+
+    function addNetworkScores(layerIndex){
+        const SCORE_CLASS = "network_score";
+        let td = document.createElement("td");
+        td.classList.add(SCORE_CLASS);
+        td.textContent = scores[layerIndex].toFixed(NETWORK_SCORE_DIGITS)
+        return td
+    }
+
 };
 
 function drawColorPalet() {

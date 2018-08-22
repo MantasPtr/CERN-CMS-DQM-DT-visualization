@@ -7,5 +7,5 @@ def buildDicts(run, wheel: str, sector: int, station: int) -> (dict, dict):
     station = int(station)       
     validateRun(run, sector, station, wheel)
     identifier = {"run":run}
-    params = {"wheel":wheel, "sector": station, "station": station}
+    params = {"wheel":wheel, "sector": sector, "station": station}
     return identifier, params

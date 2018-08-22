@@ -15,7 +15,7 @@ rect {
 
 #image td {
     max-width: 20px;
-    font-size: 10px;
+    font-size: 14px;
 }
 
 #image td span.input-group-addon {
@@ -30,7 +30,6 @@ rect {
 td span{
     white-space: nowrap;
 }
-
 
 th {
     white-space: nowrap;

@@ -1,6 +1,6 @@
 from dataLoading.requestExecutor import getMatrixFromProtectedUrl, getJsonDataFromProtectedUrl
 from logic import dataFetch, dataLoad
-from flask import Flask, render_template, request, make_response, jsonify
+from flask import Flask, render_template, request, make_response, jsonify, redirect
 import gui.plotting.adrian as aplot
 import json
 from logic.dictBuilder import buildDicts
@@ -48,13 +48,20 @@ def get_adrian(run, wheel, sector, station):
 @app.route("/data/<int:run>/<string:wheel>/<int:sector>/<int:station>/", methods = ['GET'])
 def runData(run, wheel, sector, station):
     identifier, params  = buildDicts(run, wheel, sector, station)
-    matrix = dataLoad.getMatrixFromDB(identifier, params)
-    if (matrix == None):
+    data = dataLoad.getMatrixFromDB(identifier, params)
+    if (data == None):
         response = make_response("Record not found")
         response.status_code = 404
         return response
     else:
-        return jsonify(matrix.get("data")[0].get("matrix"))
+        #TODO move this check somewhere where it belongs
+        print(data)
+        if (len(data.get("data")) != 1):
+            response = make_response("Request with did not return single result")
+            response.status_code = 500
+            return response
+        return jsonify(data.get("data")[0])
+        
 
 @app.route("/save/", methods = ['POST'])
 def score():
@@ -80,3 +87,15 @@ def net_scores_json():
 def net_scores():
     scores = dataLoad.get_network_scores()
     return render_template(SCORE_PAGE_TEMPLATE, scores = scores)
+
+
+@app.route("/next/")
+def get_uncertant_matrix():
+    scores = dataLoad.get_network_scores(1)
+    if (len(scores) == 1):
+        run = scores[0].get("identifier").get("run")
+        wheel = scores[0].get("data").get("params").get("wheel")
+        sector = scores[0].get("data").get("params").get("sector")
+        station = scores[0].get("data").get("params").get("station")
+        return redirect("/" + run + "/" +  wheel + "/" + sector + "/" + station + "/")
+    return jsonify(1)
