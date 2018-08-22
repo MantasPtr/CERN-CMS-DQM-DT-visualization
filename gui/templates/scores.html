@@ -26,7 +26,7 @@
         </td>
         <td>{{"%.5f"|format(item.rating)}}</td>
         <td>
-          <a type="button" class="btn btn-success" href="/{{item.identifier.run}}">Load</a>
+          <a type="button" class="btn btn-success" href="/{{item.identifier.run}}/{{item.data.params.wheel}}/{{item.data.params.sector}}/{{item.data.params.station}}/">Load</a>
         </td>
        </tr>
     {% endfor %}

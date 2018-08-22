@@ -3,25 +3,37 @@ let wheel;
 let sector;
 let station;
 
-function onLoadDataFromDB(){
-    let runValue =  getStringValueFromInputField("runInput");
-    let wheelValue = getStringValueFromInputField("wheelInput");
-    let sectorValue = getStringValueFromInputField("sectorInput");
-    let stationValue = getStringValueFromInputField("stationInput");
+window.onload = onPageLoad;
 
-    if (!(runValue && wheelValue && sectorValue && stationValue)) {
-        console.log("some value is empty")
-        return;
+function onPageLoad(){
+    let inputArray = Object.values(getInput());
+    if (!inputArray.includes("")){
+        onLoadDataFromDB();
+    }
+}
+
+function onLoadDataFromDB(){
+    let { runValue, wheelValue, sectorValue, stationValue } = getInput();
+    validateInput();
+    fetchdata();
+    
+    function validateInput(){
+        if (!(runValue && wheelValue && sectorValue && stationValue)) {
+            showApiError("some value is empty");
+            return;
+        }
+        hideApiError();
     }
 
-    fetch("/" +runValue+ "/" + wheelValue + "/" + sectorValue + "/" + stationValue + "/").then(
-        (response) => {
+    function fetchdata() {
+        let url = "/data/" + runValue + "/" + wheelValue + "/" + sectorValue + "/" + stationValue + "/"
+        fetch(url).then((response) => {
             validateApiResponseCode(response);
             response.json().then(processJsonResponse);
-        }
-    );
+        });
+    }
 
-    function processJsonResponse (matrix){ 
+    function processJsonResponse (matrix){
         createTable(matrix);
         hideApiError();
         run = runValue;
@@ -31,6 +43,14 @@ function onLoadDataFromDB(){
     }
 };
 
+
+function getInput() {
+    let runValue = getStringValueFromInputField("runInput");
+    let wheelValue = getStringValueFromInputField("wheelInput");
+    let sectorValue = getStringValueFromInputField("sectorInput");
+    let stationValue = getStringValueFromInputField("stationInput");
+    return { runValue, wheelValue, sectorValue, stationValue };
+}
 
 function save(){
     if (cacheData === null) {
@@ -58,6 +78,6 @@ function save(){
     }
 
     function processJsonResponse (json){
-        showApiMessage("Run "  + run + (json.updated ?" updated!": " saved!"))
+        showApiMessage("Run " + run + (json.updated ?" updated!": " saved!"))
     }
 }

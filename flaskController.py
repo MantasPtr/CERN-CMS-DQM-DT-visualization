@@ -8,22 +8,26 @@ app = Flask(__name__, template_folder="gui/templates", static_folder="gui/static
 
 MAIN_PAGE_TEMPLATE='eval.html'
 FETCH_PAGE_TEMPLATE='fetch.html'
-FETCH_PAGE_TEMPLATE='scores.html'
+SCORE_PAGE_TEMPLATE='scores.html'
 
 @app.route('/')
 def default():
     return render_template(MAIN_PAGE_TEMPLATE)
 
-@app.route('/<int:run>')
+@app.route('/<int:run>/')
 def evalRun(run):
     return render_template(MAIN_PAGE_TEMPLATE, run = run)
 
-@app.route('/fetch')
+@app.route('/<int:run>/<string:wheel>/<int:sector>/<int:station>/')
+def evalRunWithParamsk(run, wheel, sector, station):
+    return render_template(MAIN_PAGE_TEMPLATE, run = run, wheel = wheel, sector = sector, station = station)
+
+@app.route('/fetch/')
 def fetch():
     runs = dataLoad.getFetchedData()
     return render_template(FETCH_PAGE_TEMPLATE, runs = runs)
    
-@app.route('/fetch/<int:run>')
+@app.route('/fetch/<int:run>/')
 def fetchRun(run):
     responseData = dataFetch.getDataByIdentifier({"run":run})
     if responseData == None:
@@ -32,7 +36,7 @@ def fetchRun(run):
     responseData.pop("save_time", None)
     return jsonify(responseData)
 
-@app.route("/<int:run>/<string:wheel>/<int:sector>/<int:station>/i")
+@app.route("/data/<int:run>/<string:wheel>/<int:sector>/<int:station>/i")
 def get_adrian(run, wheel, sector, station):
     identifier, params  = buildDicts(run, wheel, sector, station)
     data = dataLoad.getMatrixFromDB(identifier, params)
@@ -41,7 +45,7 @@ def get_adrian(run, wheel, sector, station):
     response.headers['Content-Type'] = 'image/png'
     return response
 
-@app.route("/<int:run>/<string:wheel>/<int:sector>/<int:station>/", methods = ['GET'])
+@app.route("/data/<int:run>/<string:wheel>/<int:sector>/<int:station>/", methods = ['GET'])
 def runData(run, wheel, sector, station):
     identifier, params  = buildDicts(run, wheel, sector, station)
     matrix = dataLoad.getMatrixFromDB(identifier, params)
@@ -60,11 +64,11 @@ def score():
     identifier, params = buildDicts(body["run"], body["wheel"], body["sector"], body["station"])
     return jsonify(dataLoad.updateUserScore(identifier, params, badLayers))
 
-@app.route("/<int:runNumber>", methods = ['DELETE'])
+@app.route("/data/<int:runNumber>", methods = ['DELETE'])
 def delete(runNumber):
     return jsonify(dataLoad.delete({"run":runNumber}))
 
-@app.route("/scores")
+@app.route("/scores/")
 def scores():
     return jsonify(dataLoad.getScoresData())
 
@@ -72,7 +76,7 @@ def scores():
 def net_scores_json():
     return jsonify(dataLoad.get_network_scores())
 
-@app.route("/net_scores")
+@app.route("/net_scores/")
 def net_scores():
     scores = dataLoad.get_network_scores()
-    return render_template(FETCH_PAGE_TEMPLATE, scores = scores)
+    return render_template(SCORE_PAGE_TEMPLATE, scores = scores)

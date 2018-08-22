@@ -13,7 +13,7 @@ function onFetchData(){
 }
 
 function deleteRun(identifier){
-    fetch(identifier.run,{
+    fetch("/data/" + identifier.run,{
         method:"DELETE"
     }).then(
         response => { 
