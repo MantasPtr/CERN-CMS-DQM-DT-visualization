@@ -141,9 +141,9 @@ class Mongo_4_DB_controller():
             warnings.warn(f"Update with criteria:{args[0]} did not update any records!")
         return {"matched":rez["n"], "updated": rez["nModified"] == 0 }
 
-    def _build_db_record(self, identier: dict, matrix, status):
+    def _build_db_record(self, identifier: dict, matrix, status):
         return {
-            "identifier": identier,
+            "identifier": identifier,
             "status": status,
             "save_time": datetime.datetime.utcnow(),
             "data": matrix

@@ -14,7 +14,7 @@ function createTable(tableData, scores = cachedScores) {
     scores = scores.slice().reverse();
 
     maxValue = getMax(tableData);
-    drawColorPalet();
+    drawColorPallet();
     maxLayers = tableData.length;
     let table = document.createElement("table");
 
@@ -88,7 +88,7 @@ function createTable(tableData, scores = cachedScores) {
 
 };
 
-function drawColorPalet() {
+function drawColorPallet() {
     let canvas = document.createElement("canvas")
     let canvasDiv = document.querySelector("#colorbar");
     canvasDiv.innerHTML = "";
