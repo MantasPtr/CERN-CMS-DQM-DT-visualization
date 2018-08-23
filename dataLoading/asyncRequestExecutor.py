@@ -4,29 +4,26 @@ import aiohttp
 from errors.errors import FetchError
 from dataLoading import authUtils
 
-DEMO_REQUEST_URL= "https://cmsweb.cern.ch/dqm/online/jsonfairy/archive/317111/Global/Online/ALL/DT/01-Digi/Wheel-1/Sector2/Station1/OccupancyAllHits_perCh_W-1_St1_Sec2"
-requestExecutor = None
-
 class asyncRequestExecutor():
     
     def __init__(self, session: aiohttp.ClientSession):
         self.session = session
 
-    async def getMatrixFromProtectedUrl(self, url=DEMO_REQUEST_URL):
+    async def getMatrixFromProtectedUrl(self, url):
         dataJson = await self.getJsonDataFromProtectedUrl(url)
         try:
             return self.getMatrix(json.loads(dataJson))
         except ValueError as ve:
             raise FetchError(f"Invalid json structure from url:{url} \n Error: {ve}")
 
-    async def getJsonDataFromProtectedUrl(self, url=DEMO_REQUEST_URL):
+    async def getJsonDataFromProtectedUrl(self, url):
         print("Request URL: " + url)
-        authObj = authUtils.AuthContainer().loadData()
+        authObj = authUtils.AuthContainer().load_data()
         return await self.getContentFromProtectedUrl(url, authObj)
 
     async def getContentFromProtectedUrl(self, url, authObj: authUtils.AuthContainer): 
         context = ssl.SSLContext()
-        context.load_cert_chain(authObj.pathToCerticate, authObj.pathToCerticatePass, authObj.password)
+        context.load_cert_chain(authObj.pathToCertificate, authObj.pathToCertificatePass, authObj.password)
         result =  await self.session.get(url, ssl=context)
         return await result.content.read()
 

@@ -3,23 +3,23 @@ from os.path import isfile
 import warnings
 
 class AuthContainer():
-    pathToCerticate = None
-    pathToCerticatePass = None
+    pathToCertificate = None
+    pathToCertificatePass = None
     password = None
 
-    def __readPasswordFile__(self, file):
+    def load_data(self):
+        config = cfg.getConfig()
+        homePath = cfg.getHomePath()
+        self.pathToCertificate = homePath + config['pathToCert']
+        self.pathToCertificatePass = homePath + config['pathToCertKey']
+        self.password = self._read_password_file(config['passwordFile'])
+        return self
+
+    def _read_password_file(self, file):
         if not isfile(file):
             warnings.warn('Password file file not found', RuntimeWarning)
             return ''
         f = open(file,'r')
         return f.read()
-
-    def loadData(self):
-        config = cfg.getConfig()
-        homePath = cfg.getHomePath()
-        self.pathToCerticate= homePath + config['pathToCert']
-        self.pathToCerticatePass= homePath + config['pathToCertKey']
-        self.password= self.__readPasswordFile__(config['passwordFile'])
-        return self
 
 container = AuthContainer()

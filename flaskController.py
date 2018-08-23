@@ -1,7 +1,6 @@
-from dataLoading.requestExecutor import getMatrixFromProtectedUrl, getJsonDataFromProtectedUrl
 from logic import dataFetch, dataLoad
 from flask import Flask, render_template, request, make_response, jsonify, redirect
-import gui.plotting.adrian as aplot
+import gui.plotting.adrian as a_plot
 import json
 from logic.dictBuilder import buildDicts
 app = Flask(__name__, template_folder="gui/templates", static_folder="gui/static")
@@ -19,12 +18,12 @@ def evalRun(run):
     return render_template(MAIN_PAGE_TEMPLATE, run = run)
 
 @app.route('/<int:run>/<string:wheel>/<int:sector>/<int:station>/')
-def evalRunWithParamsk(run, wheel, sector, station):
+def evalRunWithParam(run, wheel, sector, station):
     return render_template(MAIN_PAGE_TEMPLATE, run = run, wheel = wheel, sector = sector, station = station)
 
 @app.route('/fetch/')
 def fetch():
-    runs = dataLoad.getFetchedData()
+    runs = dataLoad.get_fetched_data()
     return render_template(FETCH_PAGE_TEMPLATE, runs = runs)
    
 @app.route('/fetch/<int:run>/')
@@ -39,8 +38,8 @@ def fetchRun(run):
 @app.route("/data/<int:run>/<string:wheel>/<int:sector>/<int:station>/i")
 def get_adrian(run, wheel, sector, station):
     identifier, params  = buildDicts(run, wheel, sector, station)
-    data = dataLoad.getMatrixFromDB(identifier, params)
-    imgBytes = aplot.plot_occupancy_hitmap(data.get("data")[0].get("matrix"), "title", "a.u.")
+    data = dataLoad.get_matrix_from_DB(identifier, params)
+    imgBytes = a_plot.plot_occupancy_hitmap(data.get("data")[0].get("matrix"), "title", "a.u.")
     response = make_response(imgBytes.getvalue())
     response.headers['Content-Type'] = 'image/png'
     return response
@@ -48,7 +47,7 @@ def get_adrian(run, wheel, sector, station):
 @app.route("/data/<int:run>/<string:wheel>/<int:sector>/<int:station>/", methods = ['GET'])
 def runData(run, wheel, sector, station):
     identifier, params  = buildDicts(run, wheel, sector, station)
-    data = dataLoad.getMatrixFromDB(identifier, params)
+    data = dataLoad.get_matrix_from_DB(identifier, params)
     if (data == None):
         return _make_response("Record not found", 404)
     else:
@@ -64,7 +63,7 @@ def score():
     body = request.get_json()
     badLayers = list(map(int,body["layers"]))
     identifier, params = buildDicts(body["run"], body["wheel"], body["sector"], body["station"])
-    return jsonify(dataLoad.updateUserScore(identifier, params, badLayers))
+    return jsonify(dataLoad.update_user_score(identifier, params, badLayers))
 
 @app.route("/data/<int:runNumber>", methods = ['DELETE'])
 def delete(runNumber):
@@ -72,7 +71,7 @@ def delete(runNumber):
 
 @app.route("/scores/")
 def scores():
-    return jsonify(dataLoad.getScoresData())
+    return jsonify(dataLoad.get_scores_data())
 
 @app.route("/net_scores.json")
 def net_scores_json():

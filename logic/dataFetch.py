@@ -7,11 +7,11 @@ def getDataByIdentifier(identifier: dict):
     data = dbController.get_one(identifier)
     if data == None:
         dbController.save(identifier)
-        asyncUtils.run_in_thread(loadDataAndSave, identifier)
+        asyncUtils.run_in_thread(load_data_and_save, identifier)
         return None
     return data 
 
-async def loadDataAndSave(identifier):
+async def load_data_and_save(identifier):
     try:
         data = await asyncFetchAllData(identifier)
         print(f":: Successfully fetch data for: {identifier}")
