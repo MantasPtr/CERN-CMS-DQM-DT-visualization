@@ -26,14 +26,13 @@ sudo iptables -t nat -A PREROUTING -p tcp --dport 80 -j REDIRECT --to-port 8080
                 "station":1,
                 "sector":1
             },
-            "matrix": [[1,1,1],[1,1,1],[1,1,1]],
-            "scores": [0.5,0.5,0.5,0.5,0.5,0.5,0.5,0.5,0.5,0.5,0.5,0.5],
-            "user_scores": [
-               {
-                 "bad_layers":[1,2,12],
-                 "eval_time": "timestamp"
-               }
-            ]
+            "matrix": [[0,0,0],[1,1,1],[777,888,999]],
+            "scores": [0,0.5,0.5,0.5,0.5,0.5,0.5,0.5,0.5,0.5,0.5,1],
+            "evaluation": {
+                "bad_layers": [1,7,14],
+                "eval_time": "timestamp",
+                "skipped": false
+            }
         },
         {
             "params": {

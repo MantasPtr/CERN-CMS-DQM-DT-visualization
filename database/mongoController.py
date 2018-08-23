@@ -28,7 +28,15 @@ class Mongo_4_DB_controller():
                 "identifier": identifier, 
                 "data": {"$elemMatch": { ("params."+str(key)):value for key,value in paramDict.items() }}
             },{
-                "$set": {"data.$.user_scores":badLayers}
+                "$set": {"data.$.evaluation.bad_layers":badLayers, "data.$.evaluation.eval_time": datetime.datetime.utcnow(), "data.$.evaluation.skipped":False}
+            })
+
+    def skip_user_score(self, identifier: dict, paramDict: dict):
+        return self._assure_update({   
+                "identifier": identifier, 
+                "data": {"$elemMatch": { ("params."+str(key)):value for key,value in paramDict.items() }}
+            },{
+                "$set": {"data.$.evaluation.skipped": True}
             })
 
     def delete(self, identifier: dict):
@@ -73,8 +81,8 @@ class Mongo_4_DB_controller():
     def get_all_user_scores(self):
         cursor = self.dbCollection.aggregate([
             {"$unwind": "$data" },
-            {"$match": {"data.user_scores": {"$exists": True}} },
-            {"$project": {"_id":0, "identifier":1, "data.user_scores":1, "data.params":1} } 
+            {"$match": {"data.evaluation.bad_layers": {"$exists": True}} },
+            {"$project": {"_id":0, "identifier":1, "data.evaluation":1, "data.params":1} } 
         ])
         return list(cursor)
 
