@@ -14,15 +14,17 @@ function onPageLoad(){
 
 function onLoadDataFromDB(){
     let { runValue, wheelValue, sectorValue, stationValue } = getInput();
-    validateInput();
-    fetchdata();
+    if (inputIsValid()){
+        fetchdata();
+    }
     
-    function validateInput(){
+    function inputIsValid(){
         if (!(runValue && wheelValue && sectorValue && stationValue)) {
             showApiError("some value is empty");
-            return;
+            return false;
         }
         hideApiError();
+        return true;
     }
 
     function fetchdata() {
