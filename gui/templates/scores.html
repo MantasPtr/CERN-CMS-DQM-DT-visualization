@@ -12,6 +12,9 @@
         <th>Params:</th>
         <th>Network score:</th>
         <th>Certainty score:</th>
+        {% if scores[0].data.evaluation is defined %}
+        <th>Evaluated bad layers</th>
+        {% endif %} 
         <th/>
       </tr>
       {% for item in scores %}
@@ -21,10 +24,24 @@
         <td>
           |
           {% for c in item.data.scores %}   
-            {{ "%.3f|"|format(c) }}
+          {{ "%.3f|"|format(c) }}
           {% endfor %}
         </td>
         <td>{{"%.5f"|format(item.rating)}}</td>
+        {% if scores[0].data.evaluation is defined %}
+          {% if item.data.evaluation is defined %}
+            {% if item.data.evaluation.bad_layers is defined %}         
+              <td>{{item.data.evaluation.bad_layers}}</td>
+            {% elif item.data.evaluation.skipped is defined and item.data.evaluation.skipped %}
+              <td>Skipped</td>
+            {% endif %} 
+          {% else %}  
+            <td>-</td>
+          {% endif %} 
+        {% endif %} 
+
+
+        
         <td>
           <a type="button" class="btn btn-success" href="/{{item.identifier.run}}/{{item.data.params.wheel}}/{{item.data.params.sector}}/{{item.data.params.station}}/">Load</a>
         </td>

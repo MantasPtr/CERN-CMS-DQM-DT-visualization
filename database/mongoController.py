@@ -95,6 +95,8 @@ class Mongo_4_DB_controller():
                 "identifier":1,
                 "data.params":1,
                 "data.scores":1,
+                "data.evaluation.bad_layers":1,
+                "data.evaluation.skipped":1,
                 "rating": self._get_score_eval_pipeline()
             }},
             {"$sort": {"rating":1}},
