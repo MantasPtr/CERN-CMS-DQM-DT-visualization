@@ -55,7 +55,6 @@ def runData(run, wheel, sector, station):
         return response
     else:
         #TODO move this check somewhere where it belongs
-        print(data)
         if (len(data.get("data")) != 1):
             response = make_response("Request with did not return single result")
             response.status_code = 500
@@ -97,5 +96,5 @@ def get_uncertant_matrix():
         wheel = scores[0].get("data").get("params").get("wheel")
         sector = scores[0].get("data").get("params").get("sector")
         station = scores[0].get("data").get("params").get("station")
-        return redirect("/" + run + "/" +  wheel + "/" + sector + "/" + station + "/")
+        return redirect(f"/{run}/{wheel}/{sector}/{station}/")
     return jsonify(1)

@@ -18,9 +18,13 @@ rect {
     font-size: 14px;
 }
 
-#image td span.input-group-addon {
+#image td span.input-group-addon, #image td.network_score {
     font-size: 16px;
     max-width: 100px;
+}
+
+.network_score {
+    text-align: right;
 }
 
 #colorbar > canvas {

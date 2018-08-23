@@ -33,10 +33,10 @@ function createTable(tableData, scores = catchedScores) {
         cellHeader.setAttribute("colspan", tableData[0].length);
         headerRow.appendChild(cellHeader);
         let layerHeader = document.createElement("th")
-        layerHeader.textContent = "Bad layers:";
+        layerHeader.textContent = "Bad layers";
         headerRow.appendChild(layerHeader);
         let scoreHeader = document.createElement("th");
-        scoreHeader.textContent = "Bad score:";
+        scoreHeader.textContent = "Bad score";
         headerRow.appendChild(scoreHeader);
         return thead;
     }
