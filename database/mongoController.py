@@ -95,18 +95,7 @@ class Mongo_4_DB_controller():
                 "identifier":1,
                 "data.params":1,
                 "data.scores":1,
-                "rating":{
-                    "$reduce": {
-                        "input": "$data.scores",
-                        "initialValue": 0.5,
-                        "in": {
-                            "$min":[
-                                "$$value",
-                                { "$abs":  {"$subtract": [0.5, "$$this"]}}
-                            ]
-                        }
-                    }
-                }
+                "rating": self._get_score_eval_pipeline()
             }},
             {"$sort": {"rating":1}},
             {"$limit": limit}
@@ -126,8 +115,15 @@ class Mongo_4_DB_controller():
                 "identifier":1,
                 "data.params":1,
                 "data.scores":1,
-                "rating":{
-                    "$reduce": {
+                "rating": self._get_score_eval_pipeline()
+            }},
+            {"$sort": {"rating":1}},
+            {"$limit": limit}
+        ])
+        return list(cursor)
+
+    def _get_score_eval_pipeline(self):
+        return {"$reduce": {
                         "input": "$data.scores",
                         "initialValue": 0.5,
                         "in": {
@@ -138,11 +134,6 @@ class Mongo_4_DB_controller():
                         }
                     }
                 }
-            }},
-            {"$sort": {"rating":1}},
-            {"$limit": limit}
-        ])
-        return list(cursor)
 
     def _assure_update(self, *args):
         rez = self.dbCollection.update(*args)

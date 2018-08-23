@@ -50,15 +50,11 @@ def runData(run, wheel, sector, station):
     identifier, params  = buildDicts(run, wheel, sector, station)
     data = dataLoad.getMatrixFromDB(identifier, params)
     if (data == None):
-        response = make_response("Record not found")
-        response.status_code = 404
-        return response
+        return _make_response("Record not found", 404)
     else:
         #TODO move this check somewhere where it belongs
         if (len(data.get("data")) != 1):
-            response = make_response("Request with did not return single result")
-            response.status_code = 500
-            return response
+            return _make_response("Request with did not return single result", 500)
         return jsonify(data.get("data")[0])
         
 
@@ -93,12 +89,17 @@ def new_net_scores():
     return render_template(SCORE_PAGE_TEMPLATE, scores = scores)
 
 @app.route("/next/")
-def get_uncertant_matrix():
-    scores = dataLoad.get_network_scores(1)
+def get_uncertain_matrix():
+    scores = dataLoad.get_not_evaluated_network_scores(1)
     if (len(scores) == 1):
         run = scores[0].get("identifier").get("run")
         wheel = scores[0].get("data").get("params").get("wheel")
         sector = scores[0].get("data").get("params").get("sector")
         station = scores[0].get("data").get("params").get("station")
         return redirect(f"/{run}/{wheel}/{sector}/{station}/")
-    return jsonify(1)
+    return _make_response("query did not return 1 unevaluated result",500)
+
+def _make_response(data, code: int):
+    response = make_response(data)
+    response.status_code = code
+    return response
