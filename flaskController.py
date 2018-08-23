@@ -87,6 +87,10 @@ def net_scores():
     scores = dataLoad.get_network_scores()
     return render_template(SCORE_PAGE_TEMPLATE, scores = scores)
 
+@app.route("/new_net_scores/")
+def new_net_scores():
+    scores = dataLoad.get_not_evaluated_network_scores()
+    return render_template(SCORE_PAGE_TEMPLATE, scores = scores)
 
 @app.route("/next/")
 def get_uncertant_matrix():

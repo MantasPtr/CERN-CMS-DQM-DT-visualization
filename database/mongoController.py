@@ -113,6 +113,37 @@ class Mongo_4_DB_controller():
         ])
         return list(cursor)
 
+    def get_not_evaluated_network_scores(self, limit):
+        cursor = self.dbCollection.aggregate( [
+            {"$match": {"status":"FINISHED"}},
+            {"$unwind": "$data" },
+            {"$match": { "$and": [
+                {"data.evaluation.skipped": {"$nin": [True]}},
+                {"data.evaluation.bad_layers": {"$exists": False}}
+            ]}},
+            {"$project": {
+                "_id":0,    
+                "identifier":1,
+                "data.params":1,
+                "data.scores":1,
+                "rating":{
+                    "$reduce": {
+                        "input": "$data.scores",
+                        "initialValue": 0.5,
+                        "in": {
+                            "$min":[
+                                "$$value",
+                                { "$abs":  {"$subtract": [0.5, "$$this"]}}
+                            ]
+                        }
+                    }
+                }
+            }},
+            {"$sort": {"rating":1}},
+            {"$limit": limit}
+        ])
+        return list(cursor)
+
     def _assure_update(self, *args):
         rez = self.dbCollection.update(*args)
         if rez["nModified"] == 0:

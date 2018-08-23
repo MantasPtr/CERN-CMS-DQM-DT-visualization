@@ -17,3 +17,6 @@ def getScoresData():
 
 def get_network_scores(limit = 20):
     return dbController.get_all_network_scores(limit)
+
+def get_not_evaluated_network_scores(limit = 20):
+    return dbController.get_not_evaluated_network_scores(limit)
