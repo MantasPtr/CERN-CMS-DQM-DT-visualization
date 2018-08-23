@@ -99,6 +99,13 @@ def get_uncertain_matrix():
         return redirect(f"/{run}/{wheel}/{sector}/{station}/")
     return _make_response("query did not return 1 unevaluated result",500)
 
+
+@app.route("/skip/<int:run>/<string:wheel>/<int:sector>/<int:station>/")
+def skip(run,wheel,sector,station):
+    identifier, params  = buildDicts(run, wheel, sector, station)
+    dataLoad.mark_as_skipped(identifier, params)
+    return get_uncertain_matrix()
+
 def _make_response(data, code: int):
     response = make_response(data)
     response.status_code = code

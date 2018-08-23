@@ -16,7 +16,7 @@ function deleteRun(identifier){
     fetch("/data/" + identifier.run,{
         method:"DELETE"
     }).then(
-        response => { 
+        (response) => { 
             validateResponseCode(response);
             showApiMessage("Deleted " +response.text + "file")
         }

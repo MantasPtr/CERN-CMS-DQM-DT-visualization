@@ -20,3 +20,6 @@ def get_network_scores(limit = 20):
 
 def get_not_evaluated_network_scores(limit = 20):
     return dbController.get_not_evaluated_network_scores(limit)
+
+def mark_as_skipped(identifier: dict, params: dict):
+    return dbController.skip_user_score(identifier, params)

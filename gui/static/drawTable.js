@@ -3,13 +3,13 @@ let maxValue = 0;
 const NETWORK_SCORE_DIGITS = 3;
 
 let cacheData = null;
-let catchedScores = null;
+let cachedScores = null;
 
-function createTable(tableData, scores = catchedScores) {
+function createTable(tableData, scores = cachedScores) {
     //inverting data because its done in prod
     // slice just copies data because reverse modifies array
     cacheData = tableData;
-    catchedScores = scores; 
+    cachedScores = scores; 
     tableData = tableData.slice().reverse();
     scores = scores.slice().reverse();
 

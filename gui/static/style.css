@@ -15,7 +15,7 @@ rect {
 
 #image td {
     max-width: 20px;
-    font-size: 14px;
+    font-size: 10px;
 }
 
 #image td span.input-group-addon, #image td.network_score {

@@ -9,6 +9,7 @@ function validateApiResponseCode(response){
         } else {
             showApiError(response.status + ": " + response.statusText )
         }
+        return false;
     }
 }
 
@@ -18,15 +19,15 @@ const apiMessageBannerID = "apiMessage";
 
 function showApiError(message){
     hideApiMessage()
-    let errorbanner = document.getElementById(apiErrorBannerID);
-    errorbanner.hidden = false;
-    errorbanner.textContent = "Error: " + message;
+    let errorBanner = document.getElementById(apiErrorBannerID);
+    errorBanner.hidden = false;
+    errorBanner.textContent = "Error: " + message;
 }
 
 function hideApiError(){
-    let errorbanner = document.getElementById(apiErrorBannerID);
-    errorbanner.hidden = true;
-    errorbanner.text = "";
+    let errorBanner = document.getElementById(apiErrorBannerID);
+    errorBanner.hidden = true;
+    errorBanner.text = "";
 }
 
 function showApiMessage(message){

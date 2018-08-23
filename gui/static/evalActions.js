@@ -2,6 +2,7 @@ let run;
 let wheel;
 let sector;
 let station;
+let containsValidData = false;
 
 window.onload = onPageLoad;
 
@@ -15,9 +16,9 @@ function onPageLoad(){
 function onLoadDataFromDB(){
     let { runValue, wheelValue, sectorValue, stationValue } = getInput();
     if (inputIsValid()){
-        fetchdata();
+        fetchData();
     }
-    
+
     function inputIsValid(){
         if (!(runValue && wheelValue && sectorValue && stationValue)) {
             showApiError("some value is empty");
@@ -27,10 +28,13 @@ function onLoadDataFromDB(){
         return true;
     }
 
-    function fetchdata() {
+    function fetchData() {
         let url = "/data/" + runValue + "/" + wheelValue + "/" + sectorValue + "/" + stationValue + "/";
         fetch(url).then((response) => {
-            validateApiResponseCode(response);
+            if (!validateApiResponseCode(response)) {
+                containsValidData = false;
+                return;
+            }
             response.json().then(processJsonResponse);
         });
     }
@@ -38,6 +42,7 @@ function onLoadDataFromDB(){
     function processJsonResponse (data){
         createTable(data.matrix, data.scores);
         hideApiError();
+        containsValidData = true;
         run = runValue;
         wheel = wheelValue;
         sector = sectorValue;
@@ -55,7 +60,7 @@ function getInput() {
 }
 
 function save(){
-    if (cacheData === null) {
+    if (containsValidData === null) {
         return;
     }
     const saveObject = {}
@@ -75,11 +80,19 @@ function save(){
     })
 
     function getCheckedValues(){
-        const checkboxes = Array.from(document.querySelectorAll(".layer-selection"));
-        return checkboxes.filter(c => c.checked).map(c => c.getAttribute("index"));
+        const checkBoxes = Array.from(document.querySelectorAll(".layer-selection"));
+        return checkBoxes.filter(c => c.checked).map(c => c.getAttribute("index"));
     }
 
     function processJsonResponse (json){
         showApiMessage("Run " + run + (json.updated ?" updated!": " saved!"))
     }
+}
+
+function skip(){
+    if (containsValidData === null) {
+        return;
+    }
+    let url = "/skip/" + run + "/" + wheel + "/" + sector + "/" + station + "/";
+    window.location.replace(url)
 }
