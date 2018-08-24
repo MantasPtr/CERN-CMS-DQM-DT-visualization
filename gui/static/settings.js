@@ -4,9 +4,7 @@ settings.showText = null;
 
 settings.toggleShowText = (d) => {
     settings.showText = document.querySelector("#showNumbersCheck").checked;
-    if (cacheData) {
-        createTable(cacheData)
-    }
+    createTable(cacheData);
 }
 
 settings.getShowText = () => {

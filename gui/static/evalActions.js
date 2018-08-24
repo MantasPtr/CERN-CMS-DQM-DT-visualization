@@ -40,7 +40,7 @@ function onLoadDataFromDB(){
     }
 
     function processJsonResponse (data){
-        createTable(data.matrix, data.scores);
+        createTable(data.matrix, data.scores, data.evaluation ? data.evaluation.bad_layers : []);
         hideApiError();
         containsValidData = true;
         run = runValue;
@@ -75,18 +75,19 @@ function save(){
         body:JSON.stringify(saveObject),
         headers:{"Content-Type": "application/json; charset=utf-8",}
     }).then((response) => {
-        validateApiResponseCode(response);
-        response.json().then(processJsonResponse);
-    })
-
-    function getCheckedValues(){
-        const checkBoxes = Array.from(document.querySelectorAll(".layer-selection"));
-        return checkBoxes.filter(c => c.checked).map(c => c.getAttribute("index"));
-    }
+        if (validateApiResponseCode(response)) {
+            response.json().then(processJsonResponse);
+        }
+    })  
 
     function processJsonResponse (json){
         showApiMessage("Run " + run + (json.updated ?" updated!": " saved!"))
     }
+}
+
+function getCheckedValues(){
+    const checkBoxes = Array.from(document.querySelectorAll(".layer-selection"));
+    return checkBoxes.filter(c => c.checked).map(c => c.getAttribute("index"));
 }
 
 function skip(){

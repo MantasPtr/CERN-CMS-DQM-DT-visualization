@@ -36,7 +36,7 @@ def fetchRun(run):
     responseData.pop("save_time", None)
     return jsonify(responseData)
 
-@app.route("/data/<int:run>/<string:wheel>/<int:sector>/<int:station>/i")
+@app.route("/<int:run>/<string:wheel>/<int:sector>/<int:station>/i")
 def get_adrian(run, wheel, sector, station):
     identifier, params  = buildDicts(run, wheel, sector, station)
     data = dataLoad.get_matrix_from_DB(identifier, params)
