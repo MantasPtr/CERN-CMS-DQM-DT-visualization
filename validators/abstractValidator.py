@@ -1,3 +1,5 @@
+from errors.errors import ValidationError
+
 class AbstractValidator():
     
     @staticmethod
@@ -10,4 +12,4 @@ class AbstractValidator():
 
 def validateAndRaiseException(value, validator: AbstractValidator):
     if not validator.validValue(value):
-        raise ValueError(validator.getErrorMessage())
+        raise ValidationError(validator.getErrorMessage())

@@ -2,6 +2,7 @@ from logic import dataFetch, dataLoad
 from flask import Flask, render_template, request, make_response, jsonify, redirect
 import gui.plotting.adrian as a_plot
 import json
+from errors.errors import ValidationError
 from logic.dictBuilder import buildDicts
 app = Flask(__name__, template_folder="gui/templates", static_folder="gui/static")
 
@@ -109,3 +110,7 @@ def _make_response(data, code: int):
     response = make_response(data)
     response.status_code = code
     return response
+
+@app.errorhandler(ValidationError)
+def handle_invalid_usage(error: ValidationError):
+    return _make_response(jsonify(str(error)), 400)
