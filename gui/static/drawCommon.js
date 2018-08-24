@@ -1,4 +1,4 @@
-const emptyColor = "hsl(0,0%,80%)";
+const emptyColor = "hsl(0,0%,50%)";
 
 const getColor = (value, max) => {
     max = max ? max : 255;

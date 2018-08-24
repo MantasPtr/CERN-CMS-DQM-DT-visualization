@@ -12,7 +12,7 @@
         <th>Params:</th>
         <th>Network score:</th>
         <th>Certainty score:</th>
-        {% if scores[0].data.evaluation is defined %}
+        {% if showScores is defined and showScores %}
         <th>Evaluated bad layers</th>
         {% endif %} 
         <th/>
@@ -28,7 +28,7 @@
           {% endfor %}
         </td>
         <td>{{"%.5f"|format(item.rating)}}</td>
-        {% if scores[0].data.evaluation is defined %}
+        {% if showScores is defined and showScores %}
           {% if item.data.evaluation is defined %}
             {% if item.data.evaluation.bad_layers is defined %}         
               <td>{{item.data.evaluation.bad_layers}}</td>

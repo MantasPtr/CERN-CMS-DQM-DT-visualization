@@ -81,7 +81,7 @@ def net_scores_json():
 @app.route("/net_scores/")
 def net_scores():
     scores = dataLoad.get_network_scores()
-    return render_template(SCORE_PAGE_TEMPLATE, scores = scores)
+    return render_template(SCORE_PAGE_TEMPLATE, scores = scores, showScores = True)
 
 @app.route("/new_net_scores/")
 def new_net_scores():

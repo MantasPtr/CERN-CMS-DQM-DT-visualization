@@ -12,8 +12,11 @@ class asyncRequestExecutor():
 
     async def getMatrixFromProtectedUrl(self, url):
         dataJson = await self.getJsonDataFromProtectedUrl(url)
+        return self.getMatrix(self.parseJson(dataJson, url))
+
+    def parseJson(self, dataJson, url):
         try:
-            return self.getMatrix(json.loads(dataJson))
+            return json.loads(dataJson)
         except ValueError as ve:
             raise FetchError(f"Invalid json structure from url:{url} \n Error: {ve}")
 
@@ -28,19 +31,12 @@ class asyncRequestExecutor():
         result =  await self.session.get(url, ssl=context)
         return await result.content.read()
 
-    # def getMatrix(self, valueDictionary):
-    #     hist = valueDictionary.get('hist')
-    #     if isinstance(hist, str):
-    #         raise FetchError("Cannot load data from URL: Invalid json structure: " + str(valueDictionary) )
-    #     return valueDictionary.get('hist').get('bins').get('content')
-
     def getMatrix(self, valueDictionary):
         jsonPath = configUtils.getConfig(configLocation="config/fetch.config.ini")["matrixJsonPath"]
         pathSteps = jsonPath.split(".")
         currentJsonLocation = valueDictionary
         for index, step in enumerate(pathSteps):
-            type(currentJsonLocation)
             currentJsonLocation = currentJsonLocation.get(step)
-            if index != len(pathSteps) - 1 and isinstance(currentJsonLocation, str):
+            if index != len(pathSteps) - 1 and not isinstance(currentJsonLocation, dict):
                 raise FetchError("Cannot load data from URL: Invalid json structure: " + str(valueDictionary) )
         return currentJsonLocation    
