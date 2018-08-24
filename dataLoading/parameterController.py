@@ -40,6 +40,6 @@ def _handle_dependant_params(key, parameters):
                 newParamDict.extend([dict(oldParam,**{key:newValue}) for newValue in paramRange])                   
     return newParamDict
 
-def get_url_generator(identifier: dict):
+def get_url_generator(identifier: dict) -> (str, dict):
     for params in get_param_dicts():
         yield url.format(**identifier,**params), params

@@ -21,7 +21,7 @@ class Mongo_4_DB_controller():
     def mark_as_error(self, identifier: dict, exception):
         record = self._build_db_record(identifier, None, "ERROR")
         record["exception"] = str(exception)
-        self._assure_update(identifier, record)
+        self._assure_update({"identifier": identifier}, record)
 
     def update_user_score(self, identifier: dict, paramDict: dict, badLayers: list):
         return self._assure_update({   

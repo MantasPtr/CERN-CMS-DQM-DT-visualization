@@ -6,14 +6,15 @@ function onFetchData(){
 
     fetch("/fetch/" + runValue).then(
         (response) => {
-            validateApiResponseCode(response);
-            logs(response)
+            if (validateApiResponseCode(response)) {
+                showApiMessage("Fetching for run: " + runValue +  " initialized!")
+            }
         }
     );
 }
 
 function deleteRun(identifier){
-    fetch("/data/" + identifier.run,{
+    fetch("/data/" + identifier.run, {
         method:"DELETE"
     }).then(
         (response) => { 

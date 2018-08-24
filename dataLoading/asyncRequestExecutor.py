@@ -1,6 +1,7 @@
 import ssl
 import json
 import aiohttp
+from config import configUtils
 from errors.errors import FetchError
 from dataLoading import authUtils
 
@@ -27,8 +28,19 @@ class asyncRequestExecutor():
         result =  await self.session.get(url, ssl=context)
         return await result.content.read()
 
+    # def getMatrix(self, valueDictionary):
+    #     hist = valueDictionary.get('hist')
+    #     if isinstance(hist, str):
+    #         raise FetchError("Cannot load data from URL: Invalid json structure: " + str(valueDictionary) )
+    #     return valueDictionary.get('hist').get('bins').get('content')
+
     def getMatrix(self, valueDictionary):
-        hist = valueDictionary.get('hist')
-        if isinstance(hist, str):
-            raise FetchError("Cannot load data from URL: Invalid json structure: " + str(valueDictionary) )
-        return valueDictionary.get('hist').get('bins').get('content')      
+        jsonPath = configUtils.getConfig(configLocation="config/fetch.config.ini")["matrixJsonPath"]
+        pathSteps = jsonPath.split(".")
+        currentJsonLocation = valueDictionary
+        for index, step in enumerate(pathSteps):
+            type(currentJsonLocation)
+            currentJsonLocation = currentJsonLocation.get(step)
+            if index != len(pathSteps) - 1 and isinstance(currentJsonLocation, str):
+                raise FetchError("Cannot load data from URL: Invalid json structure: " + str(valueDictionary) )
+        return currentJsonLocation    
