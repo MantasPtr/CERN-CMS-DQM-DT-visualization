@@ -19,13 +19,13 @@ def get_network_score(matrix) -> np.ndarray:
         matrix = transform.processMatrix(matrix, MATRIX_DIM)
         return _predict_badness(matrix)
 
-def get_saliency_map(matrix) -> np.ndarray:
-    # global graph
-    # with graph.as_default():
-    #     matrix = transform.processMatrix(matrix)
-    #     return predict(matrix)
-    vanilla = GradientSaliency(cnn_model)
-    matrix = transform.processMatrix(matrix, MATRIX_DIM)
-    mask = vanilla.get_mask(matrix)
-    return mask
+def get_saliency_map(matrix) -> list:
+    global graph
+    with graph.as_default():
+        vanilla = GradientSaliency(cnn_model)
+        processedMatrix = transform.processMatrix(matrix, MATRIX_DIM)
+        mask = vanilla.get_mask(processedMatrix)
+        mask = transform.resizeMatrix(mask, len(matrix[0]))
+        mask = [np_array.tolist() for np_array in mask]
+        return mask
 

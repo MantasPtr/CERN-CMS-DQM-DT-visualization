@@ -10,7 +10,7 @@ class GradientSaliency():
         self.compute_gradients = K.function(inputs = input_tensors, outputs = gradients)
 
     def get_mask(self, input_image):# Execute the function to compute the gradient
-        gradients = [self.compute_gradients([[input_line]])[0][0] for input_line in input_image ]   
+        gradients = [self.compute_gradients([[input_line]])[0][0].tolist() for input_line in input_image ]   
         return gradients
         
 # https://github.com/experiencor/deep-viz-keras/blob/master/visual_backprop.py
