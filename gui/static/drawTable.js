@@ -2,16 +2,12 @@ let maxLayers = 0;
 let maxValue = 0;
 const NETWORK_SCORE_DIGITS = 3;
 
-let cacheData = null;
-let cachedScores = null; 
-
-function createTable(tableData = cacheData,  scores = cachedScores, badLayers = getCheckedValues()) {
+function createTable(tableData, badLayers = getCheckedValues(), scores = cached_data.scores, ) {
 
     if (tableData == null) {
+        logs("no data given")
         return;
     }
-    cacheData = tableData;
-    cachedScores = scores;
     
     //inverting data because its done in prod
     // slice just copies data because reverse modifies array
@@ -60,11 +56,17 @@ function createTable(tableData = cacheData,  scores = cachedScores, badLayers = 
 
         function createCell(cellData) {
             let cell = document.createElement("td");
-            if (settings.getShowText())
-                cell.appendChild(document.createTextNode(cellData));
+            newFunction(cell, cellData);
             cell.style.backgroundColor = getColor(cellData, maxValue);
             row.appendChild(cell);
         };
+
+        function newFunction(cell, cellData) {
+            if (settings.getShowText()) { 
+                cellData = Number.isInteger(cellData) ? cellData : cellData.toFixed(1)
+                cell.appendChild(document.createTextNode(cellData));
+            }
+        }
     }
 
     function addLayerSelector(layerIndex){

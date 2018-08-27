@@ -40,7 +40,10 @@ function onLoadDataFromDB(){
     }
 
     function processJsonResponse (data){
-        createTable(data.matrix, data.scores, data.evaluation ? data.evaluation.bad_layers : []);
+        cached_data.data = data.matrix;
+        cached_data.saliency = data.saliency;
+        cached_data.scores = data.scores;
+        createTable(data.matrix, data.evaluation ? data.evaluation.bad_layers : []);
         hideApiError();
         containsValidData = true;
         run = runValue;

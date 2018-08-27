@@ -5,6 +5,7 @@
   <script src="{{url_for( 'static', filename='drawTable.js' )}} "></script>
   <script src="{{url_for( 'static', filename='drawCommon.js' )}} "></script>
   <script src="{{url_for( 'static', filename='evalActions.js' )}} "></script>
+  <script src="{{url_for( 'static', filename='tableCache.js' )}} "></script>
 {% endblock %}
 {% block body %}
   {{ super() }}
@@ -38,10 +39,16 @@
     </div>
   </div>
   <div class="row">
-    <div class="col-sm">
+    <div class="col-sm-2">
       <div class="form-check">
         <input class="form-check-input" onclick="settings.toggleShowText(this)" type="checkbox" id="showNumbersCheck">
         <label class="form-check-label" for="showNumbersCheck">Show values</label>
+      </div>
+    </div>
+    <div class="col-sm-2">
+      <div class="form-check">
+        <input class="form-check-input" onclick="settings.toggleInfluenceText(this)" type="checkbox" id="showInfluenceCheck">
+        <label class="form-check-label" for="showInfluenceCheck">Show influence</label>
       </div>
     </div>
   </div> 
