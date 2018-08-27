@@ -1,5 +1,6 @@
 import unittest
 import machineLearning.model as model
+from machineLearning.model import MATRIX_DIM
 from numpy.testing import assert_allclose
 import numpy as np
 
@@ -20,7 +21,7 @@ class NetTest(unittest.TestCase):
 
     def testPrediction(self):
         matrix = np.random.rand(100,47)
-        rez = model._predict(matrix)
+        rez = model._predict_badness(matrix)
         self.assertEqual(len(rez), 100)
 
     def testLongLine(self):
@@ -58,17 +59,58 @@ class NetTest(unittest.TestCase):
         rez = model.get_network_score(matrix)
         self.assertGreater(rez, BAD_THRESHOLD)
     
-    def testMontain(self):
+    def testMountain(self):
         matrix = [[0,1,0]]
         rez = model.get_network_score(matrix)
         self.assertGreater(rez, BAD_THRESHOLD)
         
     def test2DMatrix(self):
-        matrix = [[ i*a for i in range(47)] for a in range(88)]
+        matrix = [[ i*a for i in range(MATRIX_DIM)] for a in range(88)]
         rez =  model.get_network_score(matrix)
         self.assertEqual(len(rez), 88)
 
-    # def testSaliency2DMatrix(self):
-    #     matrix = [[5,4,3,2,1,0], [5,4,3,2,1,0]]
-    #     rez =  model.get_saliency_map(matrix)
-    #     print(rez)
+    def testSaliency2DLine(self):
+        matrix = [[5,4,3,2,1,0]]
+        rez =  model.get_saliency_map(matrix)
+        self.assertEqual(len(rez), 1)
+        self.assertEqual(len(rez[0]), MATRIX_DIM)
+
+    def testSaliencyRegresion(self):
+        matrix = [[0,0,0,0,0,0]]
+        rez =  model.get_saliency_map(matrix)
+        np.testing.assert_array_almost_equal(rez, [[
+            -1.04997004e-03, -2.79210228e-03, -3.92775750e-04,  0.00000000e+00,
+             0.00000000e+00, -5.20378165e-03,  1.11226004e-03,  2.27395422e-03,
+             0.00000000e+00,  0.00000000e+00,  2.22907541e-03,  1.19638685e-02,
+             9.88668855e-03,  0.00000000e+00,  0.00000000e+00,  3.13153432e-04,
+             3.40944249e-03,  2.79863831e-03,  0.00000000e+00,  0.00000000e+00,
+             6.00656401e-03,  4.10343194e-03,  6.58684294e-04,  0.00000000e+00,
+             0.00000000e+00, -7.57530611e-03,  1.48580153e-03,  3.70865595e-03,
+             0.00000000e+00,  0.00000000e+00,  2.58663250e-03, -8.87987670e-04,
+            -5.79148065e-04,  0.00000000e+00,  0.00000000e+00, -2.37155799e-03,
+            -3.42961866e-05, -1.57498289e-04,  0.00000000e+00,  0.00000000e+00,
+             1.84744957e-03, -2.99581327e-04,  8.00112262e-04,  0.00000000e+00,
+             0.00000000e+00,  0.00000000e+00,  0.00000000e+00]])
+
+
+    def testSaliencyMatrixRegresion(self):
+        matrix = [[5,4,3,2,1,0],[0,0,0,0,0,0],[5,4,3,2,1,0]]
+        rez =  model.get_saliency_map(matrix)
+        np.testing.assert_array_almost_equal(rez[1], [
+            -1.04997004e-03, -2.79210228e-03, -3.92775750e-04,  0.00000000e+00,
+             0.00000000e+00, -5.20378165e-03,  1.11226004e-03,  2.27395422e-03,
+             0.00000000e+00,  0.00000000e+00,  2.22907541e-03,  1.19638685e-02,
+             9.88668855e-03,  0.00000000e+00,  0.00000000e+00,  3.13153432e-04,
+             3.40944249e-03,  2.79863831e-03,  0.00000000e+00,  0.00000000e+00,
+             6.00656401e-03,  4.10343194e-03,  6.58684294e-04,  0.00000000e+00,
+             0.00000000e+00, -7.57530611e-03,  1.48580153e-03,  3.70865595e-03,
+             0.00000000e+00,  0.00000000e+00,  2.58663250e-03, -8.87987670e-04,
+            -5.79148065e-04,  0.00000000e+00,  0.00000000e+00, -2.37155799e-03,
+            -3.42961866e-05, -1.57498289e-04,  0.00000000e+00,  0.00000000e+00,
+             1.84744957e-03, -2.99581327e-04,  8.00112262e-04,  0.00000000e+00,
+             0.00000000e+00,  0.00000000e+00,  0.00000000e+00])
+
+    def testSaliencyConstant(self):
+        matrix = [[5,4,3,2,1,0], [5,4,3,2,1,0]]
+        rez =  model.get_saliency_map(matrix)
+        np.testing.assert_array_almost_equal(rez[1],rez[0])

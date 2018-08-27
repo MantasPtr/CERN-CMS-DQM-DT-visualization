@@ -4,14 +4,13 @@ from functools import partial
 from sklearn.preprocessing import MaxAbsScaler
 
 SCALER = MaxAbsScaler
-MATRIX_DIM = 47
 
-def resizeMatrix(matrix):
-    return list(map(resizeLayer,matrix))
+def resizeMatrix(matrix, model_dim):
+    return [resizeLayer(line, model_dim) for line in matrix]
 
-def resizeLayer(layer):
+def resizeLayer(layer, model_dim):
     """Resizes occupancy to a given size using bilinear interpolation"""
-    return resize(np.array(layer).reshape(1, len(layer)), (1, MATRIX_DIM), preserve_range=True, mode='constant', anti_aliasing=False)[0]
+    return resize(np.array(layer).reshape(1, len(layer)), (1, model_dim), preserve_range=True, mode='constant', anti_aliasing=False)[0]
 
 def scaleMatrix(matrix):
     return list(map(scaleLayer, matrix))
@@ -21,7 +20,7 @@ def scaleLayer(layer):
     layer = SCALER().fit(layer).transform(layer)
     return layer.reshape(1, -1)[0]
 
-def processMatrix(matrix):
-    matrix = resizeMatrix(matrix)
+def processMatrix(matrix, model_dim):
+    matrix = resizeMatrix(matrix, model_dim)
     matrix = scaleMatrix(matrix)
     return matrix
