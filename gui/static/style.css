@@ -13,6 +13,7 @@ rect {
  }
 
 #image td {
+    text-align: right;
     max-width: 20px;
     font-size: 10px;
 }

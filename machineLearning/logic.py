@@ -1,8 +1,13 @@
 import machineLearning.model as model
+import logging
 
 def _append_model_estimation_scores(result: dict) -> dict:
     matrix = result.get("matrix")
-    result["scores"] = model.get_network_score(matrix).tolist()
+    try:
+        result["scores"] = model.get_network_score(matrix).tolist()
+    except ValueError as v:
+        logging.error(result)
+        raise v
     return result
 
 
@@ -12,7 +17,11 @@ def append_estimation(data: list) -> list:
 
 def _append_model_saliency(result: dict) -> dict:
     matrix = result.get("matrix")
-    result["saliency"] = model.get_saliency_map(matrix)
+    try:
+        result["saliency"] = model.get_saliency_map(matrix)
+    except ValueError as v:
+        logging.error(result)
+        raise v
     return result
 
 def append_saliency(data: list) -> list:

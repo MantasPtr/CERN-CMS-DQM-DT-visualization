@@ -28,6 +28,7 @@ sudo iptables -t nat -A PREROUTING -p tcp --dport 80 -j REDIRECT --to-port 8080
             },
             "matrix": [[0,0,0],[1,1,1],[777,888,999]],
             "scores": [0,0.5,0.5,0.5,0.5,0.5,0.5,0.5,0.5,0.5,0.5,1],
+            "saliency": [[0,0,0],[1,2,3],[-1,-2,-3]],
             "evaluation": {
                 "bad_layers": [1,7,14],
                 "eval_time": "timestamp",

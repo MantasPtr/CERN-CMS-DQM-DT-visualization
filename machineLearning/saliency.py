@@ -3,7 +3,7 @@ import numpy as np
 
 class GradientSaliency():
 
-    def __init__(self, model, output_index = 0):
+    def __init__(self, model, output_index = 1):
         # Define the function to compute the gradient
         input_tensors = [model.input]
         gradients = model.optimizer.get_gradients(model.output[0][output_index], model.input)

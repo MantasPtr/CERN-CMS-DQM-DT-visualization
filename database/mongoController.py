@@ -48,7 +48,10 @@ class Mongo_4_DB_controller():
         return self.dbCollection.find_one({"identifier": identifier})
 
     def get_all(self):
-        data = self.dbCollection.find({}, {"_id": 0 ,"identifier": 1, "status": 1, "save_time": 1, "data":1, "exception": 1}).sort("save_time", pymongo.DESCENDING)
+        data = self.dbCollection.find(
+            {}, 
+            {"_id": 0 , "data.matrix":0, "data.saliency":0}
+        ).sort("save_time", pymongo.DESCENDING)
         return list(map(self._format_db_result_datatime, data))
 
     def _format_db_result_datatime(self, record: dict):

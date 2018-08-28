@@ -21,7 +21,6 @@ class asyncRequestExecutor():
             raise FetchError(f"Invalid json structure from url:{url} \n Error: {ve}")
 
     async def getJsonDataFromProtectedUrl(self, url):
-        print("Request URL: " + url)
         authObj = authUtils.AuthContainer().load_data()
         return await self.getContentFromProtectedUrl(url, authObj)
 
