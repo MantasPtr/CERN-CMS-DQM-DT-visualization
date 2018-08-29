@@ -32,12 +32,12 @@ class NetTest(unittest.TestCase):
     def testKnowMinimumGood(self):
         matrix = [[0,0]]
         rez = model.get_network_score(matrix)
-        self.assertLess(rez, GOOD_THRESHOLD)
+        self.assertLess(rez[0], GOOD_THRESHOLD)
     
     def testKnownMaximumGood(self):
         matrix = [[1,1]]
         rez = model.get_network_score(matrix)
-        self.assertLess(rez, GOOD_THRESHOLD)
+        self.assertLess(rez[0], GOOD_THRESHOLD)
         
     def testKnownOrdersGood(self):
         matrix = [[1,1],[0,0],[1,0],[0,1]]
@@ -51,17 +51,17 @@ class NetTest(unittest.TestCase):
         matrix = [[5,4,3,2,1,0]]
         
         rez = model.get_network_score(matrix)
-        self.assertGreater(rez, BAD_THRESHOLD)
+        self.assertGreater(rez[0], BAD_THRESHOLD)
     
     def testDipBad(self):
         matrix = [[1,0,1]]
         rez = model.get_network_score(matrix)
-        self.assertGreater(rez, BAD_THRESHOLD)
+        self.assertGreater(rez[0], BAD_THRESHOLD)
     
     def testMountain(self):
         matrix = [[0,1,0]]
         rez = model.get_network_score(matrix)
-        self.assertGreater(rez, BAD_THRESHOLD)
+        self.assertGreater(rez[0], BAD_THRESHOLD)
         
     def test2DMatrix(self):
         matrix = [[ i*a for i in range(MATRIX_DIM)] for a in range(88)]
@@ -120,8 +120,3 @@ class NetTest(unittest.TestCase):
     #     dip_avg = (rez[3]+rez[4]+rez[5])/3
     #     sign = lambda x: (1, -1)[x < 0]
     #     print([sign(x-dip_avg) for x in rez])
-    
-    def testSaliencyMatrix(self):
-        matrix= [[379,376,387,390,367,430,395,379,386,395,377,388,417,382,0,403,400,403,422,376,380,345,394,416,398,394,383,399,382,417,394,378,379,389,401,363,407,377,373,367,388,394,337,342,343,324,321,365,336,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1]]
-        rez = model.get_saliency_map(matrix)[0]
-        print(["{0:.6f}".format(x) for x in rez])

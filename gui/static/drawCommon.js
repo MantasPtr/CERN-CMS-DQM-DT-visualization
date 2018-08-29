@@ -1,12 +1,10 @@
 const emptyColor = "hsl(0,0%,50%)";
 
-const getColor = (value, max) => {
-    max = max ? max : 255;
+const getColor = (value,min = 0, max = 255) => {
     if (value === -1) {
         return emptyColor;
     }
-    v =  value/max;
-    return "hsl(" + (255 - value/max*255)+ ","+  "100" + "%, 50%)";
+    return "hsl(" + ((value-min)/(max-min)*255)+ ","+  "100" + "%, 50%)";
 };
 
 function wrap(outerElementString, innerElement){
@@ -17,4 +15,8 @@ function wrap(outerElementString, innerElement){
 
 function getMax(array){
     return Math.max(...array.map(e => Array.isArray(e) ? getMax(e) : e));
+}
+
+function getMin(array){
+    return Math.min(...array.map(e => Array.isArray(e) ? getMin(e) : e));
 }

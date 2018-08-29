@@ -4,7 +4,7 @@ import logging
 def _append_model_estimation_scores(result: dict) -> dict:
     matrix = result.get("matrix")
     try:
-        result["scores"] = model.get_network_score(matrix).tolist()
+        result["scores"] = model.get_network_score(matrix)
     except ValueError as v:
         logging.error(result)
         raise v
@@ -13,7 +13,7 @@ def _append_model_estimation_scores(result: dict) -> dict:
 
 def append_estimation(data: list) -> list:
     """Appends scores to field to dict based on matrix field"""
-    return [_append_model_estimation_scores(x) for x in data]
+    return list(map(_append_model_estimation_scores, data))
 
 def _append_model_saliency(result: dict) -> dict:
     matrix = result.get("matrix")
@@ -26,4 +26,4 @@ def _append_model_saliency(result: dict) -> dict:
 
 def append_saliency(data: list) -> list:
     """Appends scores to field to dict based on matrix field"""
-    return [_append_model_saliency(x) for x in data]
+    return list(map(_append_model_saliency, data))

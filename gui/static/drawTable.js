@@ -1,20 +1,23 @@
 let maxLayers = 0;
 let maxValue = 0;
+let minValue = 0;
 const NETWORK_SCORE_DIGITS = 3;
 
-function createTable(tableData, badLayers = getCheckedValues(), scores = cached_data.scores, ) {
+function createTable(tableData, badLayers = getCheckedValues(), scores = cached_data.scores, emptyValue = -1 ) {
 
     if (tableData == null) {
-        logs("no data given")
+        logs("no data given");
         return;
     }
-    
+
     //inverting data because its done in prod
     // slice just copies data because reverse modifies array
     tableData = tableData.slice().reverse();
     scores = scores.slice().reverse();
 
     maxValue = getMax(tableData);
+    minValue = getMin(tableData);
+    minValue = minValue != emptyValue ? minValue : 0;
     drawColorPallet();
     maxLayers = tableData.length;
     let table = document.createElement("table");
@@ -57,9 +60,9 @@ function createTable(tableData, badLayers = getCheckedValues(), scores = cached_
         function createCell(cellData) {
             let cell = document.createElement("td");
             newFunction(cell, cellData);
-            cell.style.backgroundColor = getColor(cellData, maxValue);
+            cell.style.backgroundColor = getColor(cellData, maxValue, minValue);
             row.appendChild(cell);
-        };
+        }
 
         function newFunction(cell, cellData) {
             if (settings.getShowText()) { 
@@ -105,18 +108,18 @@ function drawColorPallet() {
 
     let ctx = canvas.getContext("2d");
     let grd = ctx.createLinearGradient(0, 0, 0, 325);
-    grd.addColorStop(0     , getColor(1     * maxValue, maxValue));
-    grd.addColorStop(0.125 , getColor(0.875 * maxValue, maxValue));
-    grd.addColorStop(0.25  , getColor(0.75  * maxValue, maxValue));
-    grd.addColorStop(0.375 , getColor(0.625 * maxValue, maxValue));
-    grd.addColorStop(0.5   , getColor(0.5   * maxValue, maxValue));
-    grd.addColorStop(0.625 , getColor(0.375 * maxValue, maxValue));
-    grd.addColorStop(0.75  , getColor(0.25  * maxValue, maxValue));
-    grd.addColorStop(0.875 , getColor(0.125 * maxValue, maxValue));
-    grd.addColorStop(1     , getColor(0     * maxValue, maxValue));
+    grd.addColorStop(0     , getColor(0     * (maxValue-minValue) + minValue, minValue, maxValue));
+    grd.addColorStop(0.125 , getColor(0.125 * (maxValue-minValue) + minValue, minValue, maxValue));
+    grd.addColorStop(0.25  , getColor(0.25  * (maxValue-minValue) + minValue, minValue, maxValue));
+    grd.addColorStop(0.375 , getColor(0.375 * (maxValue-minValue) + minValue, minValue, maxValue));
+    grd.addColorStop(0.5   , getColor(0.5   * (maxValue-minValue) + minValue, minValue, maxValue));
+    grd.addColorStop(0.625 , getColor(0.625 * (maxValue-minValue) + minValue, minValue, maxValue));
+    grd.addColorStop(0.75  , getColor(0.75  * (maxValue-minValue) + minValue, minValue, maxValue));
+    grd.addColorStop(0.875 , getColor(0.875 * (maxValue-minValue) + minValue, minValue, maxValue));
+    grd.addColorStop(1     , getColor(1     * (maxValue-minValue) + minValue, minValue, maxValue));
 
     document.querySelector("#max_colorbar").textContent = maxValue;
-    document.querySelector("#min_colorbar").textContent = 0;
+    document.querySelector("#min_colorbar").textContent = minValue;
 
     ctx.fillStyle = grd;
     ctx.fillRect(0, 0, 30, 325);

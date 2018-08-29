@@ -10,8 +10,13 @@ class GradientSaliency():
         self.compute_gradients = K.function(inputs = input_tensors, outputs = gradients)
 
     def get_mask(self, input_image):# Execute the function to compute the gradient
-        gradients = [self.compute_gradients([[input_line]])[0][0].tolist() for input_line in input_image ]   
+        gradients = list(map(self._compute_mask_for_line, input_image))
         return gradients
+
+    def _compute_mask_for_line(self, line: list) -> list:
+        if len(line) == 0:
+            return [0]
+        return self.compute_gradients([[line]])[0][0].tolist() 
         
 # https://github.com/experiencor/deep-viz-keras/blob/master/visual_backprop.py
 class VisualBackprop():
@@ -29,7 +34,6 @@ class VisualBackprop():
 
         for i in range(len(self.model.layers) - 1, -1, -1):
             if 'Conv1D' in str(type(self.model.layers[i])):  #CHANGED HERE
-                #print(np.mean(layer_outs[i], axis=2))
                 layer = np.mean(layer_outs[i], axis = 2, keepdims = True)  #CHANGED HERE
                 layer = layer - np.min(layer)
                 layer = layer / (np.max(layer) - np.min(layer) + 1e-6)

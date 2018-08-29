@@ -12,10 +12,18 @@ cnn_model = load_model("%s/%s" % (MODELS_DIRECTORY, MODEL_FILE))
 graph = tf.get_default_graph()
 vanilla = GradientSaliency(cnn_model)
 
-def _predict_badness(matrix) -> np.ndarray:
-    return cnn_model.predict(np.array(matrix))[:, 1]
+import time 
+def _predict_badness(matrix) -> list:
+    badLayers = list(map(_predict_layers_badness, matrix))        
+    return badLayers
 
-def get_network_score(matrix) -> np.ndarray:
+def _predict_layers_badness(layer) -> np.ndarray:
+    if len(layer) == 0:
+        return -1
+    layer_result_list = cnn_model.predict(np.array([layer]))[:, 1]
+    return layer_result_list[0].item()
+
+def get_network_score(matrix) -> list:
     global graph
     with graph.as_default():
         matrix = transform.processMatrix(matrix, MATRIX_DIM)

@@ -10,12 +10,12 @@ class Mongo_4_DB_controller():
         self.dbCollection = collection
         self.timeOffset = datetime.datetime.now() - datetime.datetime.utcnow()
 
-    def save(self, identifier: dict, matrix = None):
-        record = self._build_db_record(identifier, matrix, "LOADING")
+    def save(self, identifier: dict, data = None):
+        record = self._build_db_record(identifier, data, "LOADING")
         self.dbCollection.save(record)
 
-    def update(self, identifier: dict, matrix):
-        record = self._build_db_record(identifier, matrix, "FINISHED")
+    def update(self, identifier: dict, data):
+        record = self._build_db_record(identifier, data, "FINISHED")
         self._assure_update({"identifier": identifier}, record)
 
     def mark_as_error(self, identifier: dict, exception):
@@ -40,7 +40,7 @@ class Mongo_4_DB_controller():
             })
 
     def delete(self, identifier: dict):
-        print(identifier)
+        print("deleting:",identifier)
         rez = self.dbCollection.delete_one({"identifier": identifier})
         return rez.deleted_count
 
@@ -146,12 +146,12 @@ class Mongo_4_DB_controller():
             warnings.warn(f"Update with criteria:{args[0]} did not update any records!")
         return {"matched":rez["n"], "updated": rez["nModified"] == 0 }
 
-    def _build_db_record(self, identifier: dict, matrix, status):
+    def _build_db_record(self, identifier: dict, data, status):
         return {
             "identifier": identifier,
             "status": status,
             "save_time": datetime.datetime.utcnow(),
-            "data": matrix
+            "data": data
         }
 
     def _get_single_result(self, cursor: pymongo.CursorType):
