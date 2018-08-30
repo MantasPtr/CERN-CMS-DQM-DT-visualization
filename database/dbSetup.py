@@ -10,7 +10,7 @@ def init_database() -> Mongo_4_DB_controller:
     return Mongo_4_DB_controller(collection)
 
 def get_default_database_config():
-    config = getConfig(configLocation=DB_CONFIG_LOCATION)
+    config = getConfig(DB_CONFIG_LOCATION)
     database = config["database"]
     collection = config["collection"]
     return database, collection

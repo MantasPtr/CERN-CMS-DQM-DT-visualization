@@ -3,7 +3,10 @@ import json
 import aiohttp
 from config import configUtils
 from errors.errors import FetchError
-from dataLoading import authUtils
+from dataLoading.authContainer import AuthContainer
+from errors.errors import ConfigError
+
+FETCH_CONFIG_LOCATION="dataLoading/config/fetch.config.ini"
 
 class asyncRequestExecutor():
     
@@ -21,17 +24,21 @@ class asyncRequestExecutor():
             raise FetchError(f"Invalid json structure from url:{url} \n Error: {ve}")
 
     async def getJsonDataFromProtectedUrl(self, url):
-        authObj = authUtils.AuthContainer().load_data()
+        authObj = AuthContainer().load_data()
         return await self.getContentFromProtectedUrl(url, authObj)
 
-    async def getContentFromProtectedUrl(self, url, authObj: authUtils.AuthContainer): 
+    async def getContentFromProtectedUrl(self, url, authObj: AuthContainer): 
         context = ssl.SSLContext()
-        context.load_cert_chain(authObj.pathToCertificate, authObj.pathToCertificatePass, authObj.password)
+        try:
+            context.load_cert_chain(authObj.pathToCertificate, authObj.pathToCertificatePass, authObj.password)
+        except ssl.SSLError as exc:
+            raise ConfigError(f"Error occurred while loading certificates. Please make sure all files are in locations defined in config and password is correct. Original error: {exc}")
+
         result =  await self.session.get(url, ssl=context)
         return await result.content.read()
 
     def getMatrix(self, valueDictionary):
-        jsonPath = configUtils.getConfig(configLocation="config/fetch.config.ini")["matrixJsonPath"]
+        jsonPath = configUtils.getConfig(FETCH_CONFIG_LOCATION)["matrixJsonPath"]
         pathSteps = jsonPath.split(".")
         currentJsonLocation = valueDictionary
         for index, step in enumerate(pathSteps):

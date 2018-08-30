@@ -29,7 +29,7 @@ def fetch():
    
 @app.route('/fetch/<int:run>/')
 def fetchRun(run):
-    responseData = dataFetch.getDataByIdentifier({"run":run})
+    responseData = dataFetch.get_data_by_identifier({"run":run})
     if responseData == None:
         return "Started!"
     responseData.pop("_id", None)

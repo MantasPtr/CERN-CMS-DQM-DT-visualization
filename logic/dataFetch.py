@@ -1,20 +1,20 @@
 from database.dbSetup import dbController 
-from dataLoading.dataLoader import asyncFetchAllData
+from dataLoading.dataLoader import async_fetch_all_data
 from errors.errors import FetchError
 from machineLearning.logic import append_estimation, append_saliency
 import asyncUtils
 
-def getDataByIdentifier(identifier: dict):
+def get_data_by_identifier(identifier: dict):
     data = dbController.get_one(identifier)
     if data == None:
         dbController.save(identifier)
-        asyncUtils.run_in_thread(load_data_and_save, identifier)
+        asyncUtils.run_in_thread(_load_data_and_save, identifier)
         return None
     return data 
 
-async def load_data_and_save(identifier):
+async def _load_data_and_save(identifier):
     try:
-        data = await asyncFetchAllData(identifier)
+        data = await async_fetch_all_data(identifier)
         print(f":: Successfully fetched data for: {identifier}")
         data = append_estimation(data)
         print(f":: Successfully estimated data for: {identifier}")
