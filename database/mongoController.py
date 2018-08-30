@@ -50,7 +50,7 @@ class Mongo_4_DB_controller():
     def get_all(self):
         data = self.dbCollection.find(
             {}, 
-            {"_id": 0 , "data.matrix":0, "data.saliency":0}
+            {"_id": 0}
         ).sort("save_time", pymongo.DESCENDING)
         return list(map(self._format_db_result_datatime, data))
 
