@@ -28,5 +28,5 @@ class NetTest(unittest.TestCase):
 
     def testNegativeDeletion(self):
         matrix = [[-1,0,1,2,-10,3,4,5,-1]]
-        rez = machineLearning.transform.removeNegatives(matrix)
+        rez = machineLearning.transform.remove_negatives(matrix)
         self.assertListEqual(rez, [[0,1,2,3,4,5]])

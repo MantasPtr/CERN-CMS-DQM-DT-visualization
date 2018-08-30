@@ -9,14 +9,14 @@ class GradientSaliency():
         gradients = model.optimizer.get_gradients(model.output[0][output_index], model.input)
         self.compute_gradients = K.function(inputs = input_tensors, outputs = gradients)
 
-    def get_mask(self, input_image):# Execute the function to compute the gradient
+    def get_gradients(self, input_image):# Execute the function to compute the gradient
         gradients = list(map(self._compute_mask_for_line, input_image))
         return gradients
 
-    def _compute_mask_for_line(self, line: list) -> list:
+    def _compute_mask_for_line(self, line: list) -> np.ndarray:
         if len(line) == 0:
             return [0]
-        return self.compute_gradients([[line]])[0][0].tolist() 
+        return self.compute_gradients([[line]])[0][0]
         
 # https://github.com/experiencor/deep-viz-keras/blob/master/visual_backprop.py
 class VisualBackprop():
@@ -27,7 +27,7 @@ class VisualBackprop():
         
         self.model = model
 
-    def get_mask(self, input_image):
+    def get_gradients(self, input_image):
         visual_bpr = None
         ## test
         layer_outs = self.forward_pass([[input_image, 0]])

@@ -17,6 +17,10 @@ function getMax(array){
     return Math.max(...array.map(e => Array.isArray(e) ? getMax(e) : e));
 }
 
-function getMin(array){
-    return Math.min(...array.map(e => Array.isArray(e) ? getMin(e) : e));
+function getMin(array, ignoreValue = -1 ){
+    return Math.min(...array.map(e => Array.isArray(e) ? getMin(e) : replaceIfEqual(e, ignoreValue, 0) ));
+}
+
+function replaceIfEqual(x, value, replace) {
+    return x != value ?  x : replace;
 }

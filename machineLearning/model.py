@@ -32,8 +32,13 @@ def get_network_score(matrix) -> list:
 def get_saliency_map(matrix) -> list:
     global graph
     with graph.as_default():
+        np_matrix = np.array(matrix)
         processedMatrix = transform.processMatrix(matrix, MATRIX_DIM)
-        mask = vanilla.get_mask(processedMatrix)
-        mask = transform.resizeMatrix(mask, len(matrix[0]))
-        mask = [np_array.tolist() for np_array in mask]
-        return mask
+        gradients = vanilla.get_gradients(processedMatrix)
+        positive_matrix = transform.remove_negatives(matrix) 
+        gradients = transform.resize_matrix_to_form(gradients, positive_matrix)
+        gradients = np.concatenate( gradients, axis=0 )
+        filled_array = np_matrix.astype(float)
+        np.place(filled_array, np_matrix != -1, gradients.reshape(-1))
+        filled_array = [np_array.tolist() for np_array in filled_array]
+        return filled_array
