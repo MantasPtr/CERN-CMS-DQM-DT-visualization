@@ -2,7 +2,7 @@
 
 Based on https://docs.mongodb.com/manual/tutorial/install-mongodb-on-red-hat/
 
-## Opening port on inptables
+## Opening port on in iptables
 
 by default using port 8080 and redirecting to it from port 80
 
