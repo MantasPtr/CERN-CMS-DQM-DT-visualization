@@ -10,7 +10,7 @@ MATRIX_DIM = 47
 
 cnn_model = load_model("%s/%s" % (MODELS_DIRECTORY, MODEL_FILE))
 graph = tf.get_default_graph()
-vanilla = GradientSaliency(cnn_model)
+saliency_calculation = GradientSaliency(cnn_model)
 
 import time 
 def _predict_badness(matrix) -> list:
@@ -32,13 +32,18 @@ def get_network_score(matrix) -> list:
 def get_saliency_map(matrix) -> list:
     global graph
     with graph.as_default():
-        np_matrix = np.array(matrix)
-        processedMatrix = transform.processMatrix(matrix, MATRIX_DIM)
-        gradients = vanilla.get_gradients(processedMatrix)
-        positive_matrix = transform.remove_negatives(matrix) 
-        gradients = transform.resize_matrix_to_form(gradients, positive_matrix)
-        gradients = np.concatenate( gradients, axis=0 )
-        filled_array = np_matrix.astype(float)
-        np.place(filled_array, np_matrix != -1, gradients.reshape(-1))
-        filled_array = [np_array.tolist() for np_array in filled_array]
-        return filled_array
+        processed_matrix = transform.processMatrix(matrix, MATRIX_DIM)
+        gradients = saliency_calculation.get_gradients(processed_matrix)
+        filled_matrix = replace_positive_values(matrix, gradients)
+        return filled_matrix
+
+def replace_positive_values(matrix_to_fill, filler):
+    np_matrix = np.array(matrix_to_fill)
+    positive_matrix = transform.remove_negatives(matrix_to_fill) 
+    filler = transform.resize_matrix_to_form(filler, positive_matrix)
+    filler = np.concatenate(filler, axis=0 )
+    filled_array = np_matrix.astype(float)
+    np.place(filled_array, np_matrix >= 0, filler.reshape(-1))
+    filled_array = [np_array.tolist() for np_array in filled_array]
+    return filled_array
+    
