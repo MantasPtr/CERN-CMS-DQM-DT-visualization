@@ -2,9 +2,10 @@ import configparser
 import json
 from pathlib import Path
 
-def getConfig(key='DEFAULT', configLocation='config/auth.config.ini'):
+def getConfig(configLocation: str, key='DEFAULT'):
     config = configparser.ConfigParser()
-    config.read(configLocation)
+    parsed = config.read(configLocation)
+    print(parsed)
     return config[key]
 
 def getJsonConfig(configLocation):

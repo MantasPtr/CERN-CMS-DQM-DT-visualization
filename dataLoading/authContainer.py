@@ -2,13 +2,15 @@ import config.configUtils as cfg
 from os.path import isfile
 import warnings
 
+AUTH_CONFIG_LOCATION = 'dataLoading/config/auth.config.ini'
+
 class AuthContainer():
     pathToCertificate = None
     pathToCertificatePass = None
     password = None
 
     def load_data(self):
-        config = cfg.getConfig()
+        config = cfg.getConfig(AUTH_CONFIG_LOCATION)
         homePath = cfg.getHomePath()
         self.pathToCertificate = homePath + config['pathToCert']
         self.pathToCertificatePass = homePath + config['pathToCertKey']
