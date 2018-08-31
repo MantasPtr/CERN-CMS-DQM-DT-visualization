@@ -1,8 +1,29 @@
-## Installing mongoDB 4.0
+## Structure
 
-Based on https://docs.mongodb.com/manual/tutorial/install-mongodb-on-red-hat/
+Modules by order:
 
-## Opening port on in iptables
+* `logic` - contains main program logic which connects all modules
+* `database` - module for responsible for persisting data
+* `dataFetching` - module for fetching data from external api
+* `machineLearning` - module for processing data with neural network
+* `config` - common config functions
+* `errors`  - contains all custom error throw by application
+* `gui` - contains flask templates and js files used for visualization
+* `validators` - contains validation logic clases
+
+Files:
+
+* `asyncUtils` - utils for running functions asynchronously or in thread
+* `flaskController` - flask app for serving front end
+
+## App setup
+
+### Installing mongoDB 4.0
+
+Based on
+<https://docs.mongodb.com/manual/tutorial/install-mongodb-on-red-hat/>
+
+### Opening port on in iptables
 
 by default using port 8080 and redirecting to it from port 80
 
