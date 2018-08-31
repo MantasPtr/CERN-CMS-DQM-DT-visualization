@@ -19,10 +19,10 @@ async def _load_process_and_save(identifier):
     try:
         data = await async_fetch_all_data(identifier)
         print(f":: Successfully fetched data for: {identifier}")
-        data = append_estimation(data)
-        print(f":: Successfully estimated data for: {identifier}")
-        data = append_saliency(data)
-        print(f":: Successfully added saliency data for: {identifier}")
+        # data = append_estimation(data)
+        # print(f":: Successfully estimated data for: {identifier}")
+        # data = append_saliency(data)
+        # print(f":: Successfully added saliency data for: {identifier}")
         dbController.update(identifier, data)
     except FetchError as fetchError:
         print(f"Error occurred while fetching: {fetchError}")
