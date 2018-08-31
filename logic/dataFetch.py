@@ -4,15 +4,18 @@ from errors.errors import FetchError
 from machineLearning.logic import append_estimation, append_saliency
 import asyncUtils
 
-def get_data_by_identifier(identifier: dict):
+def fetch_data_by_identifier(identifier: dict):
+    """Loads resource from database from database, or if not found, 
+    initiates to fetching it from external api in separate thread"""
     data = dbController.get_one(identifier)
     if data == None:
         dbController.save(identifier)
-        asyncUtils.run_in_thread(_load_data_and_save, identifier)
+        asyncUtils.run_in_thread(_load_process_and_save, identifier)
         return None
     return data 
 
-async def _load_data_and_save(identifier):
+async def _load_process_and_save(identifier):
+    """Loads, processes and saves data from external api"""
     try:
         data = await async_fetch_all_data(identifier)
         print(f":: Successfully fetched data for: {identifier}")

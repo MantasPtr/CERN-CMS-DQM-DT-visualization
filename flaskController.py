@@ -3,7 +3,7 @@ from flask import Flask, render_template, request, make_response, jsonify, redir
 import gui.plotting.adrian as a_plot
 import json
 from errors.errors import ValidationError
-from logic.dictBuilder import buildDicts
+from logic.dbIdentifierBuilder import buildDicts
 app = Flask(__name__, template_folder="gui/templates", static_folder="gui/static")
 
 MAIN_PAGE_TEMPLATE='eval.html'
@@ -29,7 +29,7 @@ def fetch():
    
 @app.route('/fetch/<int:run>/')
 def fetchRun(run):
-    responseData = dataFetch.get_data_by_identifier({"run":run})
+    responseData = dataFetch.fetch_data_by_identifier({"run":run})
     if responseData == None:
         return "Started!"
     responseData.pop("_id", None)
