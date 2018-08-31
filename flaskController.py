@@ -111,6 +111,11 @@ def _make_response(data, code: int):
     response.status_code = code
     return response
 
+@app.route('/reevaluate/')
+def reevaluate():
+    dataFetch.reevaluate_all()
+    return "OK"
+
 @app.errorhandler(ValidationError)
 def handle_invalid_usage(error: ValidationError):
     return _make_response(jsonify(str(error)), 400)

@@ -10,25 +10,29 @@ class Mongo_4_DB_controller():
         self.dbCollection = collection
         self.timeOffset = datetime.datetime.now() - datetime.datetime.utcnow()
 
-    def save(self, identifier: dict, data = None):
-        record = self._build_db_record(identifier, data, "LOADING")
+    def save(self, identifier: dict, status: str, data = None, other: dict = {}):
+        record = self._build_db_record(identifier, data, status)
+        record = self._add_other_fields(record, other)
         self.dbCollection.save(record)
 
-    def update(self, identifier: dict, data):
-        record = self._build_db_record(identifier, data, "FINISHED")
+    def update(self, identifier: dict, status: str, data = None, other: dict = {}):
+        record = self._build_db_record(identifier, data, status)
+        record = self._add_other_fields(record, other)
         self._assure_update({"identifier": identifier}, record)
-
-    def mark_as_error(self, identifier: dict, exception):
-        record = self._build_db_record(identifier, None, "ERROR")
-        record["exception"] = str(exception)
-        self._assure_update({"identifier": identifier}, record)
+    
+    def update_status(self, identifier: dict, status: str, other: dict = {}):
+        return self._assure_update({   
+                "identifier": identifier, 
+            },{
+                "$set": {"status": status, **other}
+            })
 
     def update_user_score(self, identifier: dict, paramDict: dict, badLayers: list):
         return self._assure_update({   
                 "identifier": identifier, 
                 "data": {"$elemMatch": { ("params."+str(key)):value for key,value in paramDict.items() }}
             },{
-                "$set": {"data.$.evaluation.bad_layers":badLayers, "data.$.evaluation.eval_time": datetime.datetime.utcnow(), "data.$.evaluation.skipped":False}
+                "$set": {"data.$.evaluation.bad_layers": badLayers, "data.$.evaluation.eval_time": datetime.datetime.utcnow(), "data.$.evaluation.skipped":False}
             })
 
     def skip_user_score(self, identifier: dict, paramDict: dict):
@@ -146,13 +150,20 @@ class Mongo_4_DB_controller():
             warnings.warn(f"Update with criteria:{args[0]} did not update any records!")
         return {"matched":rez["n"], "updated": rez["nModified"] == 0 }
 
-    def _build_db_record(self, identifier: dict, data, status):
+    def _build_db_record(self, identifier: dict, data, status: str) -> dict:
         return {
             "identifier": identifier,
             "status": status,
             "save_time": datetime.datetime.utcnow(),
             "data": data
-        }
+         }
+     
+    def _add_other_fields(self, data: dict, other: dict) -> dict:
+        if bool(other): # if empty
+            return data
+        else:
+            return {**data, **other}
+        
 
     def _get_single_result(self, cursor: pymongo.CursorType):
         result = list(cursor)

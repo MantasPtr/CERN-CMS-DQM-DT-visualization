@@ -122,6 +122,21 @@ function drawColorPallet() {
     document.querySelector("#min_colorbar").textContent = minValue;
 
     ctx.fillStyle = grd;
-    ctx.fillRect(0, 0, 30, 325);
+    ctx.fillRect(0, 0, 30, 330);
+    // maxLog10 = Math.round(Math.max(Math.log10(Math.abs(minValue)),Math.log10(Math.abs(maxValue))))
+    // logs("maxLog10 " + maxLog10)
+    // stepSize = Math.pow(10,maxLog10)
+    // diff = maxValue - minValue;
+    // steps = diff/stepSize +1
+    // logs("steps " + steps)
+    // logs("diff " + diff)
+    // let ctx2 = canvas.getContext("2d");
+    // for (let i=0;i<=steps;i++) {
+    //     y = i*steps*330/diff
+    //     logs(y)
+    //     ctx2.moveTo(0,y);
+    //     ctx2.lineTo(30,y);
+    // }
+    // ctx2.stroke();
     canvasDiv.appendChild(canvas)
 }

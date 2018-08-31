@@ -24,6 +24,8 @@ Files:
 
 ## App setup
 
+Builded using python 3.6 and flask
+
 ### Installing mongoDB 4.0
 
 Based on

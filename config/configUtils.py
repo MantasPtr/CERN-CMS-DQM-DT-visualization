@@ -7,8 +7,7 @@ DEFAULT_NOT_FOUND = {}
 
 def getConfig(configLocation: str, key='DEFAULT'):
     config = configparser.ConfigParser()
-    parsed = config.read(configLocation)
-    print(parsed)
+    config.read(configLocation)
     return config[key]
 
 def getJsonConfig(configLocation):
