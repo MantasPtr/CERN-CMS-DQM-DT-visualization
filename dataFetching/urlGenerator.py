@@ -3,8 +3,8 @@ import json
 import warnings 
 from typing import Generator
 
-structureConfig: dict = getJsonConfig("dataLoading/config/param.config.json")
-url = getConfig("dataLoading/config/fetch.config.ini")["url"]
+structureConfig: dict = getJsonConfig("dataFetching/config/param.config.json")
+url = getConfig("dataFetching/config/fetch.config.ini")["url"]
 
 def get_url_generator(identifier: dict):
     """Generates urls to fetch data for each identifier based on params provided at param.config file"""

@@ -3,10 +3,10 @@ import json
 import aiohttp
 from config import configUtils
 from errors.errors import FetchError
-from dataLoading.authContainer import AuthContainer
+from dataFetching.authContainer import AuthContainer
 from errors.errors import ConfigError
 import time
-FETCH_CONFIG_LOCATION="dataLoading/config/fetch.config.ini"
+FETCH_CONFIG_LOCATION="dataFetching/config/fetch.config.ini"
 PATH_STEPS = configUtils.getConfig(FETCH_CONFIG_LOCATION)["matrixJsonPath"].split(".")
 
 class AsyncRequestExecutor():
@@ -21,7 +21,6 @@ class AsyncRequestExecutor():
         return self._get_matrix(self._parse_json(dataJson, url))
 
     async def _get_json_data_from_protected_url(self, url):
-        print(time.time())
         result =  await self.session.get(url, ssl=self.ssl_context)
         return await result.content.read()
 

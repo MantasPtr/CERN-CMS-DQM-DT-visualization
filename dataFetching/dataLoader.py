@@ -1,7 +1,7 @@
-from dataLoading.asyncRequestExecutor import AsyncRequestExecutor
+from dataFetching.asyncRequestExecutor import AsyncRequestExecutor
 import asyncio
 import aiohttp
-from dataLoading.urlGenerator import get_url_generator
+from dataFetching.urlGenerator import get_url_generator
 
 async def async_fetch_all_data(identifier: dict):
     tasks = []

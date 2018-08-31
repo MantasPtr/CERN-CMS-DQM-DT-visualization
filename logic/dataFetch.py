@@ -1,5 +1,5 @@
 from database.dbSetup import dbController 
-from dataLoading.dataLoader import async_fetch_all_data
+from dataFetching.dataLoader import async_fetch_all_data
 from errors.errors import FetchError
 from machineLearning.logic import append_estimation, append_saliency
 import asyncUtils
