@@ -1,6 +1,12 @@
+# CERN-CMS-DQM-DT-visualization
+
+This is project I did during summer internship at European Organization for Nuclear Research.
+
+This application was developed for visualizing data from compact muon solenoid data quality monitoring drift tube chambers.
+
 ## Structure
 
-Modules by order:
+Modules by order of significance:
 
 * `logic` - contains main program logic which connects all modules
 * `database` - module for responsible for persisting data
