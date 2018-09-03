@@ -34,16 +34,9 @@ def get_saliency_map(matrix) -> list:
     with graph.as_default():
         processed_matrix = transform.processMatrix(matrix, MATRIX_DIM)
         gradients = saliency_calculation.get_gradients(processed_matrix)
-        filled_matrix = replace_positive_values(matrix, gradients)
+        scaled_gradients = transform.scaleMatrix(gradients)
+        filled_matrix = transform.replace_positive_values(matrix, scaled_gradients)
         return filled_matrix
 
-def replace_positive_values(matrix_to_fill, filler):
-    np_matrix = np.array(matrix_to_fill)
-    positive_matrix = transform.remove_negatives(matrix_to_fill) 
-    filler = transform.resize_matrix_to_form(filler, positive_matrix)
-    filler = np.concatenate(filler, axis=0 )
-    filled_array = np_matrix.astype(float)
-    np.place(filled_array, np_matrix >= 0, filler.reshape(-1))
-    filled_array = [np_array.tolist() for np_array in filled_array]
-    return filled_array
+
     

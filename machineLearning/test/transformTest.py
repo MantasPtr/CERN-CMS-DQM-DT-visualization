@@ -30,3 +30,8 @@ class NetTest(unittest.TestCase):
         matrix = [[-1,0,1,2,-10,3,4,5,-1]]
         rez = machineLearning.transform.remove_negatives(matrix)
         self.assertListEqual(rez, [[0,1,2,3,4,5]])
+
+    def testScaling(self):
+        matrix = [np.array([-1,0,1]),np.array([-2,-1,0]),np.array([-5,0,10]),np.array([1,10,100])]
+        rez = machineLearning.transform.scaleMatrix(matrix)
+        print(rez)
