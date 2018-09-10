@@ -80,7 +80,9 @@ sudo iptables -t nat -A PREROUTING -p tcp --dport 80 -j REDIRECT --to-port 8080
 * "status" has one of values:
   * LOADING - if data is still fetching
   * FINISHED - if data is fully loaded
-  * ERROR - if error was encoutered while fetching
+  * ERROR - if error was encountered while fetching
+  * REEVALUATING - scores are being recomputed
+  * PENDING_REEVALUATION - are being recomputed
 * "matrix" is empty unless status is "FINISHED"
 * "exception" does not exist unless status is "ERROR"
 * "scores" show how bad layers is according to neural network
