@@ -4,7 +4,7 @@ this is done for easy replacement and usage"""
 from database.dbSetup import dbController
 
 def get_matrix_from_DB(identifier: dict, params: dict = {}):
-    return dbController.get_matrix(identifier, params)
+    return dbController.get_single_record_matrix(identifier, params)
 
 def get_fetched_data():
     return dbController.get_all()

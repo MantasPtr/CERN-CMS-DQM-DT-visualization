@@ -71,7 +71,7 @@ function save(){
     saveObject.wheel = wheel;
     saveObject.sector = sector;
     saveObject.station = station;
-    saveObject.layers =  getCheckedValues();
+    saveObject.layers =  _getCheckedValues();
 
     fetch("/save/", {
         method:"POST",
@@ -85,10 +85,12 @@ function save(){
 
     function processJsonResponse (json){
         showApiMessage("Run " + run + (json.updated ?" updated!": " saved!"))
+        url = "/next/";
+        window.location.replace(url)
     }
 }
 
-function getCheckedValues(){
+function _getCheckedValues(){
     const checkBoxes = Array.from(document.querySelectorAll(".layer-selection"));
     return checkBoxes.filter(c => c.checked).map(c => c.getAttribute("index"));
 }

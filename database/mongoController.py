@@ -63,7 +63,7 @@ class Mongo_4_DB_controller():
         record["save_time"]= "%d-%02d-%02d %02d:%02d:%02d" % (datatime.year, datatime.month, datatime.day, datatime.hour, datatime.minute, datatime.second)
         return record
 
-    def get_matrix(self, identifier: dict, paramsDict: dict):
+    def get_single_record_matrix(self, identifier: dict, paramsDict: dict):
         cursor = self.dbCollection.aggregate([
             {
                 "$match":{ "identifier": identifier}

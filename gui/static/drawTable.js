@@ -3,7 +3,7 @@ let maxValue = 0;
 let minValue = 0;
 const NETWORK_SCORE_DIGITS = 3;
 
-function createTable(tableData, badLayers = getCheckedValues(), scores = cached_data.scores, emptyValue = -1 ) {
+function createTable(tableData, badLayers = _getCheckedValues(), scores = cached_data.scores, emptyValue = -1 ) {
 
     if (tableData == null) {
         logs("no data given");

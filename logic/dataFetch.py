@@ -11,7 +11,7 @@ def fetch_data_by_identifier(identifier: dict):
     data = dbController.get_one(identifier)
     if data == None:
         dbController.save(identifier, status = "LOADING")
-        asyncUtils.run_in_thread(_load_process_and_save, identifier)
+        asyncUtils.run_async_in_thread(_load_process_and_save, identifier)
         return None
     return data 
 
@@ -32,7 +32,7 @@ async def _load_process_and_save(identifier):
         raise exception
 
 def reevaluate_all():
-   asyncUtils.run_in_thread(reevaluate_all_async)
+   asyncUtils.run_async_in_thread(reevaluate_all_async)
 
 def _reevaluate_all():
     try:
@@ -61,3 +61,7 @@ async def reevaluate(record):
     data = dataEvaluation.process(record["data"])
     print(f":: Successfully reevaluated  data for: {identifier}")
     dbController.update(identifier, data = data, status = "FINISHED")
+
+def visualize(identifier: dict, params: dict):
+    record = dbController.get_single_record_matrix(identifier, params)
+    return dataEvaluation.visualize_saliency(record)

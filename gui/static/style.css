@@ -40,16 +40,26 @@ th {
 }
 
 td.status.LOADING{
-    background-color: rgba(255, 255, 0, 0.5);
+    background-color: hsla(60, 100%, 50%, 0.5);
 }
 
 td.status.FINISHED{
-    background-color: rgba(0, 128, 0, 0.5);
+    background-color: hsla(120, 100%, 25%, 0.5);
 }
 
 td.status.ERROR{
-    background-color: rgba(255, 0, 0, 0.5);
+    background-color: hsla(0, 100%, 50%, 0.5);
 }
+
+td.status.PENDING_REEVALUATION{
+    background-color: hsla(60, 100%, 50%, 0.5);
+}
+
+td.status.PENDING_REEVALUATION{
+    background-color: hsla(204, 100%, 50%, 0.5);
+}
+
+
 
 #colorbar_table {
     height: 100%;
