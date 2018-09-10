@@ -1,6 +1,10 @@
-from machineLearning.logic import append_estimation, append_saliency
+from machineLearning import logic
 
 def process(data: dict):
-    data = append_estimation(data)
-    data = append_saliency(data)
+    data = logic.append_estimation(data)
+    data = logic.append_saliency(data)
     return data
+
+def visualize_saliency(record: dict):
+    return logic.visualize_saliency_steps(record)
+    

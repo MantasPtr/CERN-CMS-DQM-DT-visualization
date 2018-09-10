@@ -1,11 +1,16 @@
-from logic import dataFetch, dataLoad
+
+import os
+os.environ['TF_CPP_MIN_LOG_LEVEL'] = '2'
+
 from flask import Flask, render_template, request, make_response, jsonify, redirect
+app = Flask(__name__, template_folder="gui/templates", static_folder="gui/static")
+
+from logic import dataFetch, dataLoad
 import gui.plotting.adrian as a_plot
 import json
 from errors.errors import ValidationError
 from logic.dbIdentifierBuilder import buildDicts
-app = Flask(__name__, template_folder="gui/templates", static_folder="gui/static")
-
+from gui.plotting import mutliplot
 MAIN_PAGE_TEMPLATE='eval.html'
 FETCH_PAGE_TEMPLATE='fetch.html'
 SCORE_PAGE_TEMPLATE='scores.html'
@@ -105,6 +110,16 @@ def skip(run,wheel,sector,station):
     identifier, params  = buildDicts(run, wheel, sector, station)
     dataLoad.mark_as_skipped(identifier, params)
     return get_uncertain_matrix()
+
+@app.route("/visualize/<int:run>/<string:wheel>/<int:sector>/<int:station>/")
+def visualize(run,wheel,sector,station):
+    
+    identifier, params  = buildDicts(run, wheel, sector, station)
+    data = dataFetch.visualize(identifier, params)
+    imgBytes = mutliplot.plot(data)
+    response = make_response(imgBytes.getvalue())
+    response.headers['Content-Type'] = 'image/png'
+    return response
 
 def _make_response(data, code: int):
     response = make_response(data)
