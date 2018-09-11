@@ -24,7 +24,7 @@ Files:
 
 ## App setup
 
-Builded using python 3.6 and flask
+Created using `Python 3.6`, `Flask`, `Jinja2`, `Javascript` and `HTML`/`CSS`
 
 ### Installing mongoDB 4.0
 
@@ -86,6 +86,61 @@ sudo iptables -t nat -A PREROUTING -p tcp --dport 80 -j REDIRECT --to-port 8080
 * "matrix" is empty unless status is "FINISHED"
 * "exception" does not exist unless status is "ERROR"
 * "scores" show how bad layers is according to neural network
+
+## End-points
+
+### Pages
+
+#### HTTP GET
+
+* `/eval/` - renders evaluation page. This page is used to visualize the matrices and provide active learning capability.
+* `/eval/<int:run>/` - renders evaluation page with "run" input field having the "run" value.
+* `/eval/<int:run>/<int:wheel>/<int:sector>/<int:station>/` - renders evaluation page with "run","wheel","sector", "station" input fields having the values of `run`,`wheel`,`sector`,`station`. Automatically attempts to load matrix on load.
+* `/eval/next` - returns next record which result should be evaluated according to active learning algorithm network scores.
+* `/eval/skip` - returns marks current record as skipped, so it counts as evaluated and wont appear next to unevaluated results.
+* `/fetch/` - renders fetch page template. It is used to initiate data fetching from external api and saving to local database.
+* `/data/net_scores/` - renders page which shows network evaluation results.
+* `/data/new_net_scores/` - renders page which shows network evaluation results which user has not evaluated yet.
+
+#### HTTP PATCH
+
+* url: `/eval/save_user_scores/`, body: `{"run":<int>,"wheel":<int>,"sector":<int>},"station":<int>,"layers":<array<int>>` - updates record with given parameters. `Layers` is array of indexes which should be marked as bad.
+
+#### HTTP POST
+
+* url: `/fetch/<int:run>/`, body:None  - if record with given record does not exit in database, initialize data fetching for specified run.
+  * If record with specified id exit in database returns error message and HTTP 409 ("CONFLICT")
+
+### Data endpoints
+
+#### HTTP GET
+
+* `/data/<int:run>/<int:wheel>/<int:sector>/<int:station>/` - returns data for specified `run`, `wheel`, `sector` and `station`.
+  * Returns HTTP 404, if record with specified parameters is not found
+  * Returns HTTP 500, if record with specified parameters specified parameters matched not 1 result.  
+* `/data/user_scores.json/` - returns which records have been evaluated and user evaluation scores.
+* `/data/net_scores.json/` - returns records in order of network scores.
+* `/data/reevaluate/` - reruns record evaluation using neural network.
+
+#### HTTP DELETE
+
+* `/data/<int:run>/` - delete record with specified `run` from database. Returns deleted record count.
+
+### Other
+
+#### HTTP GET
+
+* `/visualize/<int:run>/<string:wheel>/<int:sector>/<int:station>/` - plots steps of creating saliency methods
+
+
+### Active learning
+
+* https://www.caiac.ca/sites/default/files/publications/Barnab%C3%A9-Lortie_Vincent_2015_thesis.pdf
+
+##
+
+* http://mantas-cms/eval/279794/2/12/1/
+
 
 ### Warnings:
 

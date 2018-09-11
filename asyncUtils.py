@@ -1,7 +1,7 @@
 import asyncio
 import threading
 
-def run_in_thread(function, *args):
+def run_async_in_thread(function, *args):
     loop = asyncio.new_event_loop()
     t = threading.Thread(target=_loop_in_thread, args=(loop, function, *args))
     t.start()

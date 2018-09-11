@@ -29,13 +29,14 @@ function onLoadDataFromDB(){
     }
 
     function fetchData() {
-        let url = "/data/" + runValue + "/" + wheelValue + "/" + sectorValue + "/" + stationValue + "/";
+        let url = `/data/${runValue}/${wheelValue}/${sectorValue}/${stationValue}/`;
         fetch(url).then((response) => {
             if (!validateApiResponseCode(response)) {
                 containsValidData = false;
                 return;
             }
             response.json().then(processJsonResponse);
+            window.history.replaceState("","",`/eval/${runValue}/${wheelValue}/${sectorValue}/${stationValue}/`);
         });
     }
 
@@ -73,8 +74,8 @@ function save(){
     saveObject.station = station;
     saveObject.layers =  _getCheckedValues();
 
-    fetch("/save/", {
-        method:"POST",
+    fetch("/eval/save_user_scores/", {
+        method:"PATCH",
         body:JSON.stringify(saveObject),
         headers:{"Content-Type": "application/json; charset=utf-8",}
     }).then((response) => {
@@ -85,7 +86,7 @@ function save(){
 
     function processJsonResponse (json){
         showApiMessage("Run " + run + (json.updated ?" updated!": " saved!"))
-        url = "/next/";
+        url = "/eval/next/";
         window.location.replace(url)
     }
 }
@@ -99,6 +100,6 @@ function skip(){
     if (containsValidData === null) {
         return;
     }
-    let url = "/skip/" + run + "/" + wheel + "/" + sector + "/" + station + "/";
+    let url = "/eval/skip/" + run + "/" + wheel + "/" + sector + "/" + station + "/";
     window.location.replace(url)
 }

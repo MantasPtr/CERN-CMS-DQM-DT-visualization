@@ -33,7 +33,7 @@ def remove_negatives(matrix):
     positive =  [[x for x in line if x >= 0 ] for line in matrix]
     return positive
 
-def processMatrix(matrix, model_dim):
+def process_matrix(matrix, model_dim):
     matrix = remove_negatives(matrix)
     matrix = resizeMatrix(matrix, model_dim)
     matrix = scaleMatrix(matrix)
