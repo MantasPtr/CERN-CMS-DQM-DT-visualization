@@ -3,7 +3,7 @@ import json
 import warnings 
 from typing import Generator
 
-structureConfig: dict = getJsonConfig("dataFetching/config/param.config.json")
+structureConfig: dict = getJsonConfig("dataFetching/config/param.list.config.json")
 url = getConfig("dataFetching/config/fetch.config.ini")["url"]
 
 def get_url_generator(identifier: dict):
@@ -27,22 +27,22 @@ def _get_param_dicts():
     return parameters
 
 def _handle_static_params(key, parameters):
-    paramRange = range(structureConfig[key]["min"], structureConfig[key]["max"]+1)
+    valueArray = structureConfig[key]["values"]
     if (parameters is None):
-        parameters = [{key:value} for value in paramRange]
+        parameters = [{key:value} for value in structureConfig[key]["values"]]
     else:
-        parameters = _extend_with_new_params_combinations(parameters, key, paramRange)
+        parameters = _extend_with_new_params_combinations(parameters, key, valueArray)
     return parameters
 
-def _extend_with_new_params_combinations(parameters, key, paramRange):
-    return [dict(oldDict,**{key:newValue}) for oldDict in parameters for newValue in paramRange]
+def _extend_with_new_params_combinations(parameters, key, valueArray):
+    return [dict(oldDict,**{key:newValue}) for oldDict in parameters for newValue in valueArray]
 
 def _handle_dependant_params(key, parameters):
     dependentOn = structureConfig[key]["on"]
     newParamDict = []
     for oldParam in parameters:
-        for value in structureConfig[key]["values"]:
-            if oldParam[dependentOn] in value["if_values"]:
-                paramRange = range(value["min"],value["max"]+1)
-                newParamDict.extend([dict(oldParam,**{key:newValue}) for newValue in paramRange])                   
+        for dependency in structureConfig[key]["values"]:
+            if oldParam[dependentOn] in dependency["if_values"]:
+                valueArray = dependency["values"]
+                newParamDict.extend([dict(oldParam,**{key:newValue}) for newValue in valueArray])                   
     return newParamDict

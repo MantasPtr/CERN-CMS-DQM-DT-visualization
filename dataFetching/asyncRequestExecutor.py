@@ -11,26 +11,18 @@ PATH_STEPS = configUtils.getConfig(FETCH_CONFIG_LOCATION)["matrixJsonPath"].spli
 
 class AsyncRequestExecutor():
     
-    def __init__(self, session: aiohttp.ClientSession):
+    def __init__(self, session: aiohttp.ClientSession, authContainer: AuthContainer):
         self.session = session
-        authObj = AuthContainer().load_data()
-        self.ssl_context = self._get_ssl_context(authObj)
+        self.ssl_context = self._init_ssl_context(authContainer)
         
     async def get_matrix_from_protected_url(self, url):
-        dataJson = await self._get_json_data_from_protected_url(url)
-        return self._get_matrix(self._parse_json(dataJson, url))
+        dataJsonString = await self._get_json_data_from_protected_url(url)
+        dataJson = self._parse_json(dataJsonString, url)
+        return self._navigate_json_to_matrix(dataJson)
 
     async def _get_json_data_from_protected_url(self, url):
-        result =  await self.session.get(url, ssl=self.ssl_context)
+        result = await self.session.get(url, ssl=self.ssl_context)
         return await result.content.read()
-
-    def _get_ssl_context(self, authObj):
-        context = ssl.SSLContext()
-        try:
-            context.load_cert_chain(authObj.pathToCertificate, authObj.pathToCertificatePass, authObj.password)
-        except ssl.SSLError as exc:
-            raise ConfigError(f"Error occurred while loading certificates. Please make sure all files are in locations defined in config and password is correct. Original error: {exc}")
-        return context
 
     def _parse_json(self, dataJson, url):
         try:
@@ -38,10 +30,18 @@ class AsyncRequestExecutor():
         except ValueError as ve:
             raise FetchError(f"Invalid json structure from url:{url} \n Error: {ve}")
 
-    def _get_matrix(self, valueDictionary):
+    def _navigate_json_to_matrix(self, valueDictionary):
         currentJsonLocation = valueDictionary
         for index, step in enumerate(PATH_STEPS):
             currentJsonLocation = currentJsonLocation.get(step)
             if index != len(PATH_STEPS) - 1 and not isinstance(currentJsonLocation, dict):
                 raise FetchError("Cannot load data from URL: Invalid json structure: " + str(valueDictionary) )
         return currentJsonLocation    
+
+    def _init_ssl_context(self, authObj):
+        context = ssl.SSLContext()
+        try:
+            context.load_cert_chain(authObj.pathToCertificate, authObj.pathToCertificatePass, authObj.password)
+        except ssl.SSLError as exc:
+            raise ConfigError(f"Error occurred while loading certificates. Please make sure all files are in locations defined in config and password is correct. Original error: {exc}")
+        return context

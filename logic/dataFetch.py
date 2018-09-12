@@ -2,7 +2,7 @@ from database.dbSetup import dbController
 from dataFetching.dataLoader import async_fetch_all_data
 from errors.errors import FetchError
 import logic.dataEvaluation as dataEvaluation
-import asyncUtils
+from utils import asyncUtils
 import asyncio
 
 def fetch_data_by_identifier(identifier: dict):

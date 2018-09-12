@@ -11,6 +11,7 @@ import json
 from errors.errors import ValidationError
 from logic.dbIdentifierBuilder import buildDicts
 from gui.plotting import mutliplot
+from utils import numpyUtils
 MAIN_PAGE_TEMPLATE='eval.html'
 FETCH_PAGE_TEMPLATE='fetch.html'
 SCORE_PAGE_TEMPLATE='scores.html'
@@ -126,6 +127,12 @@ def visualize(run,wheel,sector,station):
     response = make_response(imgBytes.getvalue())
     response.headers['Content-Type'] = 'image/png'
     return response
+
+@app.route("/visualize/<int:run>/<string:wheel>/<int:sector>/<int:station>/json")
+def visualize_raw(run,wheel,sector,station):
+    identifier, params  = buildDicts(run, wheel, sector, station)
+    data = dataFetch.visualize(identifier, params)
+    return jsonify([{k:numpyUtils.to_python_matrix(v)} for value in data for k,v in value.items() ])
 
 def _make_response(data, code: int):
     response = make_response(data)

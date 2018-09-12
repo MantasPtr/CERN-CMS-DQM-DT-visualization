@@ -1,12 +1,14 @@
 from dataFetching.asyncRequestExecutor import AsyncRequestExecutor
+from dataFetching.authContainer import AuthContainer
 import asyncio
 import aiohttp
-from dataFetching.urlGenerator import get_url_generator
+from dataFetching.urlGenererators.urlGeneratorByList import get_url_generator
 
 async def async_fetch_all_data(identifier: dict):
     tasks = []
+    authContainer = AuthContainer().load_data()
     async with aiohttp.ClientSession() as client:
-        executor = AsyncRequestExecutor(client)
+        executor = AsyncRequestExecutor(client, authContainer)
         for url, params in get_url_generator(identifier):
             asyncLoadTask = async_load(url, params, executor)
             tasks.append(asyncLoadTask)

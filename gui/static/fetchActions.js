@@ -4,7 +4,7 @@ function onFetchData(){
         showApiError("Empty RUN input value");
     }
 
-    fetch("/fetch/" + runValue).then(
+    fetch(`/fetch/${runValue}/`, {method:"POST"}).then(
         (response) => {
             if (validateApiResponseCode(response)) {
                 showApiMessage("Fetching for run: " + runValue +  " initialized!")

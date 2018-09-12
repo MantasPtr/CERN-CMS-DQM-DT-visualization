@@ -15,11 +15,11 @@ Modules by order of significance:
 * `config` - common config functions
 * `errors`  - contains all custom error throw by application
 * `gui` - contains flask templates and js files used for visualization
-* `validators` - contains validation logic clases
+* `validators` - contains validation logic classes
+* `utils` - contains utils which can be used individually in any module
 
 Files:
 
-* `asyncUtils` - utils for running functions asynchronously or in thread
 * `flaskController` - flask app for serving front end
 
 ## App setup
@@ -137,9 +137,9 @@ sudo iptables -t nat -A PREROUTING -p tcp --dport 80 -j REDIRECT --to-port 8080
 
 * https://www.caiac.ca/sites/default/files/publications/Barnab%C3%A9-Lortie_Vincent_2015_thesis.pdf
 
-##
+### Interesting bad run
 
-* http://mantas-cms/eval/279794/2/12/1/
+* /eval/279794/2/12/1/
 
 
 ### Warnings:

@@ -4,8 +4,11 @@ const getColor = (value,min = 0, max = 255) => {
     if (value === -1) {
         return emptyColor;
     }
-    return "hsl(" + ((value-min)/(max-min)*255)+ ","+  "100" + "%, 50%)";
-};
+    if(max == min){
+        return "hsl(255, 100%, 50%)"
+    }
+    return "hsl(" + ((value-min)/(max-min)*255)+ ", 100%, 50%)";
+}
 
 function wrap(outerElementString, innerElement){
     let outer = document.createElement(outerElementString);
