@@ -20,8 +20,7 @@ def plot(matricies: dict):
             
             cmap = plt.get_cmap("viridis")
             cmap.set_bad("white", 1.)
-            masked_array = np.ma.array (value, mask= np.array(value) == IGNORED_VALUES[index_y])
-            
+            masked_array = np.ma.array (value, mask= (np.array(value) == IGNORED_VALUES[index_y]))
             im = ax.imshow(masked_array, cmap=cmap )
             ax.set_xlim(0, max_row_length-1)
             ax.set_ylim(0,len(value))

@@ -21,6 +21,10 @@ def resize_matrix_to_form(matrix, form) -> np.ndarray:
 def scaleMatrix(matrix):
     return list(map(scaleLayer, matrix))
 
+def sign(matrix):
+    return list(map(lambda x: (x>0.2).astype(int), matrix))
+    
+
 def scaleLayer(layer: np.ndarray) -> np.ndarray : 
     if len(layer) == 0:
         return layer

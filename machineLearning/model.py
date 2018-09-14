@@ -31,14 +31,18 @@ def get_saliency_map_steps(matrix) -> list:
     with graph.as_default():
         processed_matrix = transform.process_matrix(matrix, MATRIX_DIM)
         gradients = saliency_calculation.get_gradients(processed_matrix)
+        # only_max_before= transform.sign(gradients)
         scaled_gradients = transform.scaleMatrix(gradients)
+        # only_max= transform.sign(scaled_gradients)
         filled_matrix = transform.replace_positive_values(matrix, scaled_gradients)
         return [
             {"1. matrix": matrix },
-            {"2. processedmatrix":processed_matrix},
+            {"2. processed matrix":processed_matrix},
             {"3. gradients": gradients},
+            # {"3.5 only_max_before :": only_max_before},
             {"4. scaled gradients": scaled_gradients},
-            {"5. filled matrix:": filled_matrix}
+            # {"4.5. only_max :": only_max},
+            {"5. filled matrix:": filled_matrix},
         ]
 
 def _predict_badness(matrix) -> list:

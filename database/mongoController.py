@@ -27,12 +27,12 @@ class Mongo_4_DB_controller():
                 "$set": {"status": status, **other}
             })
 
-    def update_user_score(self, identifier: dict, paramDict: dict, badLayers: list):
+    def update_user_score(self, identifier: dict, param_dict: dict, bad_layers: list):
         return self._assure_update({   
                 "identifier": identifier, 
-                "data": {"$elemMatch": { ("params."+str(key)):value for key,value in paramDict.items() }}
+                "data": {"$elemMatch": { ("params."+str(key)):value for key,value in param_dict.items() }}
             },{
-                "$set": {"data.$.evaluation.bad_layers": badLayers, "data.$.evaluation.eval_time": datetime.datetime.utcnow(), "data.$.evaluation.skipped":False}
+                "$set": {"data.$.evaluation.bad_layers": bad_layers, "data.$.evaluation.eval_time": datetime.datetime.utcnow(), "data.$.evaluation.skipped":False}
             })
 
     def skip_user_score(self, identifier: dict, paramDict: dict):
@@ -86,6 +86,21 @@ class Mongo_4_DB_controller():
         return self._get_single_result(cursor)
 
     def get_all_user_scores(self):
+        """returns: 
+            [
+                data: 
+                    evaluation:
+                        bad_layers: [<int?>]
+                        eval_time:	<datatime>
+                        skipped:    <boolean>
+                    params:
+                        sector:     <int>
+                        station:    <int>
+                        wheel:      <int>
+                identifier:
+                    run: <int>
+            ]	
+        """
         cursor = self.dbCollection.aggregate([
             {"$unwind": "$data" },
             {"$match": {"data.evaluation.bad_layers": {"$exists": True}} },
