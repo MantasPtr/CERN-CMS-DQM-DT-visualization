@@ -43,7 +43,7 @@ def fetchRun(run):
     else:
         return _make_response(f"Specified record with identifier {identifier_dict} already exits in database", 409)
 
-@app.route("/<int:run>/<string:wheel>/<int:sector>/<int:station>/i")
+@app.route("/eval/<int:run>/<string:wheel>/<int:sector>/<int:station>/i")
 def get_adrian(run, wheel, sector, station):
     identifier, params  = buildDicts(run, wheel, sector, station)
     data = dataLoad.get_matrix_from_DB(identifier, params)
