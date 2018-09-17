@@ -1,7 +1,7 @@
 import sys
 sys.path.append("/afs/cern.ch/user/m/mpetrika/private/cms/task/")
 
-import csvFileReader, csv_data_converter
+import csvFileReader, csvDataConverter
 import argparse
 from database.dbSetup import dbController as db
 
@@ -15,7 +15,7 @@ def _read_file(file_name: str) -> iter:
     return csvFileReader.read_file(file_name)
 
 def _process_data(raw_data: iter) -> iter:
-    csv_data = csv_data_converter.from_row_to_record(raw_data)
+    csv_data = csvDataConverter.from_row_to_record(raw_data)
     for run, data in csv_data.items():
         for params, scores in data.items():
             yield dict([run]), dict(params[:]), scores

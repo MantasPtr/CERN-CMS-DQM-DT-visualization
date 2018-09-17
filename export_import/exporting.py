@@ -1,7 +1,7 @@
 import sys
 sys.path.append("/afs/cern.ch/user/m/mpetrika/private/cms/task/")
 
-import csv_data_converter, csvFileWriter
+import csvDataConverter, csvFileWriter
 from datetime import datetime
 from database import dbSetup as db
 
@@ -18,7 +18,7 @@ def _load_from_database():
     return db.dbController.get_all_user_scores()
 
 def _process_data(db_records: iter) -> iter :
-    return csv_data_converter.from_record_to_row(db_records)
+    return csvDataConverter.from_record_to_row(db_records)
 
 def _get_file_name():
     return f"{FILE_PREFIX}{datetime.now()}.csv".replace(" ", "_")
