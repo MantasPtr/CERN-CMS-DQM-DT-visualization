@@ -51,6 +51,13 @@ class Mongo_4_DB_controller():
     def get_one(self, identifier: dict):
         return self.dbCollection.find_one({"identifier": identifier})
 
+    def get_all_loaded_run_identifiers(self):
+        cursor = self.dbCollection.find(
+            { "status": "FINISHED"},
+            { "identifier": 1}
+        )
+        return list(cursor)
+
     def get_all(self):
         data = self.dbCollection.find(
             {}, 
@@ -174,7 +181,7 @@ class Mongo_4_DB_controller():
          }
      
     def _add_other_fields(self, data: dict, other: dict) -> dict:
-        if bool(other): # if empty
+        if not other: # if empty
             return data
         else:
             return {**data, **other}
