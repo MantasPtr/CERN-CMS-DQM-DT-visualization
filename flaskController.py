@@ -14,7 +14,6 @@ from gui.plotting import mutliplot
 from utils import numpyUtils
 MAIN_PAGE_TEMPLATE='eval.html'
 FETCH_PAGE_TEMPLATE='fetch.html'
-SCORE_PAGE_TEMPLATE='scores.html'
 GENERIC_SCORE_PAGE_TEMPLATE='generic_scores.html'
 
 @app.route('/')
