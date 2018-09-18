@@ -1,0 +1,49 @@
+{% extends "layout.html" %}
+{% block head %}
+  {{ super() }}
+  <script src="{{url_for( 'static', filename='fetchActions.js' )}} "></script>
+{% endblock %}
+{% block body %}
+  {{ super() }}
+  <div>
+    <table class="col-md-12 table-striped">
+      <tr>
+        {% for key in keys %}
+        <th>{{key}}</th>
+        {% endfor %}
+        <th></th>
+      </tr>
+      {% for item in values %}
+      <tr>  
+        {% for key in keys %}
+        <td>{{format(item[key])}}</td>
+        {% endfor %}
+        <td>
+          <a type="button" class="btn btn-success" href="/eval/{{item.Identifier.run}}/{{item.Params.wheel}}/{{item.Params.sector}}/{{item.Params.station}}/">Load</a>
+        </td>
+      </tr>
+      {% endfor %}  
+    </table>
+  </div>
+{% endblock %}
+
+{% macro format(tuple) -%}
+  {% if tuple.format %}
+    {{ visualize(tuple.value) }}
+  {% else %}
+    {{tuple.value}}
+  {% endif %}
+{%- endmacro %}
+
+{% macro visualize(element) -%}
+  {% if element is iterable and element is not string and element is not mapping %}
+    {% for el in element %}
+    |{{visualize(el)}}
+    {% endfor %}
+    | 
+  {% elif element is number %}
+    {{ "%.3f"|format(element) }}
+  {% else %}
+    {{element}}
+  {% endif %}
+{%- endmacro %}

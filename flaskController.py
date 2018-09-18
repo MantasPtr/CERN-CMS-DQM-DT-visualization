@@ -15,6 +15,7 @@ from utils import numpyUtils
 MAIN_PAGE_TEMPLATE='eval.html'
 FETCH_PAGE_TEMPLATE='fetch.html'
 SCORE_PAGE_TEMPLATE='scores.html'
+GENERIC_SCORE_PAGE_TEMPLATE='generic_scores.html'
 
 @app.route('/')
 @app.route('/eval/')
@@ -93,12 +94,41 @@ def net_scores_json():
 @app.route("/data/net_scores/")
 def net_scores():
     scores = dataLoad.get_network_scores()
-    return render_template(SCORE_PAGE_TEMPLATE, scores = scores, showScores = True)
+    lines = []
+    for score in scores:
+        print(score)
+        lines.append({
+             "Identifier": {"value": score["identifier"]      , "format": False },
+             "Params":     {"value": score["data"]["params"]  , "format": False },
+             "Scores":     {"value": score["data"]["scores"]  , "format": True  },
+             "Certainty":  {"value": score["rating"]          , "format": True  },
+             "User score": {"value": _format_user_score(score), "format": False },
+        })    
+    return render_template(GENERIC_SCORE_PAGE_TEMPLATE, keys = lines[0].keys(), values = lines)
+
+def _format_user_score(score):
+    if score["data"].get("evaluation", False):
+        if score["data"]["evaluation"].get("skipped",False):
+            return "Skipped"
+        else:
+            return score["data"]["evaluation"]["bad_layers"]
+    else:
+        return "-"
+    return
 
 @app.route("/data/new_net_scores/")
 def new_net_scores():
     scores = dataLoad.get_not_evaluated_network_scores()
-    return render_template(SCORE_PAGE_TEMPLATE, scores = scores)
+    lines = []
+    for score in scores:
+        lines.append({
+             "Identifier": {"value": score["identifier"]    , "format": False },
+             "Params":     {"value": score["data"]["params"], "format": False },
+             "Scores":     {"value": score["data"]["scores"], "format": True },
+             "Certainty":  {"value": score["rating"]        , "format": True },
+             })     
+    return render_template(GENERIC_SCORE_PAGE_TEMPLATE, keys = ["Identifier", "Params", "Scores", "Certainty"], values = lines)
+
 
 @app.route("/eval/next/")
 def get_uncertain_matrix():
@@ -109,7 +139,7 @@ def get_uncertain_matrix():
         sector = scores[0].get("data").get("params").get("sector")
         station = scores[0].get("data").get("params").get("station")
         return redirect(f"/eval/{run}/{wheel}/{sector}/{station}/")
-    return _make_response("query did not return 1 unevaluated result",500)
+    return _make_response(f"Query did not return 1 unevaluated result, It returned: {len(scores)}", 500)
 
 
 @app.route("/eval/skip/<int:run>/<string:wheel>/<int:sector>/<int:station>/")
@@ -120,7 +150,6 @@ def skip(run,wheel,sector,station):
 
 @app.route("/visualize/<int:run>/<string:wheel>/<int:sector>/<int:station>/")
 def visualize(run,wheel,sector,station):
-    
     identifier, params  = buildDicts(run, wheel, sector, station)
     data = dataFetch.visualize(identifier, params)
     imgBytes = mutliplot.plot(data)
