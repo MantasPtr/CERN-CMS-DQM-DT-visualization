@@ -1,4 +1,4 @@
-from database.dbSetup import dbController 
+from database.dbSetup import get_db_controller 
 from dataFetching.dataLoader import async_fetch_all_data
 from errors.errors import FetchError
 import logic.dataEvaluation as dataEvaluation
@@ -8,9 +8,9 @@ import asyncio
 def fetch_data_by_identifier(identifier: dict):
     """Loads resource from database from database, or if not found, 
     initiates to fetching it from external api in separate thread"""
-    data = dbController.get_one(identifier)
+    data = get_db_controller().get_one(identifier)
     if data == None:
-        dbController.save(identifier, status = "LOADING")
+        get_db_controller().save(identifier, status = "LOADING")
         asyncUtils.run_async_in_thread(_load_process_and_save, identifier)
         return None
     return data 
@@ -22,13 +22,13 @@ async def _load_process_and_save(identifier):
         print(f":: Successfully fetched data for: {identifier}")
         data = dataEvaluation.process(data)
         print(f":: Successfully processed data for: {identifier}")
-        dbController.update(identifier, data = data, status = "FINISHED")
+        get_db_controller().update(identifier, data = data, status = "FINISHED")
     except FetchError as fetchError:
         print(f"Error occurred while fetching: {fetchError}")
-        dbController.update(identifier, status = "ERROR", other = {"exception": str(exception)})
+        get_db_controller().update(identifier, status = "ERROR", other = {"exception": str(exception)})
     except Exception as exception:
         print(f"Unknown error occurred while fetching: {exception}")
-        dbController.update(identifier, status = "ERROR", other = {"exception": str(exception)})
+        get_db_controller().update(identifier, status = "ERROR", other = {"exception": str(exception)})
         raise exception
 
 def reevaluate_all():
@@ -36,32 +36,32 @@ def reevaluate_all():
 
 def _reevaluate_all():
     try:
-        data = dbController.get_all()
+        data = get_db_controller().get_all()
         for record in data:
             identifier = record.get("identifier")
-            dbController.update_status(identifier, status = "REEVALUATING")
+            get_db_controller().update_status(identifier, status = "REEVALUATING")
             data = dataEvaluation.process(record["data"])
             print(f":: Successfully reevaluated  data for: {identifier}")
-            dbController.update(identifier, data = data, status = "FINISHED")
+            get_db_controller().update(identifier, data = data, status = "FINISHED")
     except Exception as exception:
         print(f"Unknown error occurred while fetching: {exception}")
-        dbController.update_status(identifier, status = "ERROR", other = {"exception": str(exception)})
+        get_db_controller().update_status(identifier, status = "ERROR", other = {"exception": str(exception)})
         raise exception
 
 async def reevaluate_all_async():
-    data = dbController.get_all()
+    data = get_db_controller().get_all()
     for record in data:
         identifier = record.get("identifier")
-        dbController.update_status(identifier, status = "PENDING_REEVALUATION")
+        get_db_controller().update_status(identifier, status = "PENDING_REEVALUATION")
     await asyncio.gather(*[reevaluate(d) for d in data])
 
 async def reevaluate(record):
     identifier = record.get("identifier")
-    dbController.update_status(identifier, status = "REEVALUATING")
+    get_db_controller().update_status(identifier, status = "REEVALUATING")
     data = dataEvaluation.process(record["data"])
     print(f":: Successfully reevaluated  data for: {identifier}")
-    dbController.update(identifier, data = data, status = "FINISHED")
+    get_db_controller().update(identifier, data = data, status = "FINISHED")
 
 def visualize(identifier: dict, params: dict):
-    record = dbController.get_single_record_matrix(identifier, params)
+    record = get_db_controller().get_single_record_matrix(identifier, params)
     return dataEvaluation.visualize_saliency(record)

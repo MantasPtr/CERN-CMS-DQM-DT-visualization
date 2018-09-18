@@ -3,7 +3,7 @@ sys.path.append("/afs/cern.ch/user/m/mpetrika/private/cms/task/")
 
 import csvFileReader, csvDataConverter
 import argparse
-from database.dbSetup import dbController as db
+from database.dbSetup import get_db_controller
 
 def import_from_file(file_name):
     raw_data =_read_file(file_name)
@@ -21,11 +21,11 @@ def _process_data(raw_data: iter) -> iter:
             yield dict([run]), dict(params[:]), scores
 
 def _save_to_db(data: iter):
-    records = db.get_all_loaded_run_identifiers()
+    records = get_db_controller().get_all_loaded_run_identifiers()
     identifiers = list(map(lambda x:x["identifier"], records))
     for identifier, params, scores in data:
         if (identifier in identifiers):
-            db.update_user_score(identifier, params, scores)
+            get_db_controller().update_user_score(identifier, params, scores)
             print(f"saved: {identifier} {params}")
         else:
             print(f"not found in database: {identifier} {params}")
