@@ -1,15 +1,17 @@
 
 function validateApiResponseCode(response){
-    if (response.status == 200) {
+    if (response.ok) {
         hideApiError();
         return true;
     } else {
-        if (response.BodyUsed) {
-            response.json().then(v => showApiError(v))
-        } else {
-            showApiError(response.status + ": " + response.statusText )
-        }
-        return false;
+        return response.text().then(text => { 
+            if (text) {
+                showApiError(text)
+            } else {
+                showApiError(response.status + ": " + response.statusText )
+            }
+            return false;
+        })
     }
 }
 
@@ -32,9 +34,9 @@ function hideApiError(){
 
 function showApiMessage(message){
     hideApiError()
-    let messagebanner = document.getElementById(apiMessageBannerID);
-    messagebanner.hidden = false;
-    messagebanner.textContent = message;
+    let messageBanner = document.getElementById(apiMessageBannerID);
+    messageBanner.hidden = false;
+    messageBanner.textContent = message;
 }
 
 function hideApiMessage(){

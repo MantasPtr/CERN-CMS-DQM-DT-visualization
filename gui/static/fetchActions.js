@@ -18,8 +18,9 @@ function deleteRun(identifier){
         method:"DELETE"
     }).then(
         (response) => { 
-            validateResponseCode(response);
-            showApiMessage("Deleted " +response.text + "file")
+            if (validateApiResponseCode(response)) {
+                response.text().then(text => showApiMessage(`${text} record was deleted.`))
+            }
         }
     )
 };
