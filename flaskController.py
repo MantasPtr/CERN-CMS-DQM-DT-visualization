@@ -126,7 +126,7 @@ def new_net_scores():
              "Scores":     {"value": score["data"]["scores"], "format": True },
              "Certainty":  {"value": score["rating"]        , "format": True },
              })     
-    return render_template(GENERIC_SCORE_PAGE_TEMPLATE, keys = ["Identifier", "Params", "Scores", "Certainty"], values = lines)
+    return render_template(GENERIC_SCORE_PAGE_TEMPLATE, keys = lines[0].keys(), values = lines)
 
 
 @app.route("/eval/next/")

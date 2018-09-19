@@ -18,14 +18,30 @@
         {% for key in keys %}
         <td>{{format(item[key])}}</td>
         {% endfor %}
-        <td>
-          <a type="button" class="btn btn-success" href="/eval/{{item.Identifier.run}}/{{item.Params.wheel}}/{{item.Params.sector}}/{{item.Params.station}}/">Load</a>
-        </td>
+        {{button_to_page(item)}}
       </tr>
       {% endfor %}  
     </table>
   </div>
 {% endblock %}
+
+
+{% macro button_to_page(item) -%}
+  {% if (
+    "Identifier" in item and
+    "value" in item.Identifier and
+    "run" in item.Identifier.value and
+    "Params" in item and
+    "value" in item.Params and 
+    "wheel" in item.Params.value and 
+    "sector" in item.Params.value and 
+    "station" in item.Params.value
+    ) %}
+  <td>
+    <a type="button" class="btn btn-success" href="/eval/{{item.Identifier.value.run}}/{{item.Params.value.wheel}}/{{item.Params.value.sector}}/{{item.Params.value.station}}/">Load</a>
+  </td>
+  {% endif %}
+{%- endmacro %}
 
 {% macro format(tuple) -%}
   {% if tuple.format %}
