@@ -51,7 +51,7 @@ td.status.ERROR{
     background-color: hsla(0, 100%, 50%, 0.5);
 }
 
-td.status.PENDING_REEVALUATION{
+td.status.REEVALUATING{
     background-color: hsla(60, 100%, 50%, 0.5);
 }
 

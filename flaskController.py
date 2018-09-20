@@ -95,7 +95,6 @@ def net_scores():
     scores = dataLoad.get_network_scores()
     lines = []
     for score in scores:
-        print(score)
         lines.append({
              "Identifier": {"value": score["identifier"]      , "format": False },
              "Params":     {"value": score["data"]["params"]  , "format": False },
