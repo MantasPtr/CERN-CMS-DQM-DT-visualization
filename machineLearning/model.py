@@ -33,7 +33,6 @@ def get_saliency_map_steps(matrix) -> list:
         gradients = np.array(saliency_calculation.get_gradients(processed_matrix))
         _replace_negatives(gradients)
         filled_matrix = transform.replace_positive_values(matrix, gradients)
-        return filled_matrix
         return [
             {"1. matrix": matrix },
             {"2. processed matrix":processed_matrix},
