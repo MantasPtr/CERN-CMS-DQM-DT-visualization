@@ -1,4 +1,4 @@
-"""this module for now delegates all methods to dbController
+"""this module mostly delegates all methods to dbController
 this is done for easy replacement and usage"""
 
 from database.dbSetup import get_db_controller
@@ -14,6 +14,9 @@ def get_scores_data():
 
 def get_network_scores(limit = 20):
     return get_db_controller().get_all_network_scores(limit)
+
+def get_one_record(identifier: dict):
+    return get_db_controller().get_one(identifier)
 
 def get_not_evaluated_network_scores(limit = 20):
     return get_db_controller().get_not_evaluated_network_scores(limit)

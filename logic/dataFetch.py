@@ -8,7 +8,7 @@ import asyncio
 def fetch_data_by_identifier(identifier: dict):
     """Loads resource from database from database, or if not found, 
     initiates to fetching it from external api in separate thread"""
-    data = get_db_controller().get_one(identifier)
+    data = get_db_controller().get_one(identifier) # TODO: replace with less db intensive check like count
     if data == None:
         get_db_controller().save(identifier, status = "LOADING")
         asyncUtils.run_async_in_thread(_load_process_and_save, identifier)

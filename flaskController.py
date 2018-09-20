@@ -161,15 +161,39 @@ def visualize_raw(run,wheel,sector,station):
     data = dataFetch.visualize(identifier, params)
     return jsonify([{k:numpyUtils.to_python_matrix(v)} for value in data for k,v in value.items() ])
 
-def _make_response(data, code: int):
-    response = make_response(data)
-    response.status_code = code
-    return response
+@app.route('/data/<int:run>/csv_like.json')
+def record_lines(run):
+    record = dataLoad.get_one_record({"run":run})
+    raw_data = record["data"]
+    data = []
+    for combination in raw_data:
+        wheel = combination["params"]["wheel"]
+        sector = combination["params"]["sector"]
+        station = combination["params"]["station"]
+        for layer, row in enumerate(combination["matrix"], start=1):
+            row = numpyUtils.remove_negatives(row)
+            if len(row) == 0:
+                continue
+            line = {
+                "layer": str(layer),
+                "wheel": str(wheel),
+                "sector": str(sector),
+                "station": str(station),
+                "lumi": "-1",
+                "contect": str(row)
+            }
+            data.append(line)
+    return jsonify(data)
 
 @app.route('/data/reevaluate/')
 def reevaluate():
     dataFetch.reevaluate_all()
     return "OK"
+
+def _make_response(data, code: int):
+    response = make_response(data)
+    response.status_code = code
+    return response
 
 @app.errorhandler(ValidationError)
 def handle_invalid_usage(error: ValidationError):
