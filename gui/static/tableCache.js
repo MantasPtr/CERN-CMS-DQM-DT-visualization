@@ -1,4 +1,4 @@
-let cached_data = {};
+export const cached_data = {};
 
 cached_data.data = null;
 cached_data.scores = null;

@@ -1,3 +1,8 @@
+import {getStringValueFromInputField, showApiMessage, showApiError, validateApiResponseCode } from "./common.js";
+
+window.onFetchData = onFetchData;
+window.deleteRun = deleteRun;
+
 function onFetchData(){
     let runValue =  getStringValueFromInputField("runInput");
     if (!runValue){
@@ -7,7 +12,7 @@ function onFetchData(){
     fetch(`/fetch/${runValue}/`, {method:"POST"}).then(
         (response) => {
             if (validateApiResponseCode(response)) {
-                showApiMessage("Fetching for run: " + runValue +  " initialized!")
+                showApiMessage(`Fetching for run: ${runValue} initialized!`);
             }
         }
     );

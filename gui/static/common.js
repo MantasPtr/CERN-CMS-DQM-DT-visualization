@@ -1,5 +1,4 @@
-
-function validateApiResponseCode(response){
+export function validateApiResponseCode(response){
     if (response.ok) {
         hideApiError();
         return true;
@@ -18,36 +17,35 @@ function validateApiResponseCode(response){
 const apiErrorBannerID= "apiError";
 const apiMessageBannerID = "apiMessage";
 
-
-function showApiError(message){
+export function showApiError(message){
     hideApiMessage()
     let errorBanner = document.getElementById(apiErrorBannerID);
     errorBanner.hidden = false;
     errorBanner.textContent = "Error: " + message;
 }
 
-function hideApiError(){
+export function hideApiError(){
     let errorBanner = document.getElementById(apiErrorBannerID);
     errorBanner.hidden = true;
     errorBanner.text = "";
 }
 
-function showApiMessage(message){
+export function showApiMessage(message){
     hideApiError()
     let messageBanner = document.getElementById(apiMessageBannerID);
     messageBanner.hidden = false;
     messageBanner.textContent = message;
 }
 
-function hideApiMessage(){
+export function hideApiMessage(){
     let messageBanner = document.getElementById(apiMessageBannerID);
     messageBanner.hidden = true;
     messageBanner.text = "";
 }   
 
-function getStringValueFromInputField(selector){
+export function getStringValueFromInputField(selector){
     let element = document.getElementById(selector)
     return document.getElementById(selector).value.trim();
 }
 
-const logs = (d) => {console.log(d); return d;}
+export const logs = (d) => {console.log(d); return d;}

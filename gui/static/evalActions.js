@@ -1,9 +1,19 @@
+import {createTable} from "./drawTable.js";
+import {validateApiResponseCode, showApiError, showApiMessage, hideApiError, getStringValueFromInputField, logs} from "./common.js";
+import {cached_data} from "./tableCache.js";
+import {toggleInfluence, toggleShowText} from "./settings.js";
+
 let run;
 let wheel;
 let sector;
 let station;
 let containsValidData = false;
 
+window.onLoadDataFromDB = onLoadDataFromDB;
+window.onSave = onSave;
+window.onSkip = onSkip;
+window.onToggleInfluence = toggleInfluence;
+window.onToggleText = toggleShowText;
 window.onload = onPageLoad;
 
 function onPageLoad(){
@@ -15,11 +25,11 @@ function onPageLoad(){
 
 function onLoadDataFromDB(){
     let { runValue, wheelValue, sectorValue, stationValue } = getInput();
-    if (inputIsValid()){
-        fetchData();
+    if (_inputIsValid()){
+        _fetchData();
     }
 
-    function inputIsValid(){
+    function _inputIsValid(){
         if (!(runValue && wheelValue && sectorValue && stationValue)) {
             showApiError("some value is empty");
             return false;
@@ -28,23 +38,23 @@ function onLoadDataFromDB(){
         return true;
     }
 
-    function fetchData() {
+    function _fetchData() {
         let url = `/data/${runValue}/${wheelValue}/${sectorValue}/${stationValue}/`;
         fetch(url).then((response) => {
             if (!validateApiResponseCode(response)) {
                 containsValidData = false;
                 return;
             }
-            response.json().then(processJsonResponse);
+            response.json().then(_processJsonResponse);
             window.history.replaceState("","",`/eval/${runValue}/${wheelValue}/${sectorValue}/${stationValue}/`);
         });
     }
-
-    function processJsonResponse (data){
+    function _processJsonResponse (data){
         cached_data.data = data.matrix;
         cached_data.saliency = data.saliency;
         cached_data.scores = data.scores;
         createTable(data.matrix, data.evaluation ? data.evaluation.bad_layers : []);
+        
         hideApiError();
         containsValidData = true;
         run = runValue;
@@ -63,7 +73,7 @@ function getInput() {
     return { runValue, wheelValue, sectorValue, stationValue };
 }
 
-function save(){
+function onSave(){
     if (containsValidData === null) {
         return;
     }
@@ -72,7 +82,7 @@ function save(){
     saveObject.wheel = wheel;
     saveObject.sector = sector;
     saveObject.station = station;
-    saveObject.layers =  _getCheckedValues();
+    saveObject.layers =  getCheckedValues();
 
     fetch("/eval/save_user_scores/", {
         method:"PATCH",
@@ -80,23 +90,23 @@ function save(){
         headers:{"Content-Type": "application/json; charset=utf-8",}
     }).then((response) => {
         if (validateApiResponseCode(response)) {
-            response.json().then(processJsonResponse);
+            response.json().then(_processJsonResponse);
         }
     })  
 
-    function processJsonResponse (json){
+    function _processJsonResponse (json){
         showApiMessage("Run " + run + (json.updated ?" updated!": " saved!"))
-        url = "/eval/next/";
+        let url = "/eval/next/";
         window.location.replace(url)
     }
 }
 
-function _getCheckedValues(){
+export function getCheckedValues(){
     const checkBoxes = Array.from(document.querySelectorAll(".layer-selection"));
     return checkBoxes.filter(c => c.checked).map(c => c.getAttribute("index"));
 }
 
-function skip(){
+function onSkip(){
     if (containsValidData === null) {
         return;
     }

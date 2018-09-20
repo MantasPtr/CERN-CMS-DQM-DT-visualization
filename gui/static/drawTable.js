@@ -1,15 +1,19 @@
+import {getColor, getMax, getMin, wrap } from "./drawCommon.js";
+import {settings} from "./settings.js";
+import {logs} from "./common.js";
+import {getCheckedValues} from "./evalActions.js";
+import {cached_data} from "./tableCache.js";
 let maxLayers = 0;
 let maxValue = 0;
 let minValue = 0;
 const NETWORK_SCORE_DIGITS = 3;
 
-function createTable(tableData, badLayers = _getCheckedValues(), scores = cached_data.scores, emptyValue = -1 ) {
-
+export function createTable(tableData, badLayers = getCheckedValues(), scores = cached_data.scores, emptyValue = -1 ) {
     if (tableData == null) {
         logs("no data given");
         return;
     }
-
+   
     //inverting data because its done in prod
     // slice just copies data because reverse modifies array
     tableData = tableData.slice().reverse();
@@ -22,15 +26,15 @@ function createTable(tableData, badLayers = _getCheckedValues(), scores = cached
     maxLayers = tableData.length;
     let table = document.createElement("table");
 
-    table.appendChild(createTableHeader(tableData))
+    table.appendChild(_createTableHeader(tableData))
     let tableBody = document.createElement("tbody");
-    tableData.forEach(createRows);
+    tableData.forEach(_createRows);
     table.appendChild(tableBody);
     let container = document.querySelector("#image");
     container.innerHTML = "";
     container.appendChild(table);
-
-    function createTableHeader(tableData){
+    
+    function _createTableHeader(tableData){
         let thead = document.createElement("thead");
         let headerRow = thead.appendChild(document.createElement("tr"));
         let cellHeader =document.createElement("th");
@@ -45,28 +49,25 @@ function createTable(tableData, badLayers = _getCheckedValues(), scores = cached
         return thead;
     }
 
-    function createRows(rowData, rowIndex) {
+    function _createRows(rowData, rowIndex) {  
         let row = document.createElement("tr");
         rowData.forEach(createCell);
-
         let layerS = addLayerSelector(rowIndex);
         row.appendChild(layerS);
-
         let networkScore =  addNetworkScores(rowIndex);
         row.appendChild(networkScore);
-
         tableBody.appendChild(row);
 
         function createCell(cellData) {
             let cell = document.createElement("td");
-            newFunction(cell, cellData);
+            addText(cell, cellData);
             cell.style.backgroundColor = getColor(cellData, maxValue, minValue);
             row.appendChild(cell);
         }
 
-        function newFunction(cell, cellData) {
+        function addText(cell, cellData) {
             if (settings.getShowText()) { 
-                cellData = Number.isInteger(cellData) ? cellData : cellData.toFixed(1)
+                cellData = Number.isInteger(cellData) ? cellData : cellData.toFixed(1);
                 cell.appendChild(document.createTextNode(cellData));
             }
         }
@@ -123,6 +124,8 @@ function drawColorPallet() {
 
     ctx.fillStyle = grd;
     ctx.fillRect(0, 0, 30, 330);
+
+    // TODO: drawing lines (not complete)
     // maxLog10 = Math.round(Math.max(Math.log10(Math.abs(minValue)),Math.log10(Math.abs(maxValue))))
     // logs("maxLog10 " + maxLog10)
     // stepSize = Math.pow(10,maxLog10)

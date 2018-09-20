@@ -1,12 +1,10 @@
-const settings = {}
+import {cached_data} from "./tableCache.js";
+import {createTable} from "./drawTable.js"
+export const settings = {}
 
 settings.showText = null; 
 settings.showInfluence = null; 
 
-settings.toggleShowText = (elem) => {
-    settings.showText = elem.checked;
-    redrawTable()
-}
 
 settings.getShowText = () => {
     if (settings.showText === null) {
@@ -15,7 +13,12 @@ settings.getShowText = () => {
     return settings.showText
 }
 
-settings.toggleInfluenceText = (elem) => {
+export const toggleShowText = (elem) => {
+    settings.showText = elem.checked;
+    redrawTable()
+}
+
+export const toggleInfluence = (elem) => {
     settings.showInfluence = elem.checked;
     redrawTable()
 }
