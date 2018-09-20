@@ -1,4 +1,4 @@
-import {createTable} from "./drawTable.js";
+import {redrawTable} from "./drawTable.js";
 import {validateApiResponseCode, showApiError, showApiMessage, hideApiError, getStringValueFromInputField, logs} from "./common.js";
 import {cached_data} from "./tableCache.js";
 import {toggleInfluence, toggleShowText} from "./settings.js";
@@ -53,8 +53,7 @@ function onLoadDataFromDB(){
         cached_data.data = data.matrix;
         cached_data.saliency = data.saliency;
         cached_data.scores = data.scores;
-        createTable(data.matrix, data.evaluation ? data.evaluation.bad_layers : []);
-        
+        redrawTable({badLayers: data.evaluation ? data.evaluation.bad_layers : []});
         hideApiError();
         containsValidData = true;
         run = runValue;

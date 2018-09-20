@@ -1,4 +1,4 @@
-import {getColor, getMax, getMin, wrap } from "./drawCommon.js";
+import {getRainbowColor, getGreyColor, getMax, getMin, wrap} from "./drawCommon.js";
 import {settings} from "./settings.js";
 import {logs} from "./common.js";
 import {getCheckedValues} from "./evalActions.js";
@@ -8,12 +8,24 @@ let maxValue = 0;
 let minValue = 0;
 const NETWORK_SCORE_DIGITS = 3;
 
-export function createTable(tableData, badLayers = getCheckedValues(), scores = cached_data.scores, emptyValue = -1 ) {
+export function redrawTable(args = {}){
+    if (settings.showInfluence) {
+        args.getColor = args.getColor || getGreyColor;
+        createTable(cached_data.saliency, args);
+    } else {
+        args.getColor = args.getColor || getRainbowColor;
+        createTable(cached_data.data, args);
+    }
+}
+
+function createTable(tableData, {badLayers = getCheckedValues(), getColor = getRainbowColor} = {} ) {
+
     if (tableData == null) {
         logs("no data given");
         return;
     }
-   
+    let emptyValue = -1;
+    let scores = cached_data.scores;
     //inverting data because its done in prod
     // slice just copies data because reverse modifies array
     tableData = tableData.slice().reverse();
@@ -22,7 +34,7 @@ export function createTable(tableData, badLayers = getCheckedValues(), scores = 
     maxValue = getMax(tableData);
     minValue = getMin(tableData);
     minValue = minValue != emptyValue ? minValue : 0;
-    drawColorPallet();
+    drawColorPallet(getColor);
     maxLayers = tableData.length;
     let table = document.createElement("table");
 
@@ -33,7 +45,7 @@ export function createTable(tableData, badLayers = getCheckedValues(), scores = 
     let container = document.querySelector("#image");
     container.innerHTML = "";
     container.appendChild(table);
-    
+
     function _createTableHeader(tableData){
         let thead = document.createElement("thead");
         let headerRow = thead.appendChild(document.createElement("tr"));
@@ -99,7 +111,7 @@ export function createTable(tableData, badLayers = getCheckedValues(), scores = 
 
 };
 
-function drawColorPallet() {
+function drawColorPallet(getColor) {
     let canvas = document.createElement("canvas")
     let canvasDiv = document.querySelector("#colorbar");
     canvasDiv.innerHTML = "";

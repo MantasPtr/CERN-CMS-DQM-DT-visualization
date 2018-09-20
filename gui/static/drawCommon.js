@@ -1,6 +1,7 @@
-const emptyColor = "hsl(0,0%,50%)";
 
-export const getColor = (value,min = 0, max = 255) => {
+
+export const getRainbowColor = (value,min = 0, max = 255) => {
+    const emptyColor = "hsl(0,0%,50%)";
     if (value === -1) {
         return emptyColor;
     }
@@ -9,6 +10,18 @@ export const getColor = (value,min = 0, max = 255) => {
     }
     return "hsl(" + ((value-min)/(max-min)*255)+ ", 100%, 50%)";
 }
+
+export const getGreyColor = (value, min = 0, max = 255) => {
+    const emptyColor = "hsl(0,0%,100%)";
+    if (value === -1) {
+        return emptyColor;
+    }
+    if(max == min){
+        return "hsl(255, 100%, 50%)"
+    }
+    return `hsl(0, 0%, ${(value-min)/(max-min)*100}%)`;
+}
+
 
 export function wrap(outerElementString, innerElement){
     let outer = document.createElement(outerElementString);

@@ -1,5 +1,5 @@
 import {cached_data} from "./tableCache.js";
-import {createTable} from "./drawTable.js"
+import {redrawTable} from "./drawTable.js"
 export const settings = {}
 
 settings.showText = null; 
@@ -23,10 +23,3 @@ export const toggleInfluence = (elem) => {
     redrawTable()
 }
 
-function redrawTable(){
-    if (settings.showInfluence) {
-        createTable(cached_data.saliency);
-    } else {
-        createTable(cached_data.data);
-    }
-}
