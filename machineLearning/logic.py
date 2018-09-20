@@ -19,7 +19,7 @@ def _append_model_estimation_scores(result: dict) -> dict:
     try:
         result["scores"] = model.get_network_score(matrix)
     except ValueError as v:
-        logging.error(result)
+        logging.error(f"Value error:: {result}")
         raise v
     return result
 

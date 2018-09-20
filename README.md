@@ -132,12 +132,12 @@ sudo iptables -t nat -A PREROUTING -p tcp --dport 80 -j REDIRECT --to-port 8080
 
 * `/visualize/<int:run>/<string:wheel>/<int:sector>/<int:station>/` - plots steps of creating saliency methods
 
-
 ### Active learning
 
 * https://www.caiac.ca/sites/default/files/publications/Barnab%C3%A9-Lortie_Vincent_2015_thesis.pdf
 * https://arxiv.org/pdf/1808.00911.pdf
 * https://github.com/experiencor/deep-viz-keras
+
 ### Interesting bad run
 
 * /eval/279794/2/12/1/
