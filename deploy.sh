@@ -8,7 +8,10 @@ curl https://bootstrap.pypa.io/get-pip.py | sudo  python36
 sudo python36 -m pip install flask pymongo aiohttp tensorflow keras scikit-image sklearn
 
 # adding mongo repository
-cat << EOT >> /etc/yum.repos.d/mongodb-org-4.0.repo 
+MONGO_REPO=/etc/yum.repos.d/mongodb-org-4.0.repo
+if [ ! -f $MONGO_REPO ] || ! grep -Fxq "baseurl=https://repo.mongodb.org/yum/redhat/\$releasever/mongodb-org/4.0/x86_64/" $MONGO_REPO
+then
+cat << EOT >> $MONGO_REPO 
 [mongodb-org-4.0]
 name=MongoDB Repository
 baseurl=https://repo.mongodb.org/yum/redhat/\$releasever/mongodb-org/4.0/x86_64/
@@ -16,6 +19,7 @@ gpgcheck=1
 enabled=1
 gpgkey=https://www.mongodb.org/static/pgp/server-4.0.asc
 EOT
+fi
 
 # install mongo 4 
 sudo yum install -y mongodb-org
