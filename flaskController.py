@@ -2,7 +2,7 @@
 import os
 os.environ['TF_CPP_MIN_LOG_LEVEL'] = '2'
 
-from flask import Flask, render_template, request, make_response, jsonify, redirect
+from flask import Flask, render_template, request, make_response, Response, jsonify, redirect
 app = Flask(__name__, template_folder="gui/templates", static_folder="gui/static")
 
 from logic import dataFetch, dataLoad
@@ -161,11 +161,16 @@ def visualize_raw(run,wheel,sector,station):
     data = dataFetch.visualize(identifier, params)
     return jsonify([{k:numpyUtils.to_python_matrix(v)} for value in data for k,v in value.items() ])
 
-@app.route('/data/<int:run>/csv_like.json')
+@app.route('/data/<int:run>/layers.json')
 def record_lines(run):
     record = dataLoad.get_one_record({"run":run})
     raw_data = record["data"]
-    data = []
+    data = list(_generate_json_lines(raw_data, run))
+    return Response(json.dumps(data), 
+            mimetype='application/json',
+            headers={"Content-Disposition":f"attachment;filename={run}.json"})
+
+def _generate_json_lines(raw_data: list, run: int):
     for combination in raw_data:
         wheel = combination["params"]["wheel"]
         sector = combination["params"]["sector"]
@@ -175,15 +180,16 @@ def record_lines(run):
             if len(row) == 0:
                 continue
             line = {
-                "layer": str(layer),
                 "wheel": str(wheel),
                 "sector": str(sector),
+                "layer": str(layer),
+                "run": str(run),
+                "contect": str(row),
                 "station": str(station),
                 "lumi": "-1",
-                "contect": str(row)
             }
-            data.append(line)
-    return jsonify(data)
+            yield line
+    
 
 @app.route('/data/reevaluate/')
 def reevaluate():
