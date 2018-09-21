@@ -105,7 +105,7 @@ def net_scores():
              "Certainty":  {"value": score["rating"]          , "format": True  },
              "User score": {"value": _format_user_score(score), "format": False },
         })    
-    return render_template(GENERIC_SCORE_PAGE_TEMPLATE, keys = lines[0].keys(), values = lines)
+    return _render_generic_statistics_template(lines)
 
 def _format_user_score(score):
     if score["data"].get("evaluation", False):
@@ -128,7 +128,13 @@ def new_net_scores():
              "Scores":     {"value": score["data"]["scores"], "format": True },
              "Certainty":  {"value": score["rating"]        , "format": True },
              })     
-    return render_template(GENERIC_SCORE_PAGE_TEMPLATE, keys = lines[0].keys(), values = lines)
+    return _render_generic_statistics_template(lines)
+
+
+def _render_generic_statistics_template(values):
+    keys = values[0] if values else []  
+    return render_template(GENERIC_SCORE_PAGE_TEMPLATE, keys = keys, values = values)
+
 
 
 @app.route("/eval/next/")
@@ -192,7 +198,7 @@ def _generate_json_lines(raw_data: list, run: int):
                 "lumi": "-1",
             }
             yield line
-    
+
 @app.route('/data/reevaluate/', methods = ['POST'])
 def reevaluate():
     dataFetch.reevaluate_all()
