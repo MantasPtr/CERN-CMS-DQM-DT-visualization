@@ -64,7 +64,7 @@ def runData(run, wheel, sector, station):
             return _make_response(f"Record does not contain any data", 404)
         if len(data) != 1:
             return _make_response(f"Request with did not return single result. Expected: 1, actual: {len(data.get('data'))}", 500)
-        return jsonify(data.get("data")[0])
+        return jsonify(data[0])
         
 
 @app.route("/eval/save_user_scores/", methods = ['PATCH'])
