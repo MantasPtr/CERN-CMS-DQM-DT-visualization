@@ -7,7 +7,7 @@ curl https://bootstrap.pypa.io/get-pip.py | sudo  python36
 #python dependencies
 sudo python36 -m pip install flask pymongo aiohttp tensorflow keras scikit-image sklearn
 
-# adding mongo repository
+# adding mongo if it was not added before repository
 MONGO_REPO=/etc/yum.repos.d/mongodb-org-4.0.repo
 if [ ! -f $MONGO_REPO ] || ! grep -Fxq "baseurl=https://repo.mongodb.org/yum/redhat/\$releasever/mongodb-org/4.0/x86_64/" $MONGO_REPO
 then
