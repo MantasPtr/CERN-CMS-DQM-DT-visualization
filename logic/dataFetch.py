@@ -25,7 +25,7 @@ async def _load_process_and_save(identifier):
         get_db_controller().update(identifier, data = data, status = "FINISHED")
     except FetchError as fetchError:
         print(f"Error occurred while fetching: {fetchError}")
-        get_db_controller().update(identifier, status = "ERROR", other = {"exception": str(exception)})
+        get_db_controller().update(identifier, status = "ERROR", other = {"exception": str(fetchError)})
     except Exception as exception:
         print(f"Unknown error occurred while fetching: {exception}")
         get_db_controller().update(identifier, status = "ERROR", other = {"exception": str(exception)})
@@ -50,17 +50,23 @@ def _reevaluate_all():
 
 async def reevaluate_all_async():
     data = get_db_controller().get_all()
-    for record in data:
+    downloaded_data = [x for x in data if x["status"] in ["REEVALUATING", "FINISHED", "PENDING_REEVALUATION"]]
+    for record in downloaded_data:
         identifier = record.get("identifier")
         get_db_controller().update_status(identifier, status = "PENDING_REEVALUATION")
-    await asyncio.gather(*[reevaluate(d) for d in data])
+    await asyncio.gather(*[reevaluate(d) for d in downloaded_data])
 
 async def reevaluate(record):
-    identifier = record.get("identifier")
-    get_db_controller().update_status(identifier, status = "REEVALUATING")
-    data = dataEvaluation.process(record["data"])
-    print(f":: Successfully reevaluated  data for: {identifier}")
-    get_db_controller().update(identifier, data = data, status = "FINISHED")
+    try:
+        identifier = record.get("identifier")
+        get_db_controller().update_status(identifier, status = "REEVALUATING")
+        data = dataEvaluation.process(record["data"])
+        get_db_controller().update(identifier, data = data, status = "FINISHED")
+        print(f":: Successfully reevaluated  data for: {identifier}")
+    except Exception as exception:
+        print(f"Unknown error occurred while reevalutating record {identifier}: error: {exception}")
+        get_db_controller().update_status(identifier, status = "ERROR", other = {"exception": str(exception)})
+        raise exception
 
 def visualize(identifier: dict, params: dict):
     record = get_db_controller().get_single_record_matrix(identifier, params)

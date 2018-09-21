@@ -7,7 +7,7 @@
   {{ super() }}
   <div class="row">
     <!-- INPUT -->
-    <div class="col-md-3">
+    <div class="col-md-4 col-md-3 col-lg-2">
       <div class="form-row">
         <div class="form-group">
           <label for="runInput">Run</label>
@@ -15,10 +15,15 @@
         </div>
       </div>
     </div>
-    <div class="mt-auto form-group">
-        <button class="btn btn-primary" onclick="onFetchData()">Fetch</button>
+    <div class="col mt-auto form-group">
       <div class="mb-2">
+        <button class="btn btn-primary" onclick="onFetchData()">Fetch</button>
       </div>
+    </div>
+    <div class="col mt-auto form-group ml-auto">
+        <div class="mb-2">
+          <button class="btn btn-warning" onclick="onReevaluate()">Reevaluate</button>
+        </div>
     </div>
   </div>
   <div>

@@ -168,8 +168,8 @@ class Mongo_4_DB_controller():
 
     def _assure_update(self, *args):
         rez = self.dbCollection.update(*args)
-        if rez["nModified"] == 0:
-            warnings.warn(f"Update with criteria:{args[0]} did not update any records!")
+        if rez["n"] == 0:
+            warnings.warn(f"Update with criteria:{args[0]} did not match any records!")
         return {"matched":rez["n"], "updated": rez["nModified"] == 0 }
 
     def _build_db_record(self, identifier: dict, data, status: str) -> dict:
@@ -185,7 +185,6 @@ class Mongo_4_DB_controller():
             return data
         else:
             return {**data, **other}
-        
 
     def _get_single_result(self, cursor: pymongo.CursorType):
         result = list(cursor)

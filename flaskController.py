@@ -55,11 +55,14 @@ def get_adrian(run, wheel, sector, station):
 @app.route("/data/<int:run>/<string:wheel>/<int:sector>/<int:station>/", methods = ['GET'])
 def runData(run, wheel, sector, station):
     identifier, params  = buildDicts(run, wheel, sector, station)
-    data = dataLoad.get_matrix_from_DB(identifier, params)
-    if (data == None):
+    run_data = dataLoad.get_matrix_from_DB(identifier, params)
+    if (run_data == None):
         return _make_response("Record not found", 404)
     else:
-        if (len(data.get("data")) != 1):
+        data = run_data.get("data")
+        if data == None:
+            return _make_response(f"Record does not contain any data", 404)
+        if len(data) != 1:
             return _make_response(f"Request with did not return single result. Expected: 1, actual: {len(data.get('data'))}", 500)
         return jsonify(data.get("data")[0])
         
@@ -190,8 +193,7 @@ def _generate_json_lines(raw_data: list, run: int):
             }
             yield line
     
-
-@app.route('/data/reevaluate/')
+@app.route('/data/reevaluate/', methods = ['POST'])
 def reevaluate():
     dataFetch.reevaluate_all()
     return "OK"
@@ -204,3 +206,7 @@ def _make_response(data, code: int):
 @app.errorhandler(ValidationError)
 def handle_invalid_usage(error: ValidationError):
     return _make_response(jsonify(str(error)), 400)
+
+@app.errorhandler(404)
+def page_not_found(e):
+    return "Page does not exist! Please check the url!", 404
