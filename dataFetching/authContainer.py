@@ -12,10 +12,16 @@ class AuthContainer():
     def load_data(self):
         config = cfg.getConfig(AUTH_CONFIG_LOCATION)
         homePath = cfg.getHomePath()
-        self.pathToCertificate = homePath + config['pathToCert']
-        self.pathToCertificatePass = homePath + config['pathToCertKey']
+        self.pathToCertificate = self._assure_file_path( homePath + config['pathToCert'], "Certificate")
+        self.pathToCertificatePass = self._assure_file_path(homePath + config['pathToCertKey'], "Certificate password")
         self.password = self._read_password_file(config['passwordFile'])
         return self
+
+    def _assure_file_path(self, path: str, file_purpose: str):
+        if not isfile(path):
+            print(f"Error info: File was searched at {path}")
+            raise FileNotFoundError(f"{file_purpose} file not found")
+        return path
 
     def _read_password_file(self, file):
         if not isfile(file):
