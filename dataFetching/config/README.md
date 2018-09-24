@@ -2,9 +2,9 @@
 
 ## auth.config.ini
 
-* *pathToCert* - global path to certificate file
-* *pathToCert* - global path to certificate key file
-* *passwordFile* - location to file that contains single line of password used for password protected certificates
+* *cert_path* - global path to certificate file
+* *cert_key_path* - global path to certificate key file
+* *password_file* - location to file that contains single line of password used for password protected certificates
 
 ## fetch.config.ini
 

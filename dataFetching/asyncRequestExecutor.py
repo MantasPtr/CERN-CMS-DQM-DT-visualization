@@ -41,7 +41,7 @@ class AsyncRequestExecutor():
     def _init_ssl_context(self, authObj):
         context = ssl.SSLContext()
         try:
-            context.load_cert_chain(authObj.pathToCertificate, authObj.pathToCertificatePass, authObj.password)
+            context.load_cert_chain(authObj.certificate_path, authObj.certificate_pass_path, authObj.password)
         except ssl.SSLError as exc:
             raise ConfigError(f"Error occurred while loading certificates. Please make sure all files are in locations defined in config and password is correct. Original error: {exc}")
         return context

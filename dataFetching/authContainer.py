@@ -5,16 +5,16 @@ import warnings
 AUTH_CONFIG_LOCATION = 'dataFetching/config/auth.config.ini'
 
 class AuthContainer():
-    pathToCertificate = None
-    pathToCertificatePass = None
+    certificate_path = None
+    certificate_pass_path = None
     password = None
 
     def load_data(self):
         config = cfg.getConfig(AUTH_CONFIG_LOCATION)
         homePath = cfg.getHomePath()
-        self.pathToCertificate = self._assure_file_path( homePath + config['pathToCert'], "Certificate")
-        self.pathToCertificatePass = self._assure_file_path(homePath + config['pathToCertKey'], "Certificate password")
-        self.password = self._read_password_file(config['passwordFile'])
+        self.certificate_path = self._assure_file_path( homePath + config['cert_path'], "Certificate")
+        self.certificate_pass_path = self._assure_file_path(homePath + config['cert_key_path'], "Certificate password")
+        self.password = self._read_password_file(config['password_file'])
         return self
 
     def _assure_file_path(self, path: str, file_purpose: str):

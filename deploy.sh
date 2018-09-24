@@ -1,3 +1,4 @@
+#!/bin/bash
 # git clone git@github.com:MantasPtr/CERN-CMS-DQM-DT-visualization.git
 
 # python 3.6
