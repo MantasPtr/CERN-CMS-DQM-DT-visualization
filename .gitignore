@@ -1,5 +1,7 @@
 files/
 .vscode/
 __pycache__/
+*.pem
+*.p12
 **/password.txt
 exported_files/*
