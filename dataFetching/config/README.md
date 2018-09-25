@@ -2,9 +2,9 @@
 
 ## auth.config.ini
 
-* *cert_path* - global path to certificate file
-* *cert_key_path* - global path to certificate key file
-* *password_file* - location to file that contains single line of password used for password protected certificates
+* *cert_path* - path from $HOME enviroment variable to certificate file
+* *cert_key_path* - path from $HOME enviroment variable to certificate key file
+* *password_file* - path from this folder to file that contains single line of password used for password protected certificates
 
 ## fetch.config.ini
 
