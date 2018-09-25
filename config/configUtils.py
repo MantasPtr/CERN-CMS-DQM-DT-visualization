@@ -1,6 +1,5 @@
 import configparser
 import json
-from pathlib import Path
 import warnings
 
 DEFAULT_NOT_FOUND = {}
@@ -17,6 +16,3 @@ def getJsonConfig(configLocation):
     except FileNotFoundError as fnfe:
         warnings.warn(f"Config file not found {configLocation}. Falling back to default value '{DEFAULT_NOT_FOUND}'")
         return DEFAULT_NOT_FOUND
-
-def getHomePath():
-    return str(Path.home())
