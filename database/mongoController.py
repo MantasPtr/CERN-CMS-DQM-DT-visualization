@@ -115,7 +115,7 @@ class Mongo_4_DB_controller():
         ])
         return list(cursor)
 
-    def get_all_network_scores(self, limit):
+    def get_all_network_scores(self, limit, skip=0):
         cursor = self.dbCollection.aggregate( [
             {"$match": {"status":"FINISHED"}},
             {"$unwind": "$data" },
@@ -129,11 +129,15 @@ class Mongo_4_DB_controller():
                 "rating": self._get_score_eval_pipeline()
             }},
             {"$sort": {"rating":1}},
-            {"$limit": limit}
+            {"$group": {"_id": None, "count": { "$sum":1 }, "result": { "$push": '$$ROOT' }}},
+            {"$project": {"_id":0}},
+            {"$unwind": "$result" },
+            {"$skip": skip},
+            {"$limit": limit},
         ])
         return list(cursor)
 
-    def get_not_evaluated_network_scores(self, limit):
+    def get_not_evaluated_network_scores(self, limit, skip = 0):
         cursor = self.dbCollection.aggregate( [
             {"$match": {"status":"FINISHED"}},
             {"$unwind": "$data" },
@@ -149,7 +153,11 @@ class Mongo_4_DB_controller():
                 "rating": self._get_score_eval_pipeline()
             }},
             {"$sort": {"rating":1}},
-            {"$limit": limit}
+            {"$group": {"_id": None, "count": { "$sum":1 }, "result": { "$push": '$$ROOT' }}},
+            {"$project": {"_id":0}},
+            {"$unwind": "$result" },
+            {"$skip": skip},
+            {"$limit": limit},
         ])
         return list(cursor)
 

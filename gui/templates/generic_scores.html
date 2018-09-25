@@ -20,8 +20,9 @@
         {% endfor %}
         {{button_to_page(item)}}
       </tr>
-      {% endfor %}  
+      {% endfor %}
     </table>
+    {{render_pagination(pagination)}}  
   </div>
 {% endblock %}
 
@@ -37,7 +38,7 @@
     "sector" in item.Params.value and 
     "station" in item.Params.value
     ) %}
-  <td>
+  <td>  
     <a type="button" class="btn btn-success" href="/eval/{{item.Identifier.value.run}}/{{item.Params.value.wheel}}/{{item.Params.value.sector}}/{{item.Params.value.station}}/">Load</a>
   </td>
   {% endif %}
@@ -54,7 +55,7 @@
 {% macro visualize(element) -%}
   {% if element is iterable and element is not string and element is not mapping %}
     {% for el in element %}
-    |{{visualize(el)}}
+      |{{visualize(el)}}
     {% endfor %}
     | 
   {% elif element is number %}
@@ -63,3 +64,37 @@
     {{element}}
   {% endif %}
 {%- endmacro %}
+
+{% macro render_pagination(pagination) %}
+  {% if pagination %}
+    <ul class="pagination justify-content-center">
+      {% if pagination.has_prev %}
+      <li class="page-item">
+        <a class="page-link" href="{{ url_for_other_page(pagination.page - 1)
+          }}">&laquo; Previous 
+        </a>
+      {% endif %}
+      {%- for page in pagination.iter_pages() %}
+        {% if page %}
+          </li>
+          {% if page != pagination.page %}
+            <li class="page-item">
+              <a class="page-link" href="{{ url_for_other_page(page) }}">{{ page }}</a>
+            </li>
+          {% else %}
+            <li class="page-item active"><strong class="page-link">{{ page }}</strong></li>
+          {% endif %}
+        {% else %}
+          <li class="page-item disabled ellipsis"><span class="page-link">…<span></li>
+        {% endif %}
+      {%- endfor %}
+      {% if pagination.has_next %}
+        <li class="page-item">
+          <a class="page-link" href="{{ url_for_other_page(pagination.page + 1)
+            }}">Next &raquo;
+          </a>
+          {% endif %}
+      </li>
+    </ul>
+  {% endif %}
+{% endmacro %}

@@ -2,7 +2,7 @@
 import os
 os.environ['TF_CPP_MIN_LOG_LEVEL'] = '2'
 
-from flask import Flask, render_template, request, make_response, Response, jsonify, redirect
+from flask import Flask, render_template, request, make_response, Response, jsonify, redirect, url_for
 app = Flask(__name__, template_folder="gui/templates", static_folder="gui/static")
 
 from logic import dataFetch, dataLoad
@@ -12,9 +12,11 @@ from errors.errors import ValidationError
 from logic.dbIdentifierBuilder import buildDicts
 from gui.plotting import mutliplot
 from utils import numpyUtils
+from gui.guiUtils import Pagination
 MAIN_PAGE_TEMPLATE='eval.html'
 FETCH_PAGE_TEMPLATE='fetch.html'
 GENERIC_SCORE_PAGE_TEMPLATE='generic_scores.html'
+PAGE_SIZE = 20
 
 @app.route('/')
 @app.route('/eval/')
@@ -93,19 +95,24 @@ def scores():
 def net_scores_json():
     return jsonify(dataLoad.get_network_scores())
 
-@app.route("/data/net_scores/")
-def net_scores():
-    scores = dataLoad.get_network_scores()
-    lines = []
-    for score in scores:
+@app.route("/data/net_scores/", defaults={"page":1})
+@app.route('/data/net_scores/page/<int:page>')
+def net_scores(page):
+    records = dataLoad.get_network_scores(limit=PAGE_SIZE, page=page)
+    count = records[0]["count"]
+    lines = []      
+    for record in records:
+        score = record["result"] 
         lines.append({
              "Identifier": {"value": score["identifier"]      , "format": False },
              "Params":     {"value": score["data"]["params"]  , "format": False },
              "Scores":     {"value": score["data"]["scores"]  , "format": True  },
              "Certainty":  {"value": score["rating"]          , "format": True  },
              "User score": {"value": _format_user_score(score), "format": False },
-        })    
-    return _render_generic_statistics_template(lines)
+        })
+        
+    pagination = Pagination(page, per_page=PAGE_SIZE, total_count= count)
+    return _render_generic_statistics_template(lines, pagination)
 
 def _format_user_score(score):
     if score["data"].get("evaluation", False):
@@ -117,25 +124,28 @@ def _format_user_score(score):
         return "-"
     return
 
-@app.route("/data/new_net_scores/")
-def new_net_scores():
-    scores = dataLoad.get_not_evaluated_network_scores()
+@app.route("/data/new_net_scores/", defaults={"page":1})
+@app.route('/data/new_net_scores/page/<int:page>')
+def new_net_scores(page):
+    records = dataLoad.get_not_evaluated_network_scores(page=page)
+    count = records[0]["count"]
     lines = []
-    for score in scores:
+    for record in records:
+        score = record["result"] 
         lines.append({
              "Identifier": {"value": score["identifier"]    , "format": False },
              "Params":     {"value": score["data"]["params"], "format": False },
              "Scores":     {"value": score["data"]["scores"], "format": True },
              "Certainty":  {"value": score["rating"]        , "format": True },
              })     
-    return _render_generic_statistics_template(lines)
+
+    pagination = Pagination(page, per_page=PAGE_SIZE, total_count= count)
+    return _render_generic_statistics_template(lines, pagination)
 
 
-def _render_generic_statistics_template(values):
+def _render_generic_statistics_template(values, pagination = None):
     keys = values[0] if values else []  
-    return render_template(GENERIC_SCORE_PAGE_TEMPLATE, keys = keys, values = values)
-
-
+    return render_template(GENERIC_SCORE_PAGE_TEMPLATE, keys = keys, values = values, pagination = pagination)
 
 @app.route("/eval/next/")
 def get_uncertain_matrix():
@@ -216,3 +226,12 @@ def handle_invalid_usage(error: ValidationError):
 @app.errorhandler(404)
 def page_not_found(e):
     return "Page does not exist! Please check the url!", 404
+
+def flask_pagination_url_formater(page):
+    args = request.view_args.copy()
+    args['page'] = page
+    return url_for(request.endpoint, **args)
+app.jinja_env.globals['url_for_other_page'] = flask_pagination_url_formater
+
+if __name__ == '__main__':
+   app.run(host="0.0.0.0", port=8080)

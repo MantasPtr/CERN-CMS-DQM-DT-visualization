@@ -12,14 +12,16 @@ def get_fetched_data():
 def get_scores_data():
     return get_db_controller().get_all_user_scores()
 
-def get_network_scores(limit = 20):
-    return get_db_controller().get_all_network_scores(limit)
+def get_network_scores(limit = 20, page = 1):
+    skip_count = (page-1) * limit
+    return get_db_controller().get_all_network_scores(limit, skip=skip_count)
 
 def get_one_record(identifier: dict):
     return get_db_controller().get_one(identifier)
 
-def get_not_evaluated_network_scores(limit = 20):
-    return get_db_controller().get_not_evaluated_network_scores(limit)
+def get_not_evaluated_network_scores(limit = 20, page = 1):
+    skip_count = (page-1) * limit
+    return get_db_controller().get_not_evaluated_network_scores(limit, skip=skip_count)
 
 def update_user_score(identifier: dict, params: dict, layers: list):
     return get_db_controller().update_user_score(identifier, params, layers)

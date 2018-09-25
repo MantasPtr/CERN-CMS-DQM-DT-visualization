@@ -81,3 +81,18 @@ nav span.alert{
 nav > div {
     width: 100%;
 }
+
+.pagination {
+    margin-top: 10px;
+}
+
+.page-link {
+    border-color: hsl(0, 0%, 73%)
+}
+
+.page-link:hover {
+    border-color: hsl(0, 0%, 73%)
+}
+.page-item.disabled .page-link {
+    border-color: hsl(0, 0%, 73%)
+}
