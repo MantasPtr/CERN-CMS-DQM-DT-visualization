@@ -7,7 +7,7 @@ from dataFetching.authContainer import AuthContainer
 from errors.errors import ConfigError
 import time
 FETCH_CONFIG_LOCATION="dataFetching/config/fetch.config.ini"
-PATH_STEPS = configUtils.getConfig(FETCH_CONFIG_LOCATION)["matrixJsonPath"].split(".")
+PATH_STEPS = configUtils.getConfig(FETCH_CONFIG_LOCATION)["matrix_json_path"].split(".")
 
 class AsyncRequestExecutor():
     

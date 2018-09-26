@@ -9,7 +9,7 @@
 ## fetch.config.ini
 
 * *url* - url from which to fetch data form. Has to have placeholders for literal string interpolation based on identifier and params to be filled by url_generator.
-* *matrixJsonPath* - dot (.) separated path to matrix in from *url* retrieved json
+* *matrix_json_path* - dot (.) separated path to matrix in from *url* retrieved json
 
 ## params.range.config.json
 
