@@ -15,7 +15,7 @@ class AuthContainer():
         config = cfg.getConfig(config_dir / AUTH_CONFIG_FILE)
         self.certificate_path = self._assure_file_path(config_dir /config['cert_path'], "Certificate")
         self.certificate_pass_path = self._assure_file_path( config_dir / config['cert_key_path'], "Certificate password")
-        self.password = self._read_password_file(config_dir / config['password_file'])
+        self.password = self._read_password_file(config_dir / config.get('password_file', ""))
         return self
 
     def _assure_file_path(self, path: pathlib.Path, file_purpose: str):
