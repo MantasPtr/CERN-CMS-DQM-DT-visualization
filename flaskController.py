@@ -31,6 +31,7 @@ def evalRun(run):
 def evalRunWithParam(run, wheel, sector, station):
     return render_template(MAIN_PAGE_TEMPLATE, run = run, wheel = wheel, sector = sector, station = station)
 
+@app.route('/manage/')
 @app.route('/fetch/')
 def fetch():
     runs = dataLoad.get_fetched_data()
@@ -65,7 +66,7 @@ def runData(run, wheel, sector, station):
         if data == None:
             return _make_response(f"Record does not contain any data", 404)
         if len(data) != 1:
-            return _make_response(f"Request with did not return single result. Expected: 1, actual: {len(data.get('data'))}", 500)
+            return _make_response(f"Request with did not return single result. Expected: 1, actual: {len(data)}", 500)
         return jsonify(data[0])
         
 
@@ -76,7 +77,7 @@ def score():
     #   'wheel': '0', 
     #   'sector': '1',
     #   'station': '1',
-    #   'layers': ['12', '10', '9', '7', '6', '5', '2', '1']
+    #   'layers': ['0', '1, '0', '0','0', '1, '0', '0', '0', '1' , '1', '1']
     # }
     body = request.get_json()
     badLayers = list(map(int,body["layers"]))
@@ -114,15 +115,35 @@ def net_scores(page):
     pagination = Pagination(page, per_page=PAGE_SIZE, total_count= count)
     return _render_generic_statistics_template(lines, pagination)
 
+@app.route("/data/contamination/", defaults={"page":1})
+@app.route('/data/contamination/page/<int:page>')
+def contamination(page):
+    records = dataLoad.get_contamination_scores(limit=PAGE_SIZE, page=page)
+    print("Records::", records)
+    count = records[0]["count"]
+    lines = []      
+    for record in records:
+        score = record["result"] 
+        lines.append({
+             "Identifier":    {"value": score["identifier"]      , "format": False },
+             "Params":        {"value": score["data"]["params"]  , "format": False },
+             "Scores":        {"value": score["data"]["scores"]  , "format": True  },
+             "User score":    {"value": _format_user_score(score), "format": False },
+             "Contamination": {"value": score["rating"]          , "format": True  },
+        })
+        
+    pagination = Pagination(page, per_page=PAGE_SIZE, total_count= count)
+    return _render_generic_statistics_template(lines, pagination)
+
+
 def _format_user_score(score):
-    if score["data"].get("evaluation", False):
-        if score["data"]["evaluation"].get("skipped",False):
+    if "evaluation" in score["data"]:
+        if "skipped" in score["data"]["evaluation"]:
             return "Skipped"
         else:
             return score["data"]["evaluation"]["bad_layers"]
     else:
         return "-"
-    return
 
 @app.route("/data/new_net_scores/", defaults={"page":1})
 @app.route('/data/new_net_scores/page/<int:page>')
@@ -149,12 +170,13 @@ def _render_generic_statistics_template(values, pagination = None):
 
 @app.route("/eval/next/")
 def get_uncertain_matrix():
-    scores = dataLoad.get_not_evaluated_network_scores(1)
-    if (len(scores) == 1):
-        run = scores[0].get("identifier").get("run")
-        wheel = scores[0].get("data").get("params").get("wheel")
-        sector = scores[0].get("data").get("params").get("sector")
-        station = scores[0].get("data").get("params").get("station")
+    container = dataLoad.get_not_evaluated_network_scores(1)
+    if (len(container) == 1):
+        scores = container[0]["result"]
+        run = scores["identifier"]["run"]
+        wheel = scores["data"]["params"]["wheel"]
+        sector = scores["data"]["params"]["sector"]
+        station = scores["data"]["params"]["station"]
         return redirect(f"/eval/{run}/{wheel}/{sector}/{station}/")
     return _make_response(f"Query did not return 1 unevaluated result, It returned: {len(scores)}", 500)
 

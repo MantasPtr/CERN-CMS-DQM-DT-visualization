@@ -102,7 +102,7 @@ function onSave(){
 
 export function getCheckedValues(){
     const checkBoxes = Array.from(document.querySelectorAll(".layer-selection"));
-    return checkBoxes.filter(c => c.checked).map(c => c.getAttribute("index"));
+    return checkBoxes.map(c => c.checked ? 1 : 0 );
 }
 
 function onSkip(){

@@ -8,7 +8,7 @@ import warnings
 #    {
 #       data: 
 #           evaluation:
-#               bad_layers: [<int?>]
+#               bad_layers: [<0 or 1>] - 12 elements
 #               eval_time:	<datatime>
 #               skipped:    <boolean>
 #           params:
@@ -30,15 +30,15 @@ def from_record_to_row(data: Iterable):
         station =_params["station"] 
         wheel = _params["wheel"]
         bad_layers = record["data"]["evaluation"]["bad_layers"]
-        for i in range(1,13):
-            yield [wheel, station, sector, run, i, int(i not in bad_layers)]
+        for i in range(12):
+            yield [wheel, station, sector, run, i+1, bad_layers[i]]
 
 def from_row_to_record(data: Iterable):
     """returns list[identifier][params] = score"""
     identifier_lists = collections.defaultdict(lambda: collections.defaultdict(list))
     for record in data:
         if (len(record) != 6):
-            warnings.warn(f"Wrong csv line structure: {record}. Expected array of 6elements")
+            warnings.warn(f"Wrong csv line structure: {record}. Expected array of 6 elements")
             continue
         identifier = ("run", int(record[3]))   # tuple since dict is not hashable 
         params = (("wheel"  , int(record[0])),

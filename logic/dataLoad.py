@@ -16,6 +16,10 @@ def get_network_scores(limit = 20, page = 1):
     skip_count = (page-1) * limit
     return get_db_controller().get_all_network_scores(limit, skip=skip_count)
 
+def get_contamination_scores(limit = 20, page = 1):
+    skip_count = (page-1) * limit
+    return get_db_controller().get_contamination(limit, skip=skip_count)
+
 def get_one_record(identifier: dict):
     return get_db_controller().get_one(identifier)
 

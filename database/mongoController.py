@@ -97,7 +97,7 @@ class Mongo_4_DB_controller():
             [
                 data: 
                     evaluation:
-                        bad_layers: [<int?>]
+                        bad_layers: [<0 or 1>] - 12 times
                         eval_time:	<datatime>
                         skipped:    <boolean>
                     params:
@@ -136,6 +136,52 @@ class Mongo_4_DB_controller():
             {"$limit": limit},
         ])
         return list(cursor)
+
+    def get_contamination(self, limit, skip=0):
+        cursor = self.dbCollection.aggregate( [
+            {"$match": {"status":"FINISHED"}},
+            {"$unwind": "$data" },
+            {"$match": {"data.evaluation.bad_layers": {"$exists": True}}},
+            {"$project": {
+                "_id":0,
+                "identifier":1,
+                "data.params":1,
+                "data.scores":1,
+                "data.evaluation.bad_layers":1,
+                "rating": self._get_contamination_eval_pipeline(),
+            }},
+            {"$sort": {"rating":-1}},
+            {"$group": {"_id": None, "count": { "$sum":1 }, "result": { "$push": '$$ROOT' }}},
+            {"$project": {"_id":0}},
+            {"$unwind": "$result" },
+            {"$skip": skip},
+            {"$limit": limit},
+        ])
+        return list(cursor)
+
+    def _get_contamination_eval_pipeline(self):
+        return {"$reduce": {
+                    "input": {"$zip": {
+                            "inputs":["$data.scores", "$data.evaluation.bad_layers"],
+                            "useLongestLength":True
+                        }},
+                    "initialValue": 0,
+                    "in": {
+                        "$max":[
+                            "$$value",
+                            {"$cond": [ {"$eq":[{"$arrayElemAt": ["$$this", 0]}, -1]}, 0, 
+                                { "$abs":  {
+                                    "$subtract": [  
+                                        {"$arrayElemAt": ["$$this", 0]},
+                                        {"$arrayElemAt": ["$$this", 1]}
+                                    ]
+                                }}]
+                            }
+                        ]
+                    }
+                }
+            }
+
 
     def get_not_evaluated_network_scores(self, limit, skip = 0):
         cursor = self.dbCollection.aggregate( [

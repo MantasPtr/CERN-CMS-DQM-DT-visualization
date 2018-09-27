@@ -59,7 +59,7 @@ sudo iptables -t nat -A PREROUTING -p tcp --dport 80 -j REDIRECT --to-port 8080
             "scores": [0,0.5,0.5,0.5,0.5,0.5,0.5,0.5,0.5,0.5,0.5,1],
             "saliency": [[0,0,0],[1,2,3],[-1,-2,-3]],
             "evaluation": {
-                "bad_layers": [1,7,14],
+                "bad_layers": [1,0,0,0,0,0,1,0,0,0,0,1],
                 "eval_time": "timestamp",
                 "skipped": false
             }
@@ -109,7 +109,7 @@ sudo iptables -t nat -A PREROUTING -p tcp --dport 80 -j REDIRECT --to-port 8080
 #### HTTP POST
 
 * url: `/fetch/<int:run>/`, body:None  - if record with given record does not exit in database, initialize data fetching for specified run.
-  * If record with specified id exit in database returns error message and HTTP 409 ("CONFLICT")
+* If record with specified id exit in database returns error message and HTTP 409 ("CONFLICT")
 
 ### Data endpoints
 
@@ -141,9 +141,9 @@ sudo iptables -t nat -A PREROUTING -p tcp --dport 80 -j REDIRECT --to-port 8080
 ### Interesting bad run
 
 * /eval/279794/2/12/1/
+* bad web design /eval/279794/-2/1/4/
 
-
-### Warnings:
+### Warnings
 
 * Your CPU supports instructions that this TensorFlow binary was not compiled to use: AVX2 FMA
 * UserWarning: Error in loading the saved optimizer state. As a result, your model is starting with a freshly initialized optimizer.

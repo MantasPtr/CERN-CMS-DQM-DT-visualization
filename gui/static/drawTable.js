@@ -95,7 +95,7 @@ function createTable(tableData, {badLayers = getCheckedValues(), getColor = getR
         input.classList.add(LAYER_CLASS);
         input.setAttribute("index", index); 
         input.type = "checkbox";
-        input.checked = badLayers.includes(index);
+        input.checked = !!badLayers[layerIndex]; // !! converts to boolean
         span.appendChild(input);
         span.appendChild(document.createTextNode(LAYER_SUFFIX + index));
         return wrap("td", span);
