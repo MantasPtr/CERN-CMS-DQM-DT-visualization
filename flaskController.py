@@ -108,7 +108,6 @@ def net_scores(page):
 @app.route('/data/contamination/page/<int:page>')
 def contamination(page):
     records = dataLoad.get_contamination_scores(limit=PAGE_SIZE, page=page)
-    print("Records::", records)
     count = records[0]["count"]
     lines = []      
     for record in records:

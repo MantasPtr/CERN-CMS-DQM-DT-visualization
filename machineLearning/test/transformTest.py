@@ -2,6 +2,7 @@ import unittest
 import machineLearning.transform
 from machineLearning.model import MATRIX_DIM
 from numpy.testing import assert_allclose
+import utils.numpyUtils as npUtils
 import numpy as np
 class NetTest(unittest.TestCase):
     
@@ -34,4 +35,4 @@ class NetTest(unittest.TestCase):
     def testScaling(self):
         matrix = [np.array([-1,0,1]),np.array([-2,-1,0]),np.array([-5,0,10]),np.array([1,10,100])]
         rez = machineLearning.transform.scaleMatrix(matrix)
-        print(rez)
+        self.assertListEqual(npUtils.to_python_matrix(rez), [[-1,0,1],[-1,-0.5,0],[-0.5,0,1],[0.01,0.1,1] ])
