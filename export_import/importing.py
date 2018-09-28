@@ -1,6 +1,5 @@
-import sys
-sys.path.append("/afs/cern.ch/user/m/mpetrika/private/cms/task/")
-
+import sys, os
+sys.path.insert(1, os.path.join(sys.path[0], '..')) # adds parent directory to path in order to make database import valid 
 import csvFileReader, csvDataConverter
 import argparse
 from database.dbSetup import get_db_controller
@@ -10,7 +9,6 @@ def import_from_file(file_name):
     data = _process_data(raw_data)
     _save_to_db(data)
     
-
 def _read_file(file_name: str) -> iter:
     return csvFileReader.read_file(file_name)
 

@@ -1,5 +1,5 @@
-import sys
-sys.path.append("/afs/cern.ch/user/m/mpetrika/private/cms/task/")
+import sys, os
+sys.path.insert(1, os.path.join(sys.path[0], '..')) # adds parent directory to path in order to make database import valid
 
 import csvDataConverter, csvFileWriter
 from datetime import datetime
@@ -24,7 +24,7 @@ def _get_file_name():
     return f"{FILE_PREFIX}{datetime.now()}.csv".replace(" ", "_")
 
 def _write_to_file(file_name: str,  data: iter):
-    print(f"Writing to file: {file_name}")
+    print(f"Writing to file: {DIRECTORY}/{file_name}")
     csvFileWriter.write_to_file(file_name, data, directory=DIRECTORY)
 
 if __name__ == '__main__':

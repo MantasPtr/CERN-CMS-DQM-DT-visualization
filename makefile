@@ -15,5 +15,6 @@ test:
 export:
 	python36 export_import/exporting.py
 
-import: $(file)
-	python36 export_import/importing.py
+import:
+	python36 export_import/importing.py $(FILE)
+
