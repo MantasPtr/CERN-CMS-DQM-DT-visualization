@@ -147,3 +147,21 @@ sudo iptables -t nat -A PREROUTING -p tcp --dport 80 -j REDIRECT --to-port 8080
 
 * Your CPU supports instructions that this TensorFlow binary was not compiled to use: AVX2 FMA
 * UserWarning: Error in loading the saved optimizer state. As a result, your model is starting with a freshly initialized optimizer.
+
+### Versions
+
+Not sure if you need all of them but thats what I had installed. Newever versions should also work, since these were the latest.
+
+* aiohttp==3.3.2
+* Flask==1.0.2
+* Jinja2==2.10
+* Keras==2.2.2
+* Keras-Applications==1.0.4
+* Keras-Preprocessing==1.0.2
+* numpy==1.14.5
+* pymongo==3.7.1
+* scikit-image==0.14.0
+* scikit-learn==0.19.2
+* scipy==1.1.0
+* sklearn==0.0
+* tensorflow==1.9.0
