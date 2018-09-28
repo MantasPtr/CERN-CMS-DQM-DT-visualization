@@ -1,6 +1,8 @@
 from math import ceil
 
 class Pagination(object):
+    # taken from http://flask.pocoo.org/snippets/44/
+    # with minor adjustments
 
     def __init__(self, page, per_page, total_count):
         self.page = page
