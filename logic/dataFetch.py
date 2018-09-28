@@ -67,7 +67,3 @@ async def reevaluate(record):
         print(f"Unknown error occurred while reevalutating record {identifier}: error: {exception}")
         get_db_controller().update_status(identifier, status = "ERROR", other = {"exception": str(exception)})
         raise exception
-
-def visualize(identifier: dict, params: dict):
-    record = get_db_controller().get_single_record_matrix(identifier, params)
-    return dataEvaluation.visualize_saliency(record)

@@ -128,10 +128,6 @@ sudo iptables -t nat -A PREROUTING -p tcp --dport 80 -j REDIRECT --to-port 8080
 
 ### Other
 
-#### HTTP GET
-
-* `/visualize/<int:run>/<string:wheel>/<int:sector>/<int:station>/` - plots steps of creating saliency methods
-
 ### Active learning
 
 * https://www.caiac.ca/sites/default/files/publications/Barnab%C3%A9-Lortie_Vincent_2015_thesis.pdf

@@ -10,10 +10,6 @@ def append_saliency(data: list) -> list:
     """Appends scores to field to dict based on matrix field"""
     return list(map(_append_model_saliency, data))
 
-def visualize_saliency_steps(data: dict):
-    matrix = data.get("data")[0].get("matrix")
-    return model.get_saliency_map_steps(matrix)
-
 def _append_model_estimation_scores(result: dict) -> dict:
     matrix = result.get("matrix")
     try:

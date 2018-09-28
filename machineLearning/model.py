@@ -26,20 +26,6 @@ def get_saliency_map(matrix) -> list:
         filled_matrix = transform.replace_positive_values(matrix, gradients)
         return filled_matrix
 
-def get_saliency_map_steps(matrix) -> list:
-    global graph
-    with graph.as_default():
-        processed_matrix = transform.process_matrix(matrix, MATRIX_DIM)
-        gradients = np.array(saliency_calculation.get_gradients(processed_matrix))
-        _replace_negatives(gradients)
-        filled_matrix = transform.replace_positive_values(matrix, gradients)
-        return [
-            {"1. matrix": matrix },
-            {"2. processed matrix":processed_matrix},
-            {"3. gradients": gradients},
-            {"4. filled matrix:": filled_matrix},
-        ]
-
 def _replace_negatives(matrix, value = 0):
     for line in matrix:
         if len(line) != 0:

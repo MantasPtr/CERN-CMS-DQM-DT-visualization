@@ -175,12 +175,6 @@ def skip(run,wheel,sector,station):
     dataLoad.mark_as_skipped(identifier, params)
     return get_uncertain_matrix()
 
-@app.route("/visualize/<int:run>/<string:wheel>/<int:sector>/<int:station>/json")
-def visualize_raw(run,wheel,sector,station):
-    identifier, params  = buildDicts(run, wheel, sector, station)
-    data = dataFetch.visualize(identifier, params)
-    return jsonify([{k:numpyUtils.to_python_matrix(v)} for value in data for k,v in value.items() ])
-
 @app.route('/data/<int:run>/layers.json')
 def record_lines(run):
     record = dataLoad.get_one_record({"run":run})
