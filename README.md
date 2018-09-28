@@ -46,7 +46,7 @@ sudo iptables -t nat -A PREROUTING -p tcp --dport 80 -j REDIRECT --to-port 8080
 {  
     "_id" : "AUTO-GENERATED",
     "identifier" : {"run":123456},
-    "status": "LOADING | FINISHED | ERROR"> REEVALUATING,
+    "status": "LOADING | FINISHED | ERROR | REEVALUATING | PENDING_REEVALUATION",
     "exception": "some exception",
     "save_time": "timestamp",
     "data": [{
