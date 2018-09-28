@@ -46,7 +46,7 @@ sudo iptables -t nat -A PREROUTING -p tcp --dport 80 -j REDIRECT --to-port 8080
 {  
     "_id" : "AUTO-GENERATED",
     "identifier" : {"run":123456},
-    "status": "LOADING | FINISHED | ERROR",
+    "status": "LOADING | FINISHED | ERROR"> REEVALUATING,
     "exception": "some exception",
     "save_time": "timestamp",
     "data": [{
@@ -98,7 +98,7 @@ sudo iptables -t nat -A PREROUTING -p tcp --dport 80 -j REDIRECT --to-port 8080
 * `/eval/<int:run>/<int:wheel>/<int:sector>/<int:station>/` - renders evaluation page with "run","wheel","sector", "station" input fields having the values of `run`,`wheel`,`sector`,`station`. Automatically attempts to load matrix on load.
 * `/eval/next` - returns next record which result should be evaluated according to active learning algorithm network scores.
 * `/eval/skip` - returns marks current record as skipped, so it counts as evaluated and wont appear next to unevaluated results.
-* `/fetch/` - renders fetch page template. It is used to initiate data fetching from external api and saving to local database.
+* `/manage/` - renders fetch page template. It is used to initiate data fetching from external api and saving to local database.
 * `/data/net_scores/` - renders page which shows network evaluation results.
 * `/data/new_net_scores/` - renders page which shows network evaluation results which user has not evaluated yet.
 
