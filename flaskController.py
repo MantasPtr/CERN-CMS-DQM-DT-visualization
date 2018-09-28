@@ -6,11 +6,9 @@ from flask import Flask, render_template, request, make_response, Response, json
 app = Flask(__name__, template_folder="gui/templates", static_folder="gui/static")
 
 from logic import dataFetch, dataLoad
-import gui.plotting.adrian as a_plot
 import json
 from errors.errors import ValidationError
 from logic.dbIdentifierBuilder import buildDicts
-from gui.plotting import mutliplot
 from utils import numpyUtils
 from gui.guiUtils import Pagination
 MAIN_PAGE_TEMPLATE='eval.html'
@@ -45,15 +43,6 @@ def fetchRun(run):
         return "OK"
     else:
         return _make_response(f"Specified record with identifier {identifier_dict} already exits in database", 409)
-
-@app.route("/eval/<int:run>/<string:wheel>/<int:sector>/<int:station>/i")
-def get_adrian(run, wheel, sector, station):
-    identifier, params  = buildDicts(run, wheel, sector, station)
-    data = dataLoad.get_matrix_from_DB(identifier, params)
-    imgBytes = a_plot.plot_occupancy_hitmap(data.get("data")[0].get("matrix"), "title", "a.u.")
-    response = make_response(imgBytes.getvalue())
-    response.headers['Content-Type'] = 'image/png'
-    return response
 
 @app.route("/data/<int:run>/<string:wheel>/<int:sector>/<int:station>/", methods = ['GET'])
 def runData(run, wheel, sector, station):
@@ -186,15 +175,6 @@ def skip(run,wheel,sector,station):
     identifier, params  = buildDicts(run, wheel, sector, station)
     dataLoad.mark_as_skipped(identifier, params)
     return get_uncertain_matrix()
-
-@app.route("/visualize/<int:run>/<string:wheel>/<int:sector>/<int:station>/")
-def visualize(run,wheel,sector,station):
-    identifier, params  = buildDicts(run, wheel, sector, station)
-    data = dataFetch.visualize(identifier, params)
-    imgBytes = mutliplot.plot(data)
-    response = make_response(imgBytes.getvalue())
-    response.headers['Content-Type'] = 'image/png'
-    return response
 
 @app.route("/visualize/<int:run>/<string:wheel>/<int:sector>/<int:station>/json")
 def visualize_raw(run,wheel,sector,station):
