@@ -2,7 +2,7 @@ from keras import backend as K
 from keras import activations
 import numpy as np
 
-# https://github.com/experiencor/deep-viz-keras/blob/master/visual_backprop.py
+# https://github.com/experiencor/deep-viz-keras/blob/master/saliency.py
 class GradientSaliency():
 
     def __init__(self, model, output_index = 0):
